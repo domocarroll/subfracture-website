@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en" class="ink-space-active">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Avenue B: The Ink Space | Subfracture</title>
+
+  <!-- Import CSS -->
+  <link rel="stylesheet" href="/assets/css/visions/ink-space.css">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      background: #0a0a0a;
+      overflow-x: hidden;
+    }
+
+    .ink-space-section {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .content-block {
+      max-width: 600px;
+      text-align: center;
+    }
+
+    .content-block h1 {
+      font-size: 3rem;
+      font-weight: 300;
+      margin-bottom: 1rem;
+      color: #ffffff;
+      letter-spacing: 0.05em;
+    }
+
+    .content-block h2 {
+      font-size: 2rem;
+      font-weight: 300;
+      margin-bottom: 1rem;
+      color: #cccccc;
+      letter-spacing: 0.05em;
+    }
+
+    .content-block p {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      color: #999999;
+      margin-bottom: 1rem;
+    }
+
+    .scroll-hint {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      color: #666666;
+      font-size: 0.9rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.4; }
+      50% { opacity: 1; }
+    }
+
+    .nav-info {
+      position: fixed;
+      top: 2rem;
+      right: 2rem;
+      color: #666666;
+      font-size: 0.85rem;
+      z-index: 10;
+      text-align: right;
+      letter-spacing: 0.05em;
+    }
+
+    .nav-info strong {
+      color: #ffffff;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation info -->
+  <div class="nav-info">
+    <div><strong>AVENUE B</strong></div>
+    <div>THE INK SPACE</div>
+  </div>
+
+  <!-- Content sections that create scroll distance -->
+  <section class="ink-space-section ink-space-content">
+    <div class="content-block">
+      <h1>The Ink Space</h1>
+      <p>A gallery of consciousness. Drawings float like memories through atmospheric fog. Scroll to drift through the space.</p>
+    </div>
+    <div class="scroll-hint">Scroll to explore</div>
+  </section>
+
+  <section class="ink-space-section ink-space-content">
+    <div class="content-block">
+      <h2>Contemporary Figures</h2>
+      <p>The near field. Where presence meets form.</p>
+    </div>
+  </section>
+
+  <section class="ink-space-section ink-space-content">
+    <div class="content-block">
+      <h2>Eastern Philosophy</h2>
+      <p>Meditation. Discipline. The inner path.</p>
+    </div>
+  </section>
+
+  <section class="ink-space-section ink-space-content">
+    <div class="content-block">
+      <h2>Cultural Icons</h2>
+      <p>Hip-hop. Music. The voices that shaped generations.</p>
+    </div>
+  </section>
+
+  <section class="ink-space-section ink-space-content">
+    <div class="content-block">
+      <h2>Strategic Diagrams</h2>
+      <p>Systems. Patterns. The architecture of thought.</p>
+    </div>
+  </section>
+
+  <section class="ink-space-section ink-space-content">
+    <div class="content-block">
+      <h2>Brisbane / Meanjin</h2>
+      <p>The ground beneath. Where the journey began.</p>
+    </div>
+  </section>
+
+  <!-- Import Three.js and GSAP from CDN for demo -->
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+        "gsap": "https://cdn.jsdelivr.net/npm/gsap@3.12.5/index.js",
+        "gsap/ScrollTrigger": "https://cdn.jsdelivr.net/npm/gsap@3.12.5/ScrollTrigger.js"
+      }
+    }
+  </script>
+
+  <!-- Initialize the ink space -->
+  <script type="module">
+    import InkSpace from '/assets/js/visions/ink-space.js';
+
+    // Detect mobile
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) || window.innerWidth < 768;
+
+    // Initialize when DOM is ready
+    document.addEventListener('DOMContentLoaded', () => {
+      InkSpace.init({
+        mobile: isMobile,
+        container: document.body,
+        particleCount: isMobile ? 8000 : 25000
+      });
+
+      // Add loaded class after a moment
+      setTimeout(() => {
+        const canvas = document.getElementById('ink-space-canvas');
+        if (canvas) {
+          canvas.classList.add('loaded');
+        }
+      }, 100);
+    });
+
+    // Clean up on page unload
+    window.addEventListener('beforeunload', () => {
+      InkSpace.destroy();
+    });
+  </script>
+
+</body>
+</html>

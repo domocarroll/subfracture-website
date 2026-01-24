@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tomoe Self-Drawing Test - Subfracture</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #0a0014;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      font-family: system-ui, -apple-system, sans-serif;
+    }
+
+    #tomoe-container {
+      width: 400px;
+      height: 400px;
+    }
+
+    .debug-info {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      color: #7d54ff;
+      font-size: 12px;
+      font-family: monospace;
+      opacity: 0.5;
+    }
+  </style>
+</head>
+<body>
+  <div class="debug-info">Tomoe Self-Drawing Animation Test</div>
+  <div id="tomoe-container"></div>
+
+  <script type="module">
+    import { initTomoe } from './assets/js/tomoe-draw.js';
+
+    // Initialize the animation
+    const container = document.getElementById('tomoe-container');
+    initTomoe(container, {
+      onComplete: () => {
+        console.log('✨ Tomoe animation complete - cycles revealed');
+      }
+    });
+  </script>
+</body>
+</html>

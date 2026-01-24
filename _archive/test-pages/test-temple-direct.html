@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Direct Temple Test</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #0a0014; color: #fff; font-family: system-ui; }
+    .test-section { height: 100vh; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid #333; position: relative; }
+    h2 { font-size: 2rem; }
+    #log { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.95); padding: 10px; font-family: monospace; font-size: 12px; max-height: 200px; overflow-y: auto; z-index: 10001; }
+    #log p { margin: 2px 0; }
+    #log .error { color: #f66; }
+    #log .success { color: #6f6; }
+    #log .info { color: #6af; }
+  </style>
+  <link rel="stylesheet" href="/assets/css/visions/generative-temple.css">
+</head>
+<body>
+  <section class="test-section hero">
+    <h2>HERO - Should have breathing dots</h2>
+  </section>
+
+  <section class="test-section sf-what-we-do">
+    <h2>WHAT WE DO - p4m pattern</h2>
+  </section>
+
+  <section class="test-section sf-services">
+    <h2>SERVICES - p6m hexagons</h2>
+  </section>
+
+  <section class="test-section sf-ai-system">
+    <h2>AI SYSTEM - Bagua mandala</h2>
+  </section>
+
+  <section class="test-section sf-approach">
+    <h2>APPROACH - Lissajous curves</h2>
+  </section>
+
+  <section class="test-section sf-fight">
+    <h2>FIGHT - Fragmenting shapes</h2>
+  </section>
+
+  <div id="log"></div>
+
+  <script type="module">
+    const log = document.getElementById('log');
+    function addLog(msg, type = 'info') {
+      const p = document.createElement('p');
+      p.className = type;
+      p.textContent = new Date().toLocaleTimeString() + ' - ' + msg;
+      log.appendChild(p);
+      log.scrollTop = log.scrollHeight;
+      console.log(`[${type}] ${msg}`);
+    }
+
+    addLog('Starting temple test...', 'info');
+
+    try {
+      // Import GSAP first
+      addLog('Loading GSAP...', 'info');
+      const gsapModule = await import('gsap');
+      const gsap = gsapModule.gsap;
+      const { ScrollTrigger } = await import('gsap/ScrollTrigger');
+      gsap.registerPlugin(ScrollTrigger);
+      window.gsap = gsap;
+      window.ScrollTrigger = ScrollTrigger;
+      addLog('GSAP loaded successfully', 'success');
+
+      // Now load temple
+      addLog('Loading generative-temple.js...', 'info');
+      const temple = await import('/assets/js/visions/generative-temple.js');
+      addLog('Temple module loaded', 'success');
+
+      // Initialize
+      addLog('Initializing temple...', 'info');
+      temple.default.init();
+      addLog('Temple initialized!', 'success');
+
+      // Check what was created
+      setTimeout(() => {
+        const svg = document.querySelector('.generative-temple');
+        if (svg) {
+          const allElements = svg.querySelectorAll('*');
+          addLog(`SVG container found with ${allElements.length} child elements`, 'success');
+
+          const groups = svg.querySelectorAll('g');
+          addLog(`Found ${groups.length} pattern groups`, 'success');
+
+          const circles = svg.querySelectorAll('circle');
+          addLog(`Found ${circles.length} circles`, 'success');
+
+          const paths = svg.querySelectorAll('path');
+          addLog(`Found ${paths.length} paths`, 'success');
+
+          const polygons = svg.querySelectorAll('polygon');
+          addLog(`Found ${polygons.length} polygons`, 'success');
+
+          // Check visibility
+          const style = window.getComputedStyle(svg);
+          addLog(`SVG z-index: ${style.zIndex}, opacity: ${style.opacity}, display: ${style.display}`, 'info');
+        } else {
+          addLog('ERROR: No .generative-temple SVG container found!', 'error');
+        }
+
+        // Check for sections
+        const sections = ['.hero', '.sf-what-we-do', '.sf-services', '.sf-ai-system', '.sf-approach', '.sf-fight'];
+        sections.forEach(sel => {
+          const el = document.querySelector(sel);
+          if (el) {
+            addLog(`Section ${sel} found`, 'success');
+          } else {
+            addLog(`Section ${sel} NOT found!`, 'error');
+          }
+        });
+      }, 500);
+    } catch (e) {
+      addLog(`ERROR: ${e.message}`, 'error');
+      console.error(e);
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DANNI vs SubFrac.OS Animation Test</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #0b0b0b;
+      font-family: system-ui, -apple-system, sans-serif;
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .container {
+      max-width: 1200px;
+      padding: 2rem;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+
+    .header h1 {
+      font-size: 3rem;
+      margin: 0 0 1rem 0;
+    }
+
+    .header p {
+      opacity: 0.7;
+      font-size: 1.125rem;
+    }
+
+    .ai-showcase {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      margin-bottom: 4rem;
+    }
+
+    .ai-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 3rem;
+      text-align: center;
+    }
+
+    .ai-name {
+      font-size: 2.5rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      display: inline-block;
+      transform-origin: center center;
+    }
+
+    .ai-name.mono {
+      font-family: ui-monospace, 'SF Mono', monospace;
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
+      -webkit-font-smoothing: none;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    .ai-desc {
+      opacity: 0.8;
+      line-height: 1.6;
+      margin-bottom: 2rem;
+    }
+
+    .ai-traits {
+      text-align: left;
+      font-size: 0.9rem;
+      opacity: 0.6;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding-top: 1.5rem;
+      margin-top: 1.5rem;
+    }
+
+    .ai-traits dt {
+      font-weight: 600;
+      margin-top: 0.75rem;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .ai-traits dd {
+      margin: 0.25rem 0 0 1rem;
+    }
+
+    .controls {
+      text-align: center;
+      padding: 2rem;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 12px;
+      margin-bottom: 2rem;
+    }
+
+    .controls h3 {
+      margin-top: 0;
+    }
+
+    .btn {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #fff;
+      padding: 0.75rem 1.5rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 1rem;
+      margin: 0.5rem;
+      transition: all 0.2s;
+    }
+
+    .btn:hover {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .conversation-stage {
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 12px;
+      padding: 3rem;
+      margin-top: 4rem;
+      text-align: center;
+    }
+
+    .conversation-names {
+      display: flex;
+      justify-content: center;
+      gap: 4rem;
+      margin-top: 2rem;
+    }
+
+    .conversation-names .ai-name {
+      font-size: 3rem;
+    }
+
+    .legend {
+      margin-top: 4rem;
+      padding: 2rem;
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 8px;
+      font-size: 0.9rem;
+      opacity: 0.7;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>DANNI vs SubFrac.OS Animation Test</h1>
+      <p>Enhanced GSAP animations demonstrating viscerally different animation DNA</p>
+    </div>
+
+    <div class="controls">
+      <h3>Animation Controls</h3>
+      <button class="btn" onclick="restartDanni()">Restart DANNI</button>
+      <button class="btn" onclick="restartSubfrac()">Restart SubFrac.OS</button>
+      <button class="btn" onclick="restartBoth()">Restart Both</button>
+      <button class="btn" onclick="startConversation()">Start Conversation</button>
+    </div>
+
+    <div class="ai-showcase">
+      <!-- DANNI -->
+      <div class="ai-card">
+        <div class="ai-name" id="danni-name">DANNI</div>
+        <p class="ai-desc">
+          Listens. Collaborates. Speaks with you in the language of strategy and creativity—warm, intelligent, always three steps ahead.
+        </p>
+        <dl class="ai-traits">
+          <dt>Animation DNA:</dt>
+          <dd>Organic, breathing, human-timed</dd>
+          <dt>Easing:</dt>
+          <dd>sine.out, sine.inOut (smooth curves)</dd>
+          <dt>Timing:</dt>
+          <dd>Variable, ±75ms human variance</dd>
+          <dt>Rhythm:</dt>
+          <dd>3.5-4.0s breath cycle</dd>
+          <dt>Feeling:</dt>
+          <dd>Living presence, warm intelligence</dd>
+        </dl>
+      </div>
+
+      <!-- SubFrac.OS -->
+      <div class="ai-card">
+        <div class="ai-name mono" id="subfrac-name">SubFrac.OS</div>
+        <p class="ai-desc">
+          Thinks. Stores. Learns how to operate within your business, encoding your patterns, your voice, your way of working.
+        </p>
+        <dl class="ai-traits">
+          <dt>Animation DNA:</dt>
+          <dd>Mechanical, grid-locked, precise</dd>
+          <dt>Easing:</dt>
+          <dd>steps(1-3) (quantized steps)</dd>
+          <dt>Timing:</dt>
+          <dd>Exact, 0ms variance, metronomic</dd>
+          <dt>Rhythm:</dt>
+          <dd>0.8s pulse cycle, no pauses</dd>
+          <dt>Feeling:</dt>
+          <dd>System process, cold precision</dd>
+        </dl>
+      </div>
+    </div>
+
+    <div class="conversation-stage">
+      <h2>Visual Conversation</h2>
+      <p>When both are visible together, they engage in a subtle dialogue</p>
+      <div class="conversation-names">
+        <div class="ai-name" id="conv-danni">DANNI</div>
+        <div class="ai-name mono" id="conv-subfrac">SubFrac.OS</div>
+      </div>
+    </div>
+
+    <div class="legend">
+      <strong>What to observe:</strong>
+      <ul>
+        <li><strong>DANNI:</strong> Warm amber glow, gentle breathing, subtle scale, organic timing variations</li>
+        <li><strong>SubFrac.OS:</strong> Purple glow, digital flicker, scan-line artifact, metronomic pulse</li>
+        <li><strong>Conversation:</strong> DANNI pulses warmly, SubFrac.OS responds with digital precision</li>
+        <li><strong>Contrast:</strong> Human vs Machine, Warmth vs Precision, Organic vs Digital</li>
+      </ul>
+    </div>
+  </div>
+
+  <script type="module">
+    import { gsap } from 'https://cdn.skypack.dev/gsap@3.12.2';
+
+    window.gsap = gsap;
+
+    // DANNI animation
+    function animateDanni(el) {
+      gsap.killTweensOf(el);
+      el.style.textShadow = '0 0 0 transparent';
+
+      const humanDelay = 0.8 + (Math.random() * 0.15 - 0.075);
+
+      gsap.to(el, {
+        textShadow: '0 0 24px rgba(255, 180, 120, 0.6), 0 0 8px rgba(255, 200, 140, 0.3)',
+        duration: humanDelay,
+        ease: 'sine.out'
+      });
+
+      gsap.to(el, {
+        textShadow: '0 0 12px rgba(255, 180, 120, 0.35)',
+        duration: 1.2,
+        delay: humanDelay,
+        ease: 'sine.inOut'
+      });
+
+      gsap.to(el, {
+        textShadow: '0 0 16px rgba(255, 180, 120, 0.45), 0 0 6px rgba(255, 200, 140, 0.25)',
+        duration: 3.5 + Math.random() * 0.5,
+        delay: humanDelay + 1.2,
+        ease: 'sine.inOut',
+        yoyo: true,
+        repeat: -1,
+        repeatDelay: 0.3 + Math.random() * 0.2
+      });
+
+      gsap.to(el, {
+        scale: 1.008,
+        duration: 3.5,
+        delay: humanDelay + 1.2,
+        ease: 'sine.inOut',
+        yoyo: true,
+        repeat: -1,
+        repeatDelay: 0.3
+      });
+    }
+
+    // SubFrac.OS animation
+    function animateSubfrac(el) {
+      gsap.killTweensOf(el);
+      el.style.fontFamily = 'monospace';
+
+      gsap.fromTo(el,
+        { opacity: 0 },
+        {
+          opacity: 1,
+          duration: 0.08,
+          repeat: 4,
+          yoyo: true,
+          ease: 'steps(1)',
+          repeatDelay: 0.06
+        }
+      );
+
+      gsap.fromTo(el,
+        {
+          backgroundImage: 'linear-gradient(180deg, rgba(125, 84, 255, 0) 0%, rgba(125, 84, 255, 0.4) 50%, rgba(125, 84, 255, 0) 100%)',
+          backgroundSize: '100% 4px',
+          backgroundRepeat: 'no-repeat',
+          backgroundPosition: '0 0%',
+          WebkitBackgroundClip: 'text',
+          backgroundClip: 'text'
+        },
+        {
+          backgroundPosition: '0 100%',
+          duration: 0.3,
+          delay: 0.5,
+          ease: 'steps(8)'
+        }
+      );
+
+      gsap.to(el, {
+        textShadow: '0 0 12px rgba(125, 84, 255, 0.5), 0 0 4px rgba(125, 84, 255, 0.3)',
+        duration: 0.15,
+        delay: 0.8,
+        ease: 'steps(2)'
+      });
+
+      gsap.to(el, {
+        textShadow: '0 0 16px rgba(125, 84, 255, 0.6), 0 0 6px rgba(125, 84, 255, 0.4)',
+        duration: 0.8,
+        delay: 1.0,
+        ease: 'steps(3)',
+        yoyo: true,
+        repeat: -1,
+        repeatDelay: 0
+      });
+
+      gsap.to(el, {
+        opacity: 0.85,
+        duration: 0.05,
+        delay: 2.0,
+        ease: 'steps(1)',
+        repeat: -1,
+        repeatDelay: 2.4,
+        yoyo: true
+      });
+    }
+
+    // Conversation animation
+    function startConversationAnim() {
+      const danni = document.getElementById('conv-danni');
+      const subfrac = document.getElementById('conv-subfrac');
+
+      gsap.killTweensOf([danni, subfrac]);
+
+      let cycle = 0;
+
+      function convo() {
+        cycle++;
+
+        // DANNI speaks
+        gsap.to(danni, {
+          textShadow: '0 0 28px rgba(255, 180, 120, 0.7), 0 0 12px rgba(255, 200, 140, 0.4)',
+          scale: 1.012,
+          duration: 0.6 + Math.random() * 0.3,
+          ease: 'sine.inOut',
+          onComplete: () => {
+            gsap.to(danni, {
+              textShadow: '0 0 12px rgba(255, 180, 120, 0.35)',
+              scale: 1.0,
+              duration: 0.8,
+              ease: 'sine.out'
+            });
+          }
+        });
+
+        // SubFrac.OS responds
+        gsap.delayedCall(1.8, () => {
+          gsap.to(subfrac, {
+            textShadow: '0 0 20px rgba(125, 84, 255, 0.8), 0 0 8px rgba(125, 84, 255, 0.6)',
+            duration: 0.12,
+            ease: 'steps(2)',
+            onComplete: () => {
+              gsap.to(subfrac, {
+                opacity: 0.7,
+                duration: 0.04,
+                ease: 'steps(1)',
+                yoyo: true,
+                repeat: 1
+              });
+
+              gsap.to(subfrac, {
+                textShadow: '0 0 12px rgba(125, 84, 255, 0.5), 0 0 4px rgba(125, 84, 255, 0.3)',
+                duration: 0.15,
+                delay: 0.1,
+                ease: 'steps(2)'
+              });
+            }
+          });
+        });
+
+        if (cycle < 4) {
+          gsap.delayedCall(5.5 + Math.random() * 2, convo);
+        }
+      }
+
+      gsap.delayedCall(0.5, convo);
+    }
+
+    // Global functions
+    window.restartDanni = () => {
+      animateDanni(document.getElementById('danni-name'));
+    };
+
+    window.restartSubfrac = () => {
+      animateSubfrac(document.getElementById('subfrac-name'));
+    };
+
+    window.restartBoth = () => {
+      window.restartDanni();
+      window.restartSubfrac();
+    };
+
+    window.startConversation = () => {
+      startConversationAnim();
+    };
+
+    // Auto-start on load
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        animateDanni(document.getElementById('danni-name'));
+        animateDanni(document.getElementById('conv-danni'));
+      }, 500);
+
+      setTimeout(() => {
+        animateSubfrac(document.getElementById('subfrac-name'));
+        animateSubfrac(document.getElementById('conv-subfrac'));
+      }, 700);
+
+      setTimeout(() => {
+        startConversationAnim();
+      }, 5000);
+    });
+  </script>
+</body>
+</html>

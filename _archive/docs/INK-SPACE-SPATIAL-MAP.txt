@@ -1,0 +1,202 @@
+═══════════════════════════════════════════════════════════════════════════════
+                        THE INK SPACE - SPATIAL MAP
+                    Camera Journey Through Consciousness
+═══════════════════════════════════════════════════════════════════════════════
+
+                            [USER SCROLLS DOWN]
+                                    ↓
+
+                            CAMERA MOVES BACKWARD
+                              (z: 0 → -100)
+
+
+╔═══════════════════════════════════════════════════════════════════════════╗
+║  z = 0                          ENTRY POINT                              ║
+║  ────────────────────────────────────────────────────────────────────    ║
+║                                                                           ║
+║                         [ Camera starts here ]                           ║
+║                                                                           ║
+║                  ○ ○ ○ ○    Particles begin to drift    ○ ○ ○           ║
+║                                                                           ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+
+
+╔═══════════════════════════════════════════════════════════════════════════╗
+║  z = -10                   CONTEMPORARY FIGURES                          ║
+║  ────────────────────────────────────────────────────────────────────    ║
+║                                                                           ║
+║                        🖼️  IMG_0176.jpg                                  ║
+║                      (Contemporary figure)                                ║
+║                         Center, direct                                    ║
+║                                                                           ║
+║            ○ ○ ○    Fog begins to gather    ○ ○ ○ ○                     ║
+║                                                                           ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+
+
+╔═══════════════════════════════════════════════════════════════════════════╗
+║  z = -20 to -25              EASTERN PHILOSOPHY                          ║
+║  ────────────────────────────────────────────────────────────────────    ║
+║                                                                           ║
+║        🖼️  IMG_0159.jpg                      🖼️  IMG_0161.jpg           ║
+║         (Sadhu meditation)                    (Shaolin monk)             ║
+║         Left, elevated                        Right, grounded            ║
+║                                                                           ║
+║       ○    ○    Contemplative space    ○    ○    ○    ○                 ║
+║                                                                           ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+
+
+╔═══════════════════════════════════════════════════════════════════════════╗
+║  z = -35 to -45              CULTURAL DEPTH                              ║
+║  ────────────────────────────────────────────────────────────────────    ║
+║                                                                           ║
+║  🖼️  IMG_0174.jpg                                                        ║
+║   (Additional piece)                                                      ║
+║   Far left, low                                                           ║
+║                                  🖼️  IMG_0133.jpg                        ║
+║                                   (Hip-hop portrait)                      ║
+║                                   Right, eye-level                        ║
+║                                                                           ║
+║              🖼️  IMG_0165.jpg                                            ║
+║               (Jimi Hendrix)                                              ║
+║               Left, centered                                              ║
+║                                                                           ║
+║     ○  ○  ○    Fog thickens, mystery deepens    ○  ○  ○  ○              ║
+║                                                                           ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+
+
+╔═══════════════════════════════════════════════════════════════════════════╗
+║  z = -60 to -75           STRATEGIC SYSTEMS                              ║
+║  ────────────────────────────────────────────────────────────────────    ║
+║                                                                           ║
+║                        🖼️  IMG_0152.jpg                                  ║
+║                       (Additional depth)                                  ║
+║                        Far right, elevated                                ║
+║                                                                           ║
+║       🖼️  IMG_0154.jpg              🖼️  IMG_0155.jpg                    ║
+║        (Bagua diagram)                (Workshop depth)                    ║
+║        Left, centered                 Right, low                          ║
+║                                                                           ║
+║   ○   ○     Dense particle field, barely visible     ○   ○   ○          ║
+║                                                                           ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+
+
+╔═══════════════════════════════════════════════════════════════════════════╗
+║  z = -100                   THE FOUNDATION                               ║
+║  ────────────────────────────────────────────────────────────────────    ║
+║                                                                           ║
+║                      ┌─────────────────────┐                             ║
+║                      │                     │                             ║
+║                      │  🗺️  IMG_0240.jpg  │                             ║
+║                      │  (Brisbane/Meanjin) │                             ║
+║                      │    Horizontal map   │                             ║
+║                      │                     │                             ║
+║                      └─────────────────────┘                             ║
+║                                                                           ║
+║          ○  ○  ○   The ground beneath everything   ○  ○  ○  ○           ║
+║                      Maximum fog density                                  ║
+║                                                                           ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+
+
+═══════════════════════════════════════════════════════════════════════════════
+                              PARTICLE SYSTEM
+═══════════════════════════════════════════════════════════════════════════════
+
+  Count: 25,000 (desktop) / 8,000 (mobile)
+
+  Movement: Curl noise - fluid, organic drift
+
+  Behavior: Particles flow around drawings, creating atmosphere
+
+  Appearance: Soft white glow, additive blending, 40% opacity
+
+  Wrapping: Particles reset when drifting beyond bounds (-30 to 30 x/y)
+
+  Purpose: Mystery, depth perception, ethereal quality
+
+
+═══════════════════════════════════════════════════════════════════════════════
+                              FOG SYSTEM
+═══════════════════════════════════════════════════════════════════════════════
+
+  Type: Exponential fog (FogExp2)
+
+  Density: 0.015 (increases quadratically with distance)
+
+  Color: #0a0a0a (matches background)
+
+  Effect:
+    - Near (z = 0 to -20): Clear, drawings fully visible
+    - Mid (z = -20 to -60): Atmospheric, slight obscurity
+    - Far (z = -60 to -100): Heavy fog, barely visible
+
+  Purpose: Progressive mystery, can't see everything at once
+
+
+═══════════════════════════════════════════════════════════════════════════════
+                            CAMERA BEHAVIOR
+═══════════════════════════════════════════════════════════════════════════════
+
+  Start: z = 0, y = 0, x = 0
+
+  End: z = -100, y = varies, x = varies
+
+  Movement: Bound to scroll progress via GSAP ScrollTrigger
+
+  Easing: power2.out (smooth, natural)
+
+  Organic drift:
+    - x: sin(progress * 2π) * 2  (side-to-side sway)
+    - y: cos(progress * 3π) * 1.5 (vertical drift)
+
+  Purpose: Not clinical camera movement - feels like floating
+
+
+═══════════════════════════════════════════════════════════════════════════════
+                              DESIGN NOTES
+═══════════════════════════════════════════════════════════════════════════════
+
+  1. Drawings are not centered - intentional asymmetry creates discovery
+
+  2. Rotation angles vary - no two planes face exactly forward
+
+  3. Subtle floating - each plane bobs at different rates (0.3-0.5 speed)
+
+  4. Scale matters - larger pieces demand more attention
+
+  5. Fog obscures far depths - mystery is intentional
+
+  6. Particles never settle - constant organic movement
+
+  7. Camera sway - prevents mechanical feeling
+
+  8. Opacity at 90% - drawings feel slightly ethereal, not solid
+
+  9. No harsh lighting - soft ambient + directional creates mood
+
+ 10. Black background - void, not space; consciousness, not gallery
+
+
+═══════════════════════════════════════════════════════════════════════════════
+                          AESTHETIC PHILOSOPHY
+═══════════════════════════════════════════════════════════════════════════════
+
+  "This is not a museum. This is not an archive.
+   This is a space where memories float.
+   Where drawings exist as spirits, not objects.
+   Where fog obscures as much as it reveals.
+   Where discovery happens at your pace.
+   Where mystery is the point.
+
+   Let it breathe.
+   Let them drift.
+   Let yourself be lost."
+
+                                        - Inspired by Gaia Alari
+
+
+═══════════════════════════════════════════════════════════════════════════════

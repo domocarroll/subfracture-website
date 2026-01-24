@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Vision Test</title>
+  <style>
+    body {
+      margin: 0;
+      min-height: 300vh;
+      background: #0a0a0a;
+      font-family: system-ui;
+      color: white;
+    }
+    .hero {
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .sf-what-we-do, .sf-services, .sf-ai-system, .sf-approach, .sf-fight {
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-top: 1px solid #333;
+    }
+    h1, h2 { margin: 0; }
+    #status {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      background: rgba(0,0,0,0.8);
+      padding: 10px 20px;
+      border-radius: 4px;
+      z-index: 1000;
+      font-size: 14px;
+    }
+    #status.success { border: 2px solid #0f0; }
+    #status.error { border: 2px solid #f00; }
+  </style>
+  <link rel="stylesheet" href="/assets/css/visions/generative-temple.css">
+</head>
+<body>
+  <div id="status">Loading...</div>
+
+  <section class="hero">
+    <h1>HERO - Breathing Dots</h1>
+  </section>
+
+  <section class="sf-what-we-do">
+    <h2>WHAT WE DO - p4m Pattern</h2>
+  </section>
+
+  <section class="sf-services">
+    <h2>SERVICES - p6m Hexagonal</h2>
+  </section>
+
+  <section class="sf-ai-system">
+    <h2>AI SYSTEM - Bagua Mandala</h2>
+  </section>
+
+  <section class="sf-approach">
+    <h2>APPROACH - Lissajous</h2>
+  </section>
+
+  <section class="sf-fight">
+    <h2>WHAT WE FIGHT - Fragments</h2>
+  </section>
+
+  <script type="module">
+    import gsap from 'gsap';
+    import { ScrollTrigger } from 'gsap/ScrollTrigger';
+    gsap.registerPlugin(ScrollTrigger);
+    window.gsap = gsap;
+    window.ScrollTrigger = ScrollTrigger;
+
+    const status = document.getElementById('status');
+
+    try {
+      const temple = await import('/assets/js/visions/generative-temple.js');
+      status.textContent = 'Module loaded, initializing...';
+
+      temple.default.init();
+
+      status.textContent = 'SUCCESS! Temple is active. Scroll down!';
+      status.className = 'success';
+
+      // Log what was created
+      const svg = document.querySelector('.generative-temple');
+      if (svg) {
+        const children = svg.querySelectorAll('g');
+        console.log('Temple SVG created with', children.length, 'pattern groups');
+      }
+    } catch (e) {
+      status.textContent = 'ERROR: ' + e.message;
+      status.className = 'error';
+      console.error(e);
+    }
+  </script>
+</body>
+</html>

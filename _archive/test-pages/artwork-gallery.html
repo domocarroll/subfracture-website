@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SUBFRACTURE - Living Art Gallery</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #0a0014;
+      min-height: 100vh;
+      overflow-x: hidden;
+      font-family: system-ui, -apple-system, sans-serif;
+    }
+
+    /* ========================================
+       FLOATING ARTWORK GALLERY
+       ======================================== */
+    .art-gallery {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+      overflow: hidden;
+    }
+
+    .floating-art {
+      position: absolute;
+      opacity: 0;
+      animation: floatIn 1.5s ease-out forwards, breathe 4s ease-in-out infinite;
+      filter: drop-shadow(0 0 30px rgba(125, 84, 255, 0.3));
+      transition: transform 0.3s ease, filter 0.3s ease;
+    }
+
+    .floating-art img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    @keyframes floatIn {
+      from {
+        opacity: 0;
+        transform: translateY(50px) scale(0.9);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    @keyframes breathe {
+      0%, 100% {
+        transform: translateY(0) scale(1);
+        filter: drop-shadow(0 0 20px rgba(125, 84, 255, 0.2));
+      }
+      50% {
+        transform: translateY(-10px) scale(1.02);
+        filter: drop-shadow(0 0 40px rgba(125, 84, 255, 0.5));
+      }
+    }
+
+    @keyframes drift {
+      0%, 100% {
+        transform: translate(0, 0) rotate(0deg);
+      }
+      25% {
+        transform: translate(10px, -15px) rotate(1deg);
+      }
+      50% {
+        transform: translate(-5px, -25px) rotate(-1deg);
+      }
+      75% {
+        transform: translate(-15px, -10px) rotate(0.5deg);
+      }
+    }
+
+    /* Individual artwork positions and sizes */
+    .art-bagua {
+      width: 280px;
+      top: 10%;
+      right: 5%;
+      animation-delay: 0s, 0s;
+    }
+
+    .art-shaolin {
+      width: 320px;
+      top: 40%;
+      left: 3%;
+      animation-delay: 0.3s, 0.5s;
+    }
+
+    .art-rakim {
+      width: 260px;
+      bottom: 15%;
+      right: 8%;
+      animation-delay: 0.6s, 1s;
+    }
+
+    .art-monk {
+      width: 200px;
+      top: 60%;
+      right: 25%;
+      animation-delay: 0.9s, 1.5s;
+    }
+
+    .art-jimi {
+      width: 240px;
+      bottom: 20%;
+      left: 15%;
+      animation-delay: 1.2s, 2s;
+    }
+
+    /* Invert colors for dark background */
+    .floating-art img {
+      filter: invert(1) brightness(1.2);
+    }
+
+    /* ========================================
+       MAIN CONTENT
+       ======================================== */
+    .content {
+      position: relative;
+      z-index: 10;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+      color: #fff;
+    }
+
+    h1 {
+      font-size: clamp(2rem, 8vw, 5rem);
+      font-weight: 200;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+      color: #7d54ff;
+    }
+
+    .tagline {
+      font-size: clamp(1rem, 3vw, 1.5rem);
+      opacity: 0.7;
+      margin-bottom: 3rem;
+    }
+
+    .scroll-prompt {
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.8rem;
+      opacity: 0.5;
+      letter-spacing: 0.2em;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 0.8; }
+    }
+
+    /* ========================================
+       RESPONSIVE
+       ======================================== */
+    @media (max-width: 768px) {
+      .floating-art {
+        width: 150px !important;
+      }
+      .art-bagua { top: 5%; right: 2%; }
+      .art-shaolin { top: 25%; left: 2%; }
+      .art-rakim { bottom: 30%; right: 2%; }
+      .art-monk { display: none; }
+      .art-jimi { bottom: 5%; left: 2%; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- FLOATING ARTWORK GALLERY -->
+  <div class="art-gallery">
+    <div class="floating-art art-bagua" style="animation: floatIn 1.5s ease-out forwards, breathe 6s ease-in-out 0s infinite, drift 20s ease-in-out infinite;">
+      <img src="/assets/drawings/IMG_0154.jpg" alt="Bagua - Eastern Philosophy">
+    </div>
+
+    <div class="floating-art art-shaolin" style="animation: floatIn 1.5s ease-out 0.3s forwards, breathe 5s ease-in-out 0.5s infinite, drift 25s ease-in-out 2s infinite;">
+      <img src="/assets/drawings/IMG_0161.jpg" alt="36th Chamber of Shaolin">
+    </div>
+
+    <div class="floating-art art-rakim" style="animation: floatIn 1.5s ease-out 0.6s forwards, breathe 7s ease-in-out 1s infinite, drift 22s ease-in-out 4s infinite;">
+      <img src="/assets/drawings/IMG_0165.jpg" alt="Rakim">
+    </div>
+
+    <div class="floating-art art-monk" style="animation: floatIn 1.5s ease-out 0.9s forwards, breathe 5.5s ease-in-out 1.5s infinite, drift 28s ease-in-out 6s infinite;">
+      <img src="/assets/drawings/IMG_0159.jpg" alt="Sadhu">
+    </div>
+
+    <div class="floating-art art-jimi" style="animation: floatIn 1.5s ease-out 1.2s forwards, breathe 6.5s ease-in-out 2s infinite, drift 24s ease-in-out 8s infinite;">
+      <img src="/assets/drawings/IMG_0174.jpg" alt="Hip Hop Culture">
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="content">
+    <h1>Subfracture</h1>
+    <p class="tagline">Art and systems, flowing together</p>
+  </div>
+
+  <div class="scroll-prompt">(Scroll to explore)</div>
+
+  <script>
+    // Add parallax movement on mouse
+    document.addEventListener('mousemove', (e) => {
+      const arts = document.querySelectorAll('.floating-art');
+      const x = (e.clientX / window.innerWidth - 0.5) * 2;
+      const y = (e.clientY / window.innerHeight - 0.5) * 2;
+
+      arts.forEach((art, i) => {
+        const factor = 10 + i * 5;
+        art.style.transform = `translate(${x * factor}px, ${y * factor}px)`;
+      });
+    });
+
+    console.log('Living Art Gallery loaded');
+  </script>
+</body>
+</html>

@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Avenue C: The Fluid Canvas - Demo</title>
+
+  <!-- Fluid Canvas CSS -->
+  <link rel="stylesheet" href="assets/css/visions/fluid-canvas.css">
+
+  <style>
+    /* Demo-specific styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      color: #1a1a1a;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    .section {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4rem 2rem;
+      position: relative;
+    }
+
+    .content-wrapper {
+      max-width: 800px;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    h1 {
+      font-size: clamp(2.5rem, 8vw, 5rem);
+      font-weight: 300;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.5rem;
+      line-height: 1.1;
+    }
+
+    h2 {
+      font-size: clamp(2rem, 6vw, 3.5rem);
+      font-weight: 300;
+      letter-spacing: -0.01em;
+      margin-bottom: 1rem;
+      line-height: 1.2;
+    }
+
+    p {
+      font-size: clamp(1rem, 2vw, 1.25rem);
+      max-width: 600px;
+      margin: 0 auto 2rem;
+      opacity: 0.9;
+    }
+
+    .drawing-trigger {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 1s ease, transform 1s ease;
+    }
+
+    .drawing-trigger.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Interaction hint */
+    .interaction-hint {
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.875rem;
+      opacity: 0.5;
+      animation: fadeInOut 4s ease-in-out infinite;
+      pointer-events: none;
+      z-index: 100;
+    }
+
+    @keyframes fadeInOut {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 0.6; }
+    }
+
+    /* Section-specific backgrounds for visual hierarchy */
+    .section-intro {
+      background: rgba(245, 245, 240, 0.6);
+    }
+
+    .section-approach {
+      /* Bagua will emerge here */
+    }
+
+    .section-fight {
+      /* Shaolin monk will emerge here */
+    }
+
+    .section-spirit {
+      /* Sadhu will emerge here */
+    }
+
+    .section-finale {
+      background: rgba(245, 245, 240, 0.8);
+    }
+
+    /* Debug info */
+    .debug-info {
+      position: fixed;
+      top: 1rem;
+      left: 1rem;
+      background: rgba(0, 0, 0, 0.8);
+      color: #0f0;
+      padding: 1rem;
+      font-family: monospace;
+      font-size: 0.75rem;
+      border-radius: 4px;
+      z-index: 1000;
+      display: none;
+    }
+
+    .debug-mode .debug-info {
+      display: block;
+    }
+
+    /* Mobile adjustments */
+    @media (max-width: 768px) {
+      .section {
+        padding: 3rem 1.5rem;
+      }
+
+      .interaction-hint {
+        bottom: 1rem;
+        font-size: 0.75rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Debug Info (press 'D' to toggle) -->
+  <div class="debug-info">
+    <div>FPS: <span id="fps">60</span></div>
+    <div>Resolution: <span id="resolution">512x512</span></div>
+    <div>Device: <span id="device">desktop</span></div>
+  </div>
+
+  <!-- Interaction Hint -->
+  <div class="interaction-hint">
+    Move your cursor to disturb the ink
+  </div>
+
+  <!-- Content Sections -->
+
+  <!-- Intro -->
+  <section class="section section-intro">
+    <div class="content-wrapper">
+      <h1>The Fluid Canvas</h1>
+      <p>
+        Where order emerges from chaos. Watch as drawings coalesce from flowing ink,
+        hold their form, then dissolve back into the stream.
+      </p>
+    </div>
+  </section>
+
+  <!-- Drawing 1: Bagua (Approach) -->
+  <section class="section section-approach drawing-trigger" data-drawing="IMG_0154.jpg">
+    <div class="content-wrapper">
+      <h2>The Approach</h2>
+      <p>
+        Ancient wisdom flows through modern channels. The Bagua emerges —
+        a map of forces, a dance of opposites seeking harmony.
+      </p>
+    </div>
+  </section>
+
+  <!-- Spacer -->
+  <section class="section">
+    <div class="content-wrapper">
+      <p>
+        Scroll slowly. Let each form breathe. The fluid remembers,
+        carrying traces of what came before into what comes next.
+      </p>
+    </div>
+  </section>
+
+  <!-- Drawing 2: Shaolin Monk (What We Fight) -->
+  <section class="section section-fight drawing-trigger" data-drawing="IMG_0161.jpg">
+    <div class="content-wrapper">
+      <h2>What We Fight</h2>
+      <p>
+        Discipline emerges from turbulence. The monk stands present,
+        a still point in the ever-flowing stream of consciousness.
+      </p>
+    </div>
+  </section>
+
+  <!-- Spacer -->
+  <section class="section">
+    <div class="content-wrapper">
+      <p>
+        Between emergence and dissolution lies the work —
+        holding form against entropy, maintaining signal through noise.
+      </p>
+    </div>
+  </section>
+
+  <!-- Drawing 3: Sadhu (Spirit) -->
+  <section class="section section-spirit drawing-trigger" data-drawing="IMG_0159.jpg">
+    <div class="content-wrapper">
+      <h2>The Spirit</h2>
+      <p>
+        Seeking beyond seeking. The Sadhu appears from the mist,
+        reminding us that some truths can only be seen indirectly.
+      </p>
+    </div>
+  </section>
+
+  <!-- Finale -->
+  <section class="section section-finale">
+    <div class="content-wrapper">
+      <h2>All Returns</h2>
+      <p>
+        Every form dissolves. Every pattern scatters. Yet the fluid remains,
+        ready to birth new shapes from the same eternal dance.
+      </p>
+    </div>
+  </section>
+
+  <!-- GSAP for ScrollTrigger -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+
+  <!-- Fluid Canvas Module -->
+  <script type="module">
+    import fluidCanvas from './assets/js/visions/fluid-canvas.js';
+
+    // Detect device type
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+                     || window.innerWidth < 768;
+
+    // Initialize fluid canvas
+    fluidCanvas.init({ mobile: isMobile });
+
+    // Fade in canvas once loaded
+    setTimeout(() => {
+      const canvas = document.getElementById('fluid-canvas');
+      if (canvas) {
+        canvas.classList.add('loaded');
+      }
+    }, 500);
+
+    // Setup ScrollTrigger for drawing emergence
+    gsap.registerPlugin(ScrollTrigger);
+
+    // Track emerged drawings to prevent duplicates
+    const emergedDrawings = new Set();
+
+    document.querySelectorAll('.drawing-trigger').forEach(section => {
+      const drawingName = section.dataset.drawing;
+
+      ScrollTrigger.create({
+        trigger: section,
+        start: 'top 60%',
+        end: 'bottom 40%',
+        onEnter: () => {
+          if (!emergedDrawings.has(drawingName)) {
+            console.log(`🎨 Emerging: ${drawingName}`);
+            const drawingPath = `./assets/drawings/${drawingName}`;
+            fluidCanvas.emergeDrawing(drawingPath, 0.8);
+            emergedDrawings.add(drawingName);
+
+            // Add visible class for fade-in
+            section.classList.add('visible');
+          }
+        },
+        onLeave: () => {
+          // Optional: trigger dissolution effect
+          console.log(`🌫️ Dissolving: ${drawingName}`);
+        },
+        onEnterBack: () => {
+          // Re-emerge if scrolling back up
+          if (emergedDrawings.has(drawingName)) {
+            const drawingPath = `./assets/drawings/${drawingName}`;
+            fluidCanvas.emergeDrawing(drawingPath, 0.6);
+          }
+        },
+        markers: false // Set to true for debugging
+      });
+    });
+
+    // Smooth scroll behavior
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      });
+    });
+
+    // Debug mode toggle (press 'D')
+    let debugMode = false;
+    let lastFrameTime = performance.now();
+    let frameCount = 0;
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'd' || e.key === 'D') {
+        debugMode = !debugMode;
+        document.body.classList.toggle('debug-mode', debugMode);
+
+        // Update debug info
+        document.getElementById('device').textContent = isMobile ? 'mobile' : 'desktop';
+        document.getElementById('resolution').textContent =
+          `${fluidCanvas.config.simResolution}x${fluidCanvas.config.simResolution}`;
+      }
+    });
+
+    // FPS counter
+    function updateFPS() {
+      if (!debugMode) {
+        requestAnimationFrame(updateFPS);
+        return;
+      }
+
+      frameCount++;
+      const now = performance.now();
+      const elapsed = now - lastFrameTime;
+
+      if (elapsed >= 1000) {
+        const fps = Math.round((frameCount * 1000) / elapsed);
+        document.getElementById('fps').textContent = fps;
+        frameCount = 0;
+        lastFrameTime = now;
+      }
+
+      requestAnimationFrame(updateFPS);
+    }
+    updateFPS();
+
+    // Enhanced pointer tracking for fluid interaction
+    let pointerData = { x: 0.5, y: 0.5, moved: false };
+
+    document.addEventListener('mousemove', (e) => {
+      const canvas = document.getElementById('fluid-canvas');
+      if (!canvas) return;
+
+      const rect = canvas.getBoundingClientRect();
+      const newX = e.clientX / window.innerWidth;
+      const newY = 1 - (e.clientY / window.innerHeight);
+
+      pointerData = {
+        x: newX,
+        y: newY,
+        dx: newX - pointerData.x,
+        dy: newY - pointerData.y,
+        moved: true
+      };
+
+      // Direct splat on significant movement
+      if (Math.abs(pointerData.dx) > 0.001 || Math.abs(pointerData.dy) > 0.001) {
+        fluidCanvas.splat(
+          pointerData.x,
+          pointerData.y,
+          pointerData.dx * 5,
+          pointerData.dy * 5,
+          { r: 0.2, g: 0.2, b: 0.2 }
+        );
+      }
+    });
+
+    // Touch interaction for mobile
+    document.addEventListener('touchmove', (e) => {
+      if (e.touches.length > 0) {
+        const touch = e.touches[0];
+        const newX = touch.clientX / window.innerWidth;
+        const newY = 1 - (touch.clientY / window.innerHeight);
+
+        pointerData = {
+          x: newX,
+          y: newY,
+          dx: newX - pointerData.x,
+          dy: newY - pointerData.y,
+          moved: true
+        };
+
+        if (Math.abs(pointerData.dx) > 0.002 || Math.abs(pointerData.dy) > 0.002) {
+          fluidCanvas.splat(
+            pointerData.x,
+            pointerData.y,
+            pointerData.dx * 8,
+            pointerData.dy * 8,
+            { r: 0.3, g: 0.3, b: 0.3 }
+          );
+        }
+      }
+    }, { passive: true });
+
+    // Cleanup on page unload
+    window.addEventListener('beforeunload', () => {
+      fluidCanvas.destroy();
+    });
+
+    // Handle visibility change (pause when tab hidden)
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        fluidCanvas.isRunning = false;
+      } else {
+        fluidCanvas.isRunning = true;
+        fluidCanvas.lastTime = performance.now();
+        fluidCanvas.animate();
+      }
+    });
+
+    console.log('🌊 Fluid Canvas Demo Ready');
+    console.log('💡 Press "D" to toggle debug mode');
+  </script>
+
+</body>
+</html>

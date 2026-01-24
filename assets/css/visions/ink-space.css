@@ -1,0 +1,148 @@
+/**
+ * THE INK SPACE - Stylesheet
+ *
+ * Minimal styles to ensure the canvas sits behind interactive content
+ * while maintaining the ethereal aesthetic.
+ */
+
+/* Canvas container - fixed behind all content */
+#ink-space-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  pointer-events: none;
+  background: #0a0a0a;
+}
+
+/* Ensure content sits above the 3D space */
+.ink-space-content {
+  position: relative;
+  z-index: 1;
+  pointer-events: auto;
+}
+
+/* Loading state - subtle fade in */
+#ink-space-canvas.loading {
+  opacity: 0;
+  transition: opacity 1.2s ease-in-out;
+}
+
+#ink-space-canvas.loaded {
+  opacity: 1;
+}
+
+/* Performance hint: GPU acceleration */
+#ink-space-canvas {
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  #ink-space-canvas {
+    /* Reduce quality slightly on mobile for performance */
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+  }
+}
+
+/* Prevent text selection interference with 3D space */
+body.ink-space-active {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+}
+
+/* Allow text selection on content elements */
+.ink-space-content * {
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  user-select: text;
+}
+
+/* Smooth scroll for the experience */
+html.ink-space-active {
+  scroll-behavior: smooth;
+}
+
+/* Hide scrollbar but maintain scroll functionality */
+html.ink-space-active::-webkit-scrollbar {
+  display: none;
+}
+
+html.ink-space-active {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Atmospheric overlay for depth */
+.ink-space-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 0%,
+    rgba(10, 10, 10, 0.3) 100%
+  );
+}
+
+/* Content sections should have enough height for scroll */
+.ink-space-section {
+  min-height: 100vh;
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Text should be readable against the dark background */
+.ink-space-content {
+  color: #f0f0f0;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+}
+
+/* Links and interactive elements */
+.ink-space-content a,
+.ink-space-content button {
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+/* Performance: Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  #ink-space-canvas {
+    display: none;
+  }
+
+  html.ink-space-active {
+    scroll-behavior: auto;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  #ink-space-canvas {
+    opacity: 0.6;
+  }
+
+  .ink-space-content {
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.9);
+  }
+}
+
+/* Print styles - hide 3D canvas */
+@media print {
+  #ink-space-canvas,
+  .ink-space-overlay {
+    display: none !important;
+  }
+}

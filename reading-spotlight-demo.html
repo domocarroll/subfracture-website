@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Reading Spotlight - Demo</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      line-height: 1.6;
+      color: #1a1a1a;
+      background: #fafafa;
+    }
+
+    .demo-header {
+      padding: 60px 20px 40px;
+      text-align: center;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+
+    .demo-header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+
+    .demo-header p {
+      font-size: 1.1rem;
+      opacity: 0.95;
+    }
+
+    .demo-instructions {
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 20px;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .demo-instructions h2 {
+      font-size: 1.5rem;
+      margin-bottom: 15px;
+      color: #667eea;
+    }
+
+    .demo-instructions ul {
+      margin-left: 20px;
+    }
+
+    .demo-instructions li {
+      margin-bottom: 8px;
+    }
+
+    .demo-instructions code {
+      background: #f4f4f4;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-family: 'Courier New', monospace;
+    }
+
+    .demo-content {
+      max-width: 700px;
+      margin: 60px auto;
+      padding: 40px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    }
+
+    .demo-content h2 {
+      font-size: 2rem;
+      margin-bottom: 20px;
+      color: #1a1a1a;
+    }
+
+    .demo-content p {
+      font-size: 1.1rem;
+      margin-bottom: 24px;
+      line-height: 1.8;
+    }
+
+    .demo-content .highlight {
+      background: #fff3cd;
+      padding: 0 4px;
+      border-radius: 2px;
+    }
+
+    .zone-indicator {
+      position: fixed;
+      left: 0;
+      width: 100%;
+      background: rgba(102, 126, 234, 0.08);
+      border-top: 2px dashed rgba(102, 126, 234, 0.4);
+      border-bottom: 2px dashed rgba(102, 126, 234, 0.4);
+      pointer-events: none;
+      z-index: 998;
+      display: none;
+    }
+
+    .zone-indicator.visible {
+      display: block;
+    }
+
+    .zone-label {
+      position: absolute;
+      right: 10px;
+      top: 10px;
+      background: rgba(102, 126, 234, 0.9);
+      color: white;
+      padding: 4px 12px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    .demo-spacer {
+      height: 100vh;
+    }
+
+    footer {
+      text-align: center;
+      padding: 40px 20px;
+      color: #666;
+      font-size: 0.9rem;
+    }
+
+    /* Override spotlight for demo */
+    .sf-body p {
+      /* Demo styling */
+    }
+  </style>
+</head>
+<body>
+
+<div class="demo-header">
+  <h1>Reading Spotlight Demo</h1>
+  <p>Scroll to experience the focused reading zone</p>
+</div>
+
+<div class="demo-instructions">
+  <h2>How to Use</h2>
+  <ul>
+    <li><strong>Scroll naturally</strong> - Notice how text dims as it leaves the reading zone</li>
+    <li><strong>Press R</strong> or click the button (bottom-right) to toggle spotlight on/off</li>
+    <li><strong>Reading zone</strong>: The highlighted area where text remains clear (30-60% from top)</li>
+    <li><strong>Observe</strong>: Text above and below gradually dims and blurs</li>
+  </ul>
+  <p style="margin-top: 15px;">
+    <label>
+      <input type="checkbox" id="showZone" style="margin-right: 5px;">
+      <code>Show reading zone indicator</code>
+    </label>
+  </p>
+</div>
+
+<div class="demo-content sf-body">
+  <h2>The Philosophy of Sustained Collective Pretending</h2>
+
+  <p>Every brand that matters, every movement that changed something, started as pretending. Not lying. Not deception. But the courageous act of imagining a future that doesn't yet exist and acting as if it already does.</p>
+
+  <p>Think about it. Apple pretended computers could be beautiful. Nike pretended athletes lived in all of us. Tesla pretended electric cars could be desirable. They reached toward something invisible and held that vision so clearly, so consistently, that reality eventually caught up.</p>
+
+  <p>This is what we mean by <span class="highlight">sustained collective pretending</span>. It's the practice of holding a shared imagination long enough, consistently enough, and with enough people that the pretending becomes real.</p>
+
+  <p>Sustained means we don't give up when reality pushes back. When the market says no, when competitors copy, when critics dismiss. We keep pretending, keep building, keep believing until the vision outlasts the resistance.</p>
+
+  <p>Collective means it's not just one person's delusion. It's a shared reality that teams, customers, and communities choose to inhabit together. When enough people pretend the same thing at the same time, culture shifts.</p>
+
+  <p>Pretending isn't about fantasy. It's about possibility. It's the space between what is and what could be. It's where innovation lives, where movements begin, where change takes root.</p>
+
+  <p>Most brands fail because they stop pretending too soon. They let quarterly results override long-term vision. They abandon the imagination when it gets uncomfortable. They choose safe reality over audacious possibility.</p>
+
+  <p>We build systems to sustain pretending. Strategy frameworks that keep teams aligned around the future they're creating. Creative systems that make the invisible visible. Technology that encodes intuition so it scales without losing soul.</p>
+
+  <p>This isn't magical thinking. It's disciplined imagination. It's the recognition that culture moves toward the stories we tell most consistently. And if we're going to pretend, we might as well pretend something worth becoming.</p>
+
+  <p>The question isn't whether your brand should pretend. It already is. Every brand is pretending to be something - more innovative, more caring, more relevant than it actually is right now. The question is: Are you pretending something big enough to matter?</p>
+
+  <p>Are you sustaining that pretending when it gets hard? Are you making it collective, inviting others into the imagination? Are you building systems that keep the vision alive even when you're not in the room?</p>
+
+  <p>Because that's how brands become movements. That's how ideas become culture. That's how pretending becomes reality. Not through magic, but through the sustained, collective, deliberate practice of imagining better and acting accordingly.</p>
+
+  <p>We don't just create campaigns. We co-design movements. We build the infrastructure for sustained collective pretending. We help you hold the vision until reality bends to meet it.</p>
+
+  <p>This is what culture studios do. This is what we mean when we say art and systems flow together. The art is the pretending. The systems are what sustain it. Together, they generate acceptance. Together, they find love.</p>
+
+  <p>So what are you pretending? And more importantly, are you ready to sustain it?</p>
+</div>
+
+<div class="demo-spacer"></div>
+
+<footer>
+  <p>Reading Spotlight by Subfracture | Built with GSAP ScrollTrigger</p>
+  <p style="margin-top: 10px; font-size: 0.8rem;">This effect enhances focus without competing with content</p>
+</footer>
+
+<!-- Zone indicator (hidden by default) -->
+<div class="zone-indicator" id="zoneIndicator">
+  <div class="zone-label">READING ZONE</div>
+</div>
+
+<script type="module">
+  import { initReadingSpotlight } from '/assets/js/reading-spotlight.js';
+
+  // Initialize spotlight
+  const spotlight = initReadingSpotlight({
+    targetSelector: '.demo-content p',
+    zoneStart: 0.30,
+    zoneEnd: 0.60,
+    dimmedOpacity: 0.35,
+    dimmedBlur: 0.5
+  });
+
+  // Zone indicator toggle
+  const showZoneCheckbox = document.getElementById('showZone');
+  const zoneIndicator = document.getElementById('zoneIndicator');
+
+  showZoneCheckbox.addEventListener('change', (e) => {
+    if (e.target.checked) {
+      zoneIndicator.classList.add('visible');
+      updateZoneIndicator();
+    } else {
+      zoneIndicator.classList.remove('visible');
+    }
+  });
+
+  function updateZoneIndicator() {
+    if (!showZoneCheckbox.checked) return;
+
+    const vh = window.innerHeight;
+    const top = vh * 0.30;
+    const height = vh * (0.60 - 0.30);
+
+    zoneIndicator.style.top = `${top}px`;
+    zoneIndicator.style.height = `${height}px`;
+
+    requestAnimationFrame(updateZoneIndicator);
+  }
+
+  window.addEventListener('resize', () => {
+    if (showZoneCheckbox.checked) {
+      updateZoneIndicator();
+    }
+  });
+
+  console.log('Reading Spotlight Demo loaded');
+  console.log('Press R to toggle, or check the box to visualize the reading zone');
+</script>
+
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tomoe v2 — Rebuilt with Soul</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #0a0014;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    #tomoe-container {
+      width: min(80vw, 450px);
+      height: min(80vw, 450px);
+    }
+
+    .hint {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: #7d54ff;
+      font-family: system-ui, -apple-system, sans-serif;
+      font-size: 12px;
+      opacity: 0.4;
+      letter-spacing: 0.1em;
+    }
+  </style>
+</head>
+<body>
+  <div id="tomoe-container"></div>
+  <div class="hint">R to replay</div>
+
+  <script type="module">
+    import { init } from './assets/js/tomoe-draw-v2.js';
+
+    const container = document.getElementById('tomoe-container');
+
+    const tomoe = init(container, {
+      color: '#7d54ff',
+      onComplete: () => {
+        // Silence after completion
+      }
+    });
+
+    // Keyboard controls
+    document.addEventListener('keydown', (e) => {
+      if (e.key.toLowerCase() === 'r') {
+        tomoe.replay();
+      }
+    });
+  </script>
+</body>
+</html>

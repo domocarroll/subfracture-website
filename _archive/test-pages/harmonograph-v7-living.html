@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Subfracture // Living</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #050510;
+      overflow: hidden;
+      cursor: crosshair;
+    }
+
+    .canvas-container {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #canvas {
+      width: 70vw;
+      max-width: 900px;
+      height: auto;
+      aspect-ratio: 1 / 1;
+      -webkit-mask-image: url('assets/subfracture-wordmark.png');
+      mask-image: url('assets/subfracture-wordmark.png');
+      -webkit-mask-size: contain;
+      mask-size: contain;
+      -webkit-mask-position: center;
+      mask-position: center;
+      -webkit-mask-repeat: no-repeat;
+      mask-repeat: no-repeat;
+    }
+
+    .hint {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: rgba(255, 255, 255, 0.15);
+      font-family: 'Courier New', monospace;
+      font-size: 10px;
+      letter-spacing: 2px;
+      z-index: 100;
+      transition: opacity 1s ease;
+    }
+
+    .hint.hidden { opacity: 0; }
+  </style>
+</head>
+<body>
+  <div class="canvas-container">
+    <canvas id="canvas"></canvas>
+  </div>
+
+  <div class="hint" id="hint">click to shift &nbsp;|&nbsp; W for wild &nbsp;|&nbsp; 1-5 presets</div>
+
+  <script>
+    // ===== CONFIGURATION =====
+    const CONFIG = {
+      SIZE: 1361,
+      FADE_RATE: 0.003,        // How fast old lines fade
+      GLOW_BLUR: 8,            // Bloom intensity
+      GLOW_STRENGTH: 0.6,      // Glow opacity multiplier
+      MOUSE_INFLUENCE: 0.15,   // How much mouse affects parameters
+      EASE_POWER: 2.5,         // Drawing speed easing curve
+      MIN_LINE_WIDTH: 0.3,     // Thinnest line (at max decay)
+      MAX_LINE_WIDTH: 2.5,     // Thickest line (at start)
+    };
+
+    // ===== PRESETS =====
+    const PRESETS = {
+      ember: {
+        name: 'Ember',
+        baseParams: {
+          xAmp: [1.0, 0.45],
+          yAmp: [1.0, 0.45],
+          freq: [4.01, 2.5, 3.0, 2.51],
+          damp: [0.0006, 0.0005, 0.0006, 0.0005],
+          phase: [0, Math.PI/4, Math.PI/2, Math.PI/6]
+        },
+        hue: 15,
+        saturation: 75,
+        lightness: 55,
+        xExtent: 0.46,
+        yExtent: 0.13
+      },
+      dense: {
+        name: 'Dense',
+        baseParams: {
+          xAmp: [1.1, 0.5],
+          yAmp: [1.1, 0.5],
+          freq: [5.01, 3.0, 4.0, 3.01],
+          damp: [0.0003, 0.0003, 0.0003, 0.0003],
+          phase: [0, Math.PI/4, Math.PI/2, Math.PI/6]
+        },
+        hue: 190,
+        saturation: 65,
+        lightness: 55,
+        xExtent: 0.48,
+        yExtent: 0.14
+      },
+      voltage: {
+        name: 'Voltage',
+        baseParams: {
+          xAmp: [0.9, 0.7],
+          yAmp: [0.9, 0.7],
+          freq: [8.03, 7.0, 6.0, 8.01],
+          damp: [0.0005, 0.0004, 0.0005, 0.0004],
+          phase: [0, Math.PI/3, Math.PI/4, Math.PI/2]
+        },
+        hue: 270,
+        saturation: 65,
+        lightness: 60,
+        xExtent: 0.47,
+        yExtent: 0.14
+      },
+      fracture: {
+        name: 'Fracture',
+        baseParams: {
+          xAmp: [1.0, 0.6],
+          yAmp: [1.0, 0.6],
+          freq: [7.02, 5.0, 5.0, 7.01],
+          damp: [0.0008, 0.0007, 0.0008, 0.0007],
+          phase: [0, Math.PI/5, Math.PI/3, 0]
+        },
+        hue: 185,
+        saturation: 70,
+        lightness: 50,
+        xExtent: 0.46,
+        yExtent: 0.13
+      },
+      drift: {
+        name: 'Drift',
+        baseParams: {
+          xAmp: [1.0, 0.5],
+          yAmp: [1.0, 0.5],
+          freq: [Math.PI, Math.E, Math.SQRT2, 1.618],
+          damp: [0.0004, 0.0005, 0.0004, 0.0005],
+          phase: [0, 1, 2, 3]
+        },
+        hue: 175,
+        saturation: 55,
+        lightness: 58,
+        xExtent: 0.45,
+        yExtent: 0.12
+      }
+    };
+
+    // ===== STATE =====
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = CONFIG.SIZE;
+    canvas.height = CONFIG.SIZE;
+
+    const state = {
+      // Pendulum parameters (will be interpolated)
+      pendulums: [],
+      targetPendulums: [],
+
+      // Drawing state
+      t: 0,
+      dt: 0.015,
+      maxT: 2500,
+      cycleT: 0,           // Time within current cycle
+
+      // Visual state
+      hue: 190,
+      targetHue: 190,
+      saturation: 65,
+      lightness: 55,
+
+      // Mouse influence
+      mouseX: 0.5,         // Normalized 0-1
+      mouseY: 0.5,
+
+      // Center
+      centerX: CONFIG.SIZE / 2,
+      centerY: CONFIG.SIZE / 2,
+
+      // Mode
+      continuous: true,    // Breathing mode
+    };
+
+    let lastPoint = null;
+    let frameCount = 0;
+
+    // ===== EASING =====
+    function easeInOut(t, power = CONFIG.EASE_POWER) {
+      if (t < 0.5) {
+        return Math.pow(2 * t, power) / 2;
+      } else {
+        return 1 - Math.pow(2 * (1 - t), power) / 2;
+      }
+    }
+
+    // ===== PARAMETER INTERPOLATION =====
+    function lerpPendulums(current, target, factor) {
+      return current.map((p, i) => ({
+        A: p.A + (target[i].A - p.A) * factor,
+        f: p.f + (target[i].f - p.f) * factor,
+        d: p.d + (target[i].d - p.d) * factor,
+        p: p.p + (target[i].p - p.p) * factor
+      }));
+    }
+
+    // ===== MOUSE INFLUENCE =====
+    function applyMouseInfluence(pendulums) {
+      const mx = (state.mouseX - 0.5) * 2; // -1 to 1
+      const my = (state.mouseY - 0.5) * 2;
+
+      return pendulums.map((p, i) => ({
+        A: p.A * (1 + mx * CONFIG.MOUSE_INFLUENCE * (i % 2 === 0 ? 1 : -0.5)),
+        f: p.f * (1 + my * CONFIG.MOUSE_INFLUENCE * 0.3),
+        d: p.d,
+        p: p.p + mx * 0.1
+      }));
+    }
+
+    // ===== CORE MATH =====
+    function harmonographPoint(t, pendulums) {
+      const p = applyMouseInfluence(pendulums);
+
+      const x = p[0].A * Math.exp(-p[0].d * t) * Math.sin(p[0].f * t + p[0].p) +
+                p[1].A * Math.exp(-p[1].d * t) * Math.sin(p[1].f * t + p[1].p);
+
+      const y = p[2].A * Math.exp(-p[2].d * t) * Math.sin(p[2].f * t + p[2].p) +
+                p[3].A * Math.exp(-p[3].d * t) * Math.sin(p[3].f * t + p[3].p);
+
+      return {
+        x: state.centerX + x,
+        y: state.centerY + y
+      };
+    }
+
+    // ===== DRAWING =====
+    function drawSegment(from, to, t, maxT) {
+      const progress = t / maxT;
+
+      // Eased progress for drawing speed variation
+      const easedProgress = easeInOut(progress);
+
+      // Line width tapers with decay
+      const decay = Math.exp(-0.001 * t);
+      const lineWidth = CONFIG.MIN_LINE_WIDTH +
+                       (CONFIG.MAX_LINE_WIDTH - CONFIG.MIN_LINE_WIDTH) * decay;
+
+      // Color shifts over time
+      const hueShift = progress * 30;
+      const hue = (state.hue + hueShift) % 360;
+
+      // Opacity fades
+      const baseOpacity = 0.2 * (1 - progress * 0.5);
+
+      // Draw glow layer first
+      ctx.save();
+      ctx.shadowColor = `hsla(${hue}, ${state.saturation}%, ${state.lightness}%, ${CONFIG.GLOW_STRENGTH})`;
+      ctx.shadowBlur = CONFIG.GLOW_BLUR;
+      ctx.beginPath();
+      ctx.moveTo(from.x, from.y);
+      ctx.lineTo(to.x, to.y);
+      ctx.strokeStyle = `hsla(${hue}, ${state.saturation}%, ${state.lightness}%, ${baseOpacity})`;
+      ctx.lineWidth = lineWidth;
+      ctx.lineCap = 'round';
+      ctx.stroke();
+      ctx.restore();
+
+      // Draw crisp line on top
+      ctx.beginPath();
+      ctx.moveTo(from.x, from.y);
+      ctx.lineTo(to.x, to.y);
+      ctx.strokeStyle = `hsla(${hue}, ${state.saturation}%, ${state.lightness + 10}%, ${baseOpacity * 1.5})`;
+      ctx.lineWidth = lineWidth * 0.6;
+      ctx.lineCap = 'round';
+      ctx.stroke();
+    }
+
+    // ===== CONTINUOUS BREATHING =====
+    function fadeCanvas() {
+      // Subtle fade for breathing effect
+      ctx.fillStyle = `rgba(5, 5, 16, ${CONFIG.FADE_RATE})`;
+      ctx.fillRect(0, 0, CONFIG.SIZE, CONFIG.SIZE);
+    }
+
+    // ===== ANIMATION LOOP =====
+    function animate() {
+      frameCount++;
+
+      // Skip drawing during transition flash
+      if (isTransitioning) {
+        requestAnimationFrame(animate);
+        return;
+      }
+
+      // Continuous breathing: fade old content
+      if (state.continuous && frameCount % 2 === 0) {
+        fadeCanvas();
+      }
+
+      // Draw multiple points per frame
+      const pointsPerFrame = 60;
+      for (let i = 0; i < pointsPerFrame; i++) {
+        if (state.t > state.maxT) {
+          if (state.continuous) {
+            // Reset for next cycle with slight variation
+            state.t = 0;
+            state.cycleT++;
+            lastPoint = null;
+
+            // Subtle parameter drift each cycle
+            state.targetPendulums = state.targetPendulums.map(p => ({
+              ...p,
+              p: p.p + (Math.random() - 0.5) * 0.2,
+              f: p.f * (0.998 + Math.random() * 0.004)
+            }));
+          } else {
+            break;
+          }
+        }
+
+        const currentPoint = harmonographPoint(state.t, state.pendulums);
+
+        if (lastPoint) {
+          drawSegment(lastPoint, currentPoint, state.t, state.maxT);
+        }
+
+        lastPoint = currentPoint;
+        state.t += state.dt;
+      }
+
+      requestAnimationFrame(animate);
+    }
+
+    // ===== TRANSITION EFFECTS =====
+    let transitionAlpha = 0;
+    let isTransitioning = false;
+
+    function flashTransition(callback) {
+      // Quick flash-fade, then apply new params
+      isTransitioning = true;
+      transitionAlpha = 0;
+
+      const flashIn = () => {
+        transitionAlpha += 0.15;
+        ctx.fillStyle = `rgba(5, 5, 16, ${transitionAlpha})`;
+        ctx.fillRect(0, 0, CONFIG.SIZE, CONFIG.SIZE);
+
+        if (transitionAlpha < 1) {
+          requestAnimationFrame(flashIn);
+        } else {
+          // Apply new params at peak darkness
+          callback();
+          flashOut();
+        }
+      };
+
+      const flashOut = () => {
+        transitionAlpha -= 0.08;
+        if (transitionAlpha > 0) {
+          requestAnimationFrame(flashOut);
+        } else {
+          isTransitioning = false;
+        }
+      };
+
+      flashIn();
+    }
+
+    // ===== PRESET APPLICATION =====
+    function applyPreset(presetName, instant = false) {
+      const preset = PRESETS[presetName];
+      if (!preset) return;
+
+      const apply = () => {
+        const xE = CONFIG.SIZE * preset.xExtent;
+        const yE = CONFIG.SIZE * preset.yExtent;
+
+        state.pendulums = [
+          { A: xE * preset.baseParams.xAmp[0], f: preset.baseParams.freq[0], d: preset.baseParams.damp[0], p: preset.baseParams.phase[0] },
+          { A: xE * preset.baseParams.xAmp[1], f: preset.baseParams.freq[1], d: preset.baseParams.damp[1], p: preset.baseParams.phase[1] },
+          { A: yE * preset.baseParams.yAmp[0], f: preset.baseParams.freq[2], d: preset.baseParams.damp[2], p: preset.baseParams.phase[2] },
+          { A: yE * preset.baseParams.yAmp[1], f: preset.baseParams.freq[3], d: preset.baseParams.damp[3], p: preset.baseParams.phase[3] }
+        ];
+        state.targetPendulums = [...state.pendulums];
+        state.hue = preset.hue;
+        state.targetHue = preset.hue;
+        state.saturation = preset.saturation;
+        state.lightness = preset.lightness;
+        state.t = 0;
+        lastPoint = null;
+      };
+
+      if (instant || state.pendulums.length === 0) {
+        apply();
+        ctx.fillStyle = '#050510';
+        ctx.fillRect(0, 0, CONFIG.SIZE, CONFIG.SIZE);
+      } else {
+        flashTransition(apply);
+      }
+    }
+
+    // ===== RANDOMIZE =====
+    function randomize(wild = false) {
+      const apply = () => {
+        let xE, yE, pendulums;
+
+        if (wild) {
+          // WILD MODE: Irrational ratios, extreme ranges, full spectrum
+          const irrationals = [Math.PI, Math.E, Math.SQRT2, 1.618, Math.sqrt(3), Math.sqrt(5)];
+          const pick = () => irrationals[Math.floor(Math.random() * irrationals.length)];
+
+          xE = CONFIG.SIZE * (0.35 + Math.random() * 0.2);
+          yE = CONFIG.SIZE * (0.08 + Math.random() * 0.12);
+
+          // Completely independent frequencies - no ratio constraint
+          pendulums = [
+            { A: xE * (0.5 + Math.random() * 0.8), f: pick() * (1 + Math.random() * 3), d: 0.0001 + Math.random() * 0.001, p: Math.random() * Math.PI * 2 },
+            { A: xE * (0.3 + Math.random() * 0.7), f: pick() * (0.5 + Math.random() * 2), d: 0.0001 + Math.random() * 0.001, p: Math.random() * Math.PI * 2 },
+            { A: yE * (0.5 + Math.random() * 0.8), f: pick() * (1 + Math.random() * 3), d: 0.0001 + Math.random() * 0.001, p: Math.random() * Math.PI * 2 },
+            { A: yE * (0.3 + Math.random() * 0.7), f: pick() * (0.5 + Math.random() * 2), d: 0.0001 + Math.random() * 0.001, p: Math.random() * Math.PI * 2 }
+          ];
+
+          // Full hue spectrum
+          state.hue = Math.random() * 360;
+          state.saturation = 50 + Math.random() * 45;
+          state.lightness = 45 + Math.random() * 25;
+        } else {
+          // Normal mode: Clean ratios, constrained ranges
+          const ratios = [[3, 2], [4, 3], [5, 4], [5, 3], [7, 4], [7, 5], [8, 5]];
+          const ratio = ratios[Math.floor(Math.random() * ratios.length)];
+          const baseFreq = 2 + Math.random() * 2.5;
+          const detune = () => 0.995 + Math.random() * 0.01;
+
+          xE = CONFIG.SIZE * (0.42 + Math.random() * 0.08);
+          yE = CONFIG.SIZE * (0.11 + Math.random() * 0.04);
+
+          pendulums = [
+            { A: xE * (0.8 + Math.random() * 0.4), f: baseFreq * ratio[0] * detune(), d: 0.0004 + Math.random() * 0.0006, p: Math.random() * Math.PI * 2 },
+            { A: xE * (0.3 + Math.random() * 0.35), f: baseFreq * ratio[1] * detune() * 0.6, d: 0.0003 + Math.random() * 0.0005, p: Math.random() * Math.PI * 2 },
+            { A: yE * (0.8 + Math.random() * 0.4), f: baseFreq * ratio[1] * detune(), d: 0.0004 + Math.random() * 0.0006, p: Math.random() * Math.PI * 2 },
+            { A: yE * (0.3 + Math.random() * 0.35), f: baseFreq * ratio[0] * detune() * 0.6, d: 0.0003 + Math.random() * 0.0005, p: Math.random() * Math.PI * 2 }
+          ];
+
+          state.hue = 170 + Math.random() * 60;
+          state.saturation = 55 + Math.random() * 25;
+          state.lightness = 50 + Math.random() * 15;
+        }
+
+        state.pendulums = pendulums;
+        state.targetPendulums = [...state.pendulums];
+        state.targetHue = state.hue;
+        state.t = 0;
+        lastPoint = null;
+      };
+
+      if (state.pendulums.length === 0) {
+        apply();
+      } else {
+        flashTransition(apply);
+      }
+    }
+
+    // ===== MOUSE TRACKING =====
+    document.addEventListener('mousemove', (e) => {
+      state.mouseX = e.clientX / window.innerWidth;
+      state.mouseY = e.clientY / window.innerHeight;
+    });
+
+    // ===== INPUT HANDLERS =====
+    canvas.addEventListener('click', randomize);
+
+    document.addEventListener('keydown', (e) => {
+      switch(e.code) {
+        case 'Space':
+        case 'KeyR':
+          e.preventDefault();
+          randomize(false);
+          break;
+        case 'KeyW':
+          // WILD MODE
+          e.preventDefault();
+          randomize(true);
+          break;
+        case 'Digit1': applyPreset('ember'); break;
+        case 'Digit2': applyPreset('dense'); break;
+        case 'Digit3': applyPreset('voltage'); break;
+        case 'Digit4': applyPreset('fracture'); break;
+        case 'Digit5': applyPreset('drift'); break;
+        case 'KeyC':
+          // Toggle continuous mode
+          state.continuous = !state.continuous;
+          break;
+      }
+    });
+
+    // ===== INIT =====
+    applyPreset('ember', true);
+    animate();
+  </script>
+</body>
+</html>

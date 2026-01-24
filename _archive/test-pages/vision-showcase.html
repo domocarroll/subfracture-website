@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SUBFRACTURE Vision Showcase</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #0a0014;
+      color: #fff;
+      font-family: system-ui, -apple-system, sans-serif;
+      min-height: 100vh;
+    }
+    .showcase {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      padding: 2rem;
+    }
+    .vision-card {
+      background: rgba(125, 84, 255, 0.1);
+      border: 1px solid rgba(125, 84, 255, 0.3);
+      border-radius: 12px;
+      padding: 2rem;
+      position: relative;
+      min-height: 400px;
+      overflow: hidden;
+    }
+    .vision-card h2 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      color: #7d54ff;
+    }
+    .vision-card p {
+      opacity: 0.7;
+      margin-bottom: 1rem;
+    }
+    .vision-preview {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+    .btn {
+      background: #7d54ff;
+      color: #fff;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: all 0.2s;
+    }
+    .btn:hover {
+      background: #9d7aff;
+      transform: translateY(-2px);
+    }
+    .status {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: rgba(0,0,0,0.9);
+      padding: 1rem 1.5rem;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      z-index: 10000;
+    }
+
+    /* INLINE VISION D PREVIEW - BREATHING DOTS */
+    .breathing-dots-preview {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+    }
+    .breathing-dot-preview {
+      position: absolute;
+      background: #7d54ff;
+      border-radius: 50%;
+      animation: breathePreview 3s ease-in-out infinite;
+    }
+    @keyframes breathePreview {
+      0%, 100% { transform: scale(1); opacity: 0.4; }
+      50% { transform: scale(1.8); opacity: 0.9; }
+    }
+
+    /* INLINE VISION B PREVIEW - PARTICLES */
+    .particles-preview {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: linear-gradient(135deg, #0a0014 0%, #1a0030 100%);
+    }
+    .particle {
+      position: absolute;
+      width: 2px; height: 2px;
+      background: #7d54ff;
+      border-radius: 50%;
+      animation: drift 8s linear infinite;
+    }
+    @keyframes drift {
+      0% { transform: translateY(0) translateX(0); opacity: 0; }
+      10% { opacity: 0.6; }
+      90% { opacity: 0.6; }
+      100% { transform: translateY(-300px) translateX(50px); opacity: 0; }
+    }
+
+    /* INLINE VISION C PREVIEW - FLUID */
+    .fluid-preview {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: #f5f5f0;
+      overflow: hidden;
+    }
+    .ink-blob {
+      position: absolute;
+      background: radial-gradient(circle, rgba(0,0,0,0.8) 0%, transparent 70%);
+      border-radius: 50%;
+      animation: inkFlow 6s ease-in-out infinite;
+      filter: blur(20px);
+    }
+    @keyframes inkFlow {
+      0%, 100% { transform: scale(1) translate(0, 0); }
+      33% { transform: scale(1.3) translate(30px, -20px); }
+      66% { transform: scale(0.8) translate(-20px, 30px); }
+    }
+
+    /* INLINE VISION A PREVIEW - SVG DRAW */
+    .svg-draw-preview {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    .draw-path {
+      stroke-dasharray: 300;
+      stroke-dashoffset: 300;
+      animation: drawLine 3s ease-in-out infinite;
+    }
+    @keyframes drawLine {
+      0% { stroke-dashoffset: 300; }
+      50% { stroke-dashoffset: 0; }
+      100% { stroke-dashoffset: -300; }
+    }
+  </style>
+</head>
+<body>
+  <div class="showcase">
+    <h1 style="text-align:center; font-size: 2.5rem; padding: 2rem; color: #7d54ff;">
+      SUBFRACTURE CREATIVE VISIONS
+    </h1>
+
+    <!-- VISION A: Living Ink -->
+    <div class="vision-card">
+      <div class="vision-preview svg-draw-preview">
+        <svg width="200" height="200" viewBox="0 0 200 200">
+          <!-- Bagua-inspired octagon -->
+          <path class="draw-path" d="M100 10 L170 40 L190 100 L170 160 L100 190 L30 160 L10 100 L30 40 Z"
+                fill="none" stroke="#7d54ff" stroke-width="2"/>
+          <circle class="draw-path" cx="100" cy="100" r="40" fill="none" stroke="#7d54ff" stroke-width="2"
+                  style="animation-delay: 0.5s"/>
+        </svg>
+      </div>
+      <h2>A: THE LIVING INK</h2>
+      <p>AI-breathing drawings + self-drawing SVG diagrams. Watch the sacred geometry draw itself.</p>
+      <button class="btn" onclick="activateVision('living-ink')">Activate Living Ink</button>
+    </div>
+
+    <!-- VISION B: Ink Space -->
+    <div class="vision-card">
+      <div class="vision-preview particles-preview">
+        <script>
+          // Generate particles
+          const particlesContainer = document.currentScript.parentElement;
+          for (let i = 0; i < 50; i++) {
+            const p = document.createElement('div');
+            p.className = 'particle';
+            p.style.left = Math.random() * 100 + '%';
+            p.style.top = Math.random() * 100 + '%';
+            p.style.animationDelay = Math.random() * 8 + 's';
+            p.style.animationDuration = (5 + Math.random() * 5) + 's';
+            particlesContainer.appendChild(p);
+          }
+        </script>
+      </div>
+      <h2>B: THE INK SPACE</h2>
+      <p>Three.js 3D gallery. Drawings float through atmospheric fog. Scroll becomes camera movement.</p>
+      <button class="btn" onclick="activateVision('ink-space')">Activate Ink Space</button>
+    </div>
+
+    <!-- VISION C: Fluid Canvas -->
+    <div class="vision-card">
+      <div class="vision-preview fluid-preview">
+        <div class="ink-blob" style="width:150px;height:150px;top:20%;left:30%;"></div>
+        <div class="ink-blob" style="width:100px;height:100px;top:50%;left:60%;animation-delay:2s;"></div>
+        <div class="ink-blob" style="width:80px;height:80px;top:70%;left:20%;animation-delay:4s;"></div>
+      </div>
+      <h2 style="color:#000;">C: THE FLUID CANVAS</h2>
+      <p style="color:#333;">WebGL fluid simulation. Drawings emerge from flowing ink. Touch creates ripples.</p>
+      <button class="btn" onclick="activateVision('fluid-canvas')">Activate Fluid Canvas</button>
+    </div>
+
+    <!-- VISION D: Generative Temple -->
+    <div class="vision-card">
+      <div class="vision-preview breathing-dots-preview">
+        <script>
+          // Generate breathing dots
+          const dotsContainer = document.currentScript.parentElement;
+          for (let i = 0; i < 15; i++) {
+            const dot = document.createElement('div');
+            dot.className = 'breathing-dot-preview';
+            const size = 10 + Math.random() * 30;
+            dot.style.width = size + 'px';
+            dot.style.height = size + 'px';
+            dot.style.left = Math.random() * 90 + '%';
+            dot.style.top = Math.random() * 90 + '%';
+            dot.style.animationDelay = Math.random() * 3 + 's';
+            dotsContainer.appendChild(dot);
+          }
+        </script>
+      </div>
+      <h2>D: THE GENERATIVE TEMPLE</h2>
+      <p>Sacred geometry as atmosphere. Mathematical patterns breathe beneath the surface.</p>
+      <button class="btn" onclick="activateVision('generative-temple')">Activate Generative Temple</button>
+    </div>
+  </div>
+
+  <div class="status" id="status">
+    Click a button to activate a vision on the main site
+  </div>
+
+  <script type="module">
+    import { initVisionController, getVisionController } from '/assets/js/vision-controller.js';
+
+    // Initialize
+    const controller = initVisionController({ default: null });
+
+    window.activateVision = async (name) => {
+      const status = document.getElementById('status');
+      status.textContent = `Activating ${name}...`;
+
+      try {
+        await controller.activate(name);
+        status.textContent = `✓ ${name} is now active! Go to main page to see it.`;
+        status.style.borderLeft = '4px solid #0f0';
+
+        // Also show controls
+        controller.toggleControls();
+      } catch (e) {
+        status.textContent = `✗ Error: ${e.message}`;
+        status.style.borderLeft = '4px solid #f00';
+        console.error(e);
+      }
+    };
+
+    // Log status
+    console.log('Vision Showcase loaded. Controller:', controller);
+  </script>
+</body>
+</html>

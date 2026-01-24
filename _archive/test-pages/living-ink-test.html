@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Living Ink - System Test</title>
+  <link rel="stylesheet" href="/assets/css/visions/living-ink.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Courier New', monospace;
+      background: #0a0a0a;
+      color: #4ade80;
+      padding: 2rem;
+      line-height: 1.6;
+    }
+
+    .test-container {
+      max-width: 900px;
+      margin: 0 auto;
+      border: 2px solid #333;
+      padding: 2rem;
+      background: #1a1a1a;
+    }
+
+    h1 {
+      color: #ffd700;
+      margin-bottom: 2rem;
+      font-size: 1.75rem;
+    }
+
+    h2 {
+      color: #4ade80;
+      margin: 2rem 0 1rem;
+      font-size: 1.25rem;
+    }
+
+    .test-section {
+      margin: 2rem 0;
+      padding: 1.5rem;
+      background: #0a0a0a;
+      border-left: 4px solid #4ade80;
+    }
+
+    .test-result {
+      margin: 1rem 0;
+      padding: 0.75rem;
+      background: #1a1a1a;
+      border-radius: 4px;
+    }
+
+    .status {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 3px;
+      font-weight: bold;
+      margin-left: 0.5rem;
+    }
+
+    .status.pass {
+      background: #4ade80;
+      color: #0a0a0a;
+    }
+
+    .status.fail {
+      background: #ef4444;
+      color: #fff;
+    }
+
+    .status.pending {
+      background: #fbbf24;
+      color: #0a0a0a;
+    }
+
+    code {
+      background: #0a0a0a;
+      padding: 0.2rem 0.5rem;
+      border-radius: 3px;
+      color: #fbbf24;
+    }
+
+    .diagram-test {
+      margin: 1rem 0;
+      padding: 1rem;
+      background: #fff;
+      border-radius: 8px;
+      text-align: center;
+    }
+
+    .spacer {
+      height: 50vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #666;
+      font-size: 0.875rem;
+    }
+
+    button {
+      background: #4ade80;
+      color: #0a0a0a;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+      font-family: inherit;
+      margin-top: 1rem;
+    }
+
+    button:hover {
+      background: #22c55e;
+    }
+  </style>
+</head>
+<body>
+  <div class="test-container">
+    <h1>🖋️ LIVING INK: System Test</h1>
+
+    <p>This page verifies all Living Ink components are installed and working correctly.</p>
+
+    <!-- ===================== -->
+    <!-- MODULE LOAD TEST      -->
+    <!-- ===================== -->
+
+    <div class="test-section">
+      <h2>1. Module Loading</h2>
+      <div class="test-result" id="module-test">
+        <span>Testing module import...</span>
+      </div>
+      <div class="test-result" id="css-test">
+        <span>Testing CSS load...</span>
+      </div>
+      <div class="test-result" id="gsap-test">
+        <span>Testing GSAP availability...</span>
+      </div>
+    </div>
+
+    <!-- ===================== -->
+    <!-- SVG DIAGRAM TEST      -->
+    <!-- ===================== -->
+
+    <div class="test-section">
+      <h2>2. SVG Diagram Generation</h2>
+      <p>Scroll down to see diagrams draw themselves...</p>
+    </div>
+
+    <div class="spacer">↓ Scroll Down ↓</div>
+
+    <div class="test-section">
+      <h3>Bagua Diagram</h3>
+      <div class="diagram-test">
+        <div
+          class="living-ink__diagram"
+          data-diagram-type="bagua"
+          data-stroke-color="#1a1a1a"
+          data-stroke-width="2"
+          data-duration="3"
+          id="diagram-bagua"
+        >
+        </div>
+      </div>
+      <div class="test-result" id="bagua-test">
+        <span>Waiting for scroll...</span>
+      </div>
+    </div>
+
+    <div class="test-section">
+      <h3>Joy Spiral</h3>
+      <div class="diagram-test">
+        <div
+          class="living-ink__diagram"
+          data-diagram-type="joySpiral"
+          data-stroke-color="#DAA520"
+          data-stroke-width="2.5"
+          data-duration="3"
+          id="diagram-joy"
+        >
+        </div>
+      </div>
+      <div class="test-result" id="joy-test">
+        <span>Waiting for scroll...</span>
+      </div>
+    </div>
+
+    <div class="test-section">
+      <h3>Fear Spiral</h3>
+      <div class="diagram-test">
+        <div
+          class="living-ink__diagram"
+          data-diagram-type="fearSpiral"
+          data-stroke-color="#8B0000"
+          data-stroke-width="2.5"
+          data-duration="3"
+          id="diagram-fear"
+        >
+        </div>
+      </div>
+      <div class="test-result" id="fear-test">
+        <span>Waiting for scroll...</span>
+      </div>
+    </div>
+
+    <div class="test-section">
+      <h3>Infinity Loop</h3>
+      <div class="diagram-test">
+        <div
+          class="living-ink__diagram"
+          data-diagram-type="infinity"
+          data-stroke-color="#0064C8"
+          data-stroke-width="3"
+          data-duration="4"
+          id="diagram-infinity"
+        >
+        </div>
+      </div>
+      <div class="test-result" id="infinity-test">
+        <span>Waiting for scroll...</span>
+      </div>
+    </div>
+
+    <div class="test-section">
+      <h3>Trinity Triangle</h3>
+      <div class="diagram-test">
+        <div
+          class="living-ink__diagram"
+          data-diagram-type="trinity"
+          data-stroke-color="#008000"
+          data-stroke-width="2"
+          data-duration="3"
+          id="diagram-trinity"
+        >
+        </div>
+      </div>
+      <div class="test-result" id="trinity-test">
+        <span>Waiting for scroll...</span>
+      </div>
+    </div>
+
+    <!-- ===================== -->
+    <!-- BREATHING VIDEO TEST  -->
+    <!-- ===================== -->
+
+    <div class="test-section">
+      <h2>3. Breathing Video System</h2>
+      <p>Testing container infrastructure (videos optional)...</p>
+
+      <div style="max-width: 400px; margin: 1rem auto;">
+        <div
+          class="living-ink__breathing"
+          data-fallback-src="/assets/drawings/IMG_0159.jpg"
+          data-alt="Test drawing"
+          id="breathing-test"
+        >
+        </div>
+      </div>
+
+      <div class="test-result" id="breathing-result">
+        <span>Testing breathing container...</span>
+      </div>
+    </div>
+
+    <!-- ===================== -->
+    <!-- LAYOUT TESTS          -->
+    <!-- ===================== -->
+
+    <div class="test-section">
+      <h2>4. Layout System</h2>
+
+      <h3>Composite Layout</h3>
+      <div class="living-ink__composite" style="margin: 1rem 0;">
+        <div
+          class="living-ink__breathing"
+          data-fallback-src="/assets/drawings/IMG_0161.jpg"
+          data-alt="Layout test 1"
+          style="max-height: 300px;"
+        >
+        </div>
+        <div class="living-ink__diagram-wrapper">
+          <div
+            class="living-ink__diagram"
+            data-diagram-type="bagua"
+            data-stroke-color="#1a1a1a"
+          >
+          </div>
+        </div>
+      </div>
+      <div class="test-result" id="composite-test">
+        <span>Testing composite layout...</span>
+      </div>
+    </div>
+
+    <!-- ===================== -->
+    <!-- SUMMARY               -->
+    <!-- ===================== -->
+
+    <div class="test-section">
+      <h2>Test Summary</h2>
+      <div id="summary">
+        <p>Run tests by scrolling through the page...</p>
+      </div>
+      <button onclick="runManualTests()">Re-run Tests</button>
+    </div>
+
+    <div style="height: 20vh;"></div>
+  </div>
+
+  <script type="module">
+    import LivingInk from './assets/js/visions/living-ink.js';
+
+    // Test results
+    const results = {
+      moduleLoad: false,
+      cssLoad: false,
+      gsapAvailable: false,
+      diagramsGenerated: 0,
+      breathingContainer: false,
+      compositeLayout: false
+    };
+
+    // Update test result UI
+    function updateTest(id, pass, message) {
+      const el = document.getElementById(id);
+      if (!el) return;
+
+      const statusClass = pass ? 'pass' : 'fail';
+      const statusText = pass ? 'PASS' : 'FAIL';
+
+      el.innerHTML = `
+        <span>${message}</span>
+        <span class="status ${statusClass}">${statusText}</span>
+      `;
+    }
+
+    function updatePending(id, message) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.innerHTML = `
+        <span>${message}</span>
+        <span class="status pending">PENDING</span>
+      `;
+    }
+
+    // Test 1: Module Loading
+    try {
+      if (LivingInk && typeof LivingInk.init === 'function') {
+        results.moduleLoad = true;
+        updateTest('module-test', true, 'Living Ink module imported successfully');
+      }
+    } catch (e) {
+      updateTest('module-test', false, `Module import failed: ${e.message}`);
+    }
+
+    // Test 2: CSS Loading
+    setTimeout(() => {
+      const testEl = document.querySelector('.living-ink__diagram');
+      if (testEl) {
+        const styles = window.getComputedStyle(testEl);
+        if (styles.position === 'relative' || styles.display === 'inline-block') {
+          results.cssLoad = true;
+          updateTest('css-test', true, 'Living Ink CSS loaded and applied');
+        } else {
+          updateTest('css-test', false, 'CSS not detected or not applied');
+        }
+      }
+    }, 500);
+
+    // Test 3: GSAP
+    try {
+      if (window.gsap && window.ScrollTrigger) {
+        results.gsapAvailable = true;
+        updateTest('gsap-test', true, 'GSAP and ScrollTrigger available');
+      } else {
+        updateTest('gsap-test', false, 'GSAP or ScrollTrigger not found');
+      }
+    } catch (e) {
+      updateTest('gsap-test', false, `GSAP check failed: ${e.message}`);
+    }
+
+    // Initialize Living Ink
+    if (results.moduleLoad) {
+      LivingInk.init();
+      console.log('✅ Living Ink initialized');
+
+      // Test 4: Check if SVGs were generated
+      setTimeout(() => {
+        const diagrams = document.querySelectorAll('.living-ink__svg');
+        results.diagramsGenerated = diagrams.length;
+
+        const diagramIds = ['bagua', 'joy', 'fear', 'infinity', 'trinity'];
+        diagramIds.forEach(id => {
+          const svg = document.querySelector(`#diagram-${id} .living-ink__svg`);
+          if (svg) {
+            updateTest(`${id}-test`, true, `${id} diagram generated (SVG injected)`);
+          } else {
+            updateTest(`${id}-test`, false, `${id} diagram failed to generate`);
+          }
+        });
+
+        console.log(`✅ ${results.diagramsGenerated} diagrams generated`);
+      }, 1000);
+
+      // Test 5: Breathing container
+      setTimeout(() => {
+        const breathing = document.querySelector('#breathing-test img, #breathing-test video');
+        if (breathing) {
+          results.breathingContainer = true;
+          updateTest('breathing-result', true, 'Breathing container generated content');
+        } else {
+          updateTest('breathing-result', false, 'Breathing container did not inject content');
+        }
+      }, 1000);
+
+      // Test 6: Composite layout
+      setTimeout(() => {
+        const composite = document.querySelector('.living-ink__composite');
+        if (composite) {
+          const styles = window.getComputedStyle(composite);
+          if (styles.display === 'grid') {
+            results.compositeLayout = true;
+            updateTest('composite-test', true, 'Composite layout CSS applied');
+          } else {
+            updateTest('composite-test', false, 'Composite layout CSS not applied');
+          }
+        }
+      }, 1000);
+
+      // Summary after all tests
+      setTimeout(() => {
+        const summary = document.getElementById('summary');
+        const totalTests = 5 + results.diagramsGenerated;
+        const passedTests = [
+          results.moduleLoad,
+          results.cssLoad,
+          results.gsapAvailable,
+          results.breathingContainer,
+          results.compositeLayout
+        ].filter(Boolean).length + results.diagramsGenerated;
+
+        summary.innerHTML = `
+          <div class="test-result">
+            <strong>Total Tests:</strong> ${totalTests}<br>
+            <strong>Passed:</strong> ${passedTests}<br>
+            <strong>Failed:</strong> ${totalTests - passedTests}<br>
+            <strong>Success Rate:</strong> ${Math.round((passedTests / totalTests) * 100)}%
+          </div>
+          <div class="test-result" style="margin-top: 1rem;">
+            ${passedTests === totalTests
+              ? '<span style="color: #4ade80;">✅ All systems operational! Living Ink is ready to use.</span>'
+              : '<span style="color: #fbbf24;">⚠️ Some tests failed. Check browser console for details.</span>'
+            }
+          </div>
+        `;
+      }, 2000);
+    }
+
+    // Manual test runner
+    window.runManualTests = function() {
+      location.reload();
+    };
+
+    console.log('🖋️ Living Ink Test Suite Running...');
+  </script>
+</body>
+</html>

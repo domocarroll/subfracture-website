@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tomoe Animation Showcase - Subfracture</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #0a0014;
+      min-height: 100vh;
+      padding: 60px 40px;
+      font-family: system-ui, -apple-system, sans-serif;
+      color: #ffffff;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+
+    h1 {
+      font-size: 48px;
+      font-weight: 700;
+      color: #7d54ff;
+      margin-bottom: 12px;
+      letter-spacing: -0.02em;
+    }
+
+    .subtitle {
+      font-size: 18px;
+      color: rgba(255, 255, 255, 0.6);
+      font-weight: 400;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 40px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .card {
+      background: rgba(125, 84, 255, 0.05);
+      border: 1px solid rgba(125, 84, 255, 0.2);
+      border-radius: 12px;
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: all 0.3s ease;
+    }
+
+    .card:hover {
+      background: rgba(125, 84, 255, 0.08);
+      border-color: rgba(125, 84, 255, 0.4);
+      transform: translateY(-2px);
+    }
+
+    .card-title {
+      font-size: 20px;
+      font-weight: 600;
+      color: #7d54ff;
+      margin-bottom: 8px;
+    }
+
+    .card-description {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.5);
+      margin-bottom: 24px;
+      text-align: center;
+    }
+
+    .tomoe-container {
+      width: 280px;
+      height: 280px;
+      margin-bottom: 24px;
+    }
+
+    .controls {
+      display: flex;
+      gap: 12px;
+    }
+
+    button {
+      background: #7d54ff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    button:hover {
+      background: #9370ff;
+      transform: scale(1.05);
+    }
+
+    button:active {
+      transform: scale(0.98);
+    }
+
+    .stats {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: rgba(0, 0, 0, 0.5);
+      padding: 16px;
+      border-radius: 8px;
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.7);
+      font-family: 'Courier New', monospace;
+      border: 1px solid rgba(125, 84, 255, 0.3);
+    }
+
+    .stats div {
+      margin-bottom: 4px;
+    }
+
+    .hero-demo {
+      grid-column: 1 / -1;
+      background: linear-gradient(135deg, rgba(125, 84, 255, 0.1), rgba(125, 84, 255, 0.05));
+      border: 2px solid rgba(125, 84, 255, 0.3);
+      padding: 60px;
+    }
+
+    .hero-demo .tomoe-container {
+      width: 400px;
+      height: 400px;
+    }
+
+    @media (max-width: 768px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-demo {
+        padding: 40px 20px;
+      }
+
+      .hero-demo .tomoe-container {
+        width: 300px;
+        height: 300px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="stats">
+    <div>Tomoe Animation Showcase</div>
+    <div id="animation-count">Animations: 0</div>
+  </div>
+
+  <div class="header">
+    <h1>Tomoe Self-Drawing</h1>
+    <p class="subtitle">The sacred spiral of Subfracture - cycles, flow, interconnection</p>
+  </div>
+
+  <div class="grid">
+    <!-- Hero version -->
+    <div class="card hero-demo">
+      <div class="card-title">Hero Version</div>
+      <div class="card-description">Full-size animation for page intros</div>
+      <div class="tomoe-container" id="hero"></div>
+      <div class="controls">
+        <button onclick="replayHero()">Replay</button>
+      </div>
+    </div>
+
+    <!-- Brand purple -->
+    <div class="card">
+      <div class="card-title">Brand Purple</div>
+      <div class="card-description">Default Subfracture color (#7d54ff)</div>
+      <div class="tomoe-container" id="purple"></div>
+      <div class="controls">
+        <button onclick="replayPurple()">Replay</button>
+      </div>
+    </div>
+
+    <!-- White variant -->
+    <div class="card">
+      <div class="card-title">Pure White</div>
+      <div class="card-description">High contrast variant</div>
+      <div class="tomoe-container" id="white"></div>
+      <div class="controls">
+        <button onclick="replayWhite()">Replay</button>
+      </div>
+    </div>
+
+    <!-- Custom color -->
+    <div class="card">
+      <div class="card-title">Custom Color</div>
+      <div class="card-description">Cyan variant for dark themes</div>
+      <div class="tomoe-container" id="cyan"></div>
+      <div class="controls">
+        <button onclick="replayCyan()">Replay</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initTomoe } from './assets/js/tomoe-draw.js';
+
+    let animationCount = 0;
+
+    function updateCount() {
+      animationCount++;
+      document.getElementById('animation-count').textContent = `Animations: ${animationCount}`;
+    }
+
+    // Hero version
+    window.heroAnimation = initTomoe(document.getElementById('hero'), {
+      onComplete: () => {
+        console.log('Hero animation complete');
+        updateCount();
+      }
+    });
+
+    window.replayHero = () => {
+      window.heroAnimation.replay();
+    };
+
+    // Brand purple
+    window.purpleAnimation = initTomoe(document.getElementById('purple'), {
+      onComplete: () => {
+        updateCount();
+      }
+    });
+
+    window.replayPurple = () => {
+      window.purpleAnimation.replay();
+    };
+
+    // White variant
+    window.whiteAnimation = initTomoe(document.getElementById('white'), {
+      color: '#ffffff',
+      onComplete: () => {
+        updateCount();
+      }
+    });
+
+    window.replayWhite = () => {
+      window.whiteAnimation.replay();
+    };
+
+    // Cyan variant
+    window.cyanAnimation = initTomoe(document.getElementById('cyan'), {
+      color: '#00ffff',
+      onComplete: () => {
+        updateCount();
+      }
+    });
+
+    window.replayCyan = () => {
+      window.cyanAnimation.replay();
+    };
+  </script>
+</body>
+</html>

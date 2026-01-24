@@ -1,0 +1,226 @@
+/**
+ * Reading Spotlight Styles
+ *
+ * Minimal CSS - most effects handled by GSAP for smooth transitions
+ * These styles provide base states and GPU acceleration hints
+ */
+
+/* Spotlight paragraph base state */
+.spotlight-paragraph {
+  /* GPU acceleration */
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  /* Smooth transitions for properties GSAP doesn't animate */
+  transition: transform 0.3s ease;
+}
+
+/* Optional: Add subtle glow to active paragraphs in reading zone */
+.spotlight-paragraph.in-reading-zone {
+  /* Applied via JS when paragraph is in optimal reading position */
+  position: relative;
+}
+
+.spotlight-paragraph.in-reading-zone::before {
+  content: '';
+  position: absolute;
+  left: -20px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 60%;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    var(--clr-accent, rgba(125, 84, 255, 0.3)),
+    transparent
+  );
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+
+.spotlight-paragraph.in-reading-zone::before {
+  opacity: 1;
+}
+
+/* Toggle button */
+.spotlight-toggle {
+  /* Styles are primarily set via JS for dynamic control */
+  font-family: inherit;
+  color: var(--sf-black, #000);
+}
+
+.spotlight-toggle:focus {
+  outline: 2px solid var(--clr-accent, rgba(125, 84, 255, 0.5));
+  outline-offset: 2px;
+}
+
+.spotlight-toggle:active {
+  transform: scale(0.95) !important;
+}
+
+/* Disabled state */
+.spotlight-toggle[aria-pressed="false"] {
+  filter: grayscale(1);
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+  .spotlight-toggle {
+    bottom: 16px !important;
+    right: 16px !important;
+    width: 40px !important;
+    height: 40px !important;
+  }
+
+  .spotlight-toggle svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  /* Disable side indicator on mobile for cleaner UI */
+  .spotlight-paragraph.in-reading-zone::before {
+    display: none;
+  }
+}
+
+/* Accessibility: High contrast mode */
+@media (prefers-contrast: high) {
+  .spotlight-paragraph {
+    /* Disable blur in high contrast mode for clarity */
+    filter: none !important;
+  }
+
+  .spotlight-toggle {
+    border: 2px solid currentColor !important;
+  }
+}
+
+/* Print styles - disable all spotlight effects */
+@media print {
+  .spotlight-paragraph {
+    opacity: 1 !important;
+    filter: none !important;
+  }
+
+  .spotlight-toggle {
+    display: none !important;
+  }
+}
+
+/* Animation performance hints */
+@media (prefers-reduced-motion: no-preference) {
+  .spotlight-paragraph {
+    /* Hint to browser that these properties will change */
+    will-change: opacity, filter;
+  }
+}
+
+/* Remove will-change when reduced motion is preferred */
+@media (prefers-reduced-motion: reduce) {
+  .spotlight-paragraph {
+    will-change: auto !important;
+    opacity: 1 !important;
+    filter: none !important;
+  }
+
+  .spotlight-toggle {
+    display: none !important;
+  }
+}
+
+/* Optional: Reading zone visualization (debug mode) */
+.spotlight-debug .reading-zone-indicator {
+  position: fixed;
+  left: 0;
+  width: 100%;
+  background: rgba(125, 84, 255, 0.05);
+  pointer-events: none;
+  z-index: 999;
+  border-top: 1px dashed rgba(125, 84, 255, 0.3);
+  border-bottom: 1px dashed rgba(125, 84, 255, 0.3);
+}
+
+/* Smooth state transitions when toggling */
+.spotlight-transitioning .spotlight-paragraph {
+  transition: opacity 0.6s ease, filter 0.6s ease !important;
+}
+
+/* Better text rendering during transforms */
+.spotlight-paragraph {
+  text-rendering: optimizeLegibility;
+}
+
+/* Prevent subpixel rendering issues during opacity changes */
+.spotlight-paragraph * {
+  transform: translateZ(0);
+}
+
+/* Optional enhancement: Subtle highlight glow for current paragraph */
+.spotlight-paragraph.spotlight-active {
+  /* Applied to the paragraph closest to reading zone center */
+  text-shadow: 0 0 1px rgba(0, 0, 0, 0.03);
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .spotlight-toggle {
+    background: rgba(0, 0, 0, 0.8) !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+    color: #fff;
+  }
+
+  .spotlight-paragraph.in-reading-zone::before {
+    background: linear-gradient(
+      to bottom,
+      transparent,
+      rgba(125, 84, 255, 0.5),
+      transparent
+    );
+  }
+}
+
+/* Safari-specific optimizations */
+@supports (-webkit-backdrop-filter: blur(10px)) {
+  .spotlight-toggle {
+    -webkit-backdrop-filter: blur(10px);
+  }
+}
+
+/* Focus visible for keyboard navigation */
+.spotlight-toggle:focus-visible {
+  outline: 2px solid var(--clr-accent, rgba(125, 84, 255, 0.8));
+  outline-offset: 3px;
+}
+
+/* Hover state enhancement */
+@media (hover: hover) {
+  .spotlight-toggle:hover {
+    border-color: var(--clr-accent, rgba(125, 84, 255, 0.3));
+  }
+}
+
+/* Tooltip styling */
+.spotlight-toggle::after {
+  content: attr(title);
+  position: absolute;
+  bottom: calc(100% + 8px);
+  right: 0;
+  padding: 6px 12px;
+  background: rgba(0, 0, 0, 0.9);
+  color: white;
+  font-size: 12px;
+  white-space: nowrap;
+  border-radius: 4px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.spotlight-toggle:hover::after {
+  opacity: 1;
+  transition-delay: 0.5s;
+}

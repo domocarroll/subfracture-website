@@ -1,0 +1,1213 @@
+/**
+ * Subfracture Visual Effects
+ * Subtle, premium interactions for a culture studio
+ * --------------------------------------------------
+ */
+
+/* ==========================================================================
+   1. NOISE TEXTURE OVERLAY
+   Adds organic warmth and film-grain texture
+   ========================================================================== */
+
+.noise-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.025;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 256px 256px;
+}
+
+/* Alternative stipple pattern for lighter texture */
+.noise-overlay--stipple {
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='stipple'%3E%3CfeTurbulence type='turbulence' baseFrequency='0.9' numOctaves='3' result='noise' seed='5'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23stipple)'/%3E%3C/svg%3E");
+}
+
+
+/* ==========================================================================
+   2. SCROLL PROGRESS BAR
+   Ambient vertical indicator
+   ========================================================================== */
+
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 100vh;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    var(--sf-black, #0b0b0b) 10%,
+    var(--sf-black, #0b0b0b) 90%,
+    transparent 100%
+  );
+  transform-origin: top center;
+  transform: scaleY(0);
+  z-index: 9998;
+  pointer-events: none;
+  opacity: 0.15;
+  will-change: transform;
+}
+
+/* Dark theme variant */
+.scroll-progress--light {
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    var(--sf-white, #fafafa) 10%,
+    var(--sf-white, #fafafa) 90%,
+    transparent 100%
+  );
+}
+
+
+/* ==========================================================================
+   3. CUSTOM CURSOR
+   Refined, adaptive cursor system
+   ========================================================================== */
+
+.sf-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 10000;
+  mix-blend-mode: difference;
+  will-change: transform;
+}
+
+.sf-cursor__dot {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 4px;
+  height: 4px;
+  margin: -2px 0 0 -2px;
+  background: var(--sf-white, #fafafa);
+  border-radius: 50%;
+  transition:
+    width 0.2s cubic-bezier(0.25, 0.1, 0.25, 1),
+    height 0.2s cubic-bezier(0.25, 0.1, 0.25, 1),
+    margin 0.2s cubic-bezier(0.25, 0.1, 0.25, 1),
+    opacity 0.2s ease;
+}
+
+.sf-cursor__ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 32px;
+  height: 32px;
+  margin: -16px 0 0 -16px;
+  border: 1px solid var(--sf-white, #fafafa);
+  border-radius: 50%;
+  opacity: 0.4;
+  transition:
+    width 0.3s cubic-bezier(0.25, 0.1, 0.25, 1),
+    height 0.3s cubic-bezier(0.25, 0.1, 0.25, 1),
+    margin 0.3s cubic-bezier(0.25, 0.1, 0.25, 1),
+    opacity 0.3s ease,
+    border-width 0.3s ease;
+}
+
+/* Link hover state - expanded ring */
+.sf-cursor--link .sf-cursor__dot {
+  width: 6px;
+  height: 6px;
+  margin: -3px 0 0 -3px;
+}
+
+.sf-cursor--link .sf-cursor__ring {
+  width: 48px;
+  height: 48px;
+  margin: -24px 0 0 -24px;
+  opacity: 0.6;
+}
+
+/* Video/media hover state */
+.sf-cursor--video .sf-cursor__dot {
+  width: 0;
+  height: 0;
+  opacity: 0;
+}
+
+.sf-cursor--video .sf-cursor__ring {
+  width: 64px;
+  height: 64px;
+  margin: -32px 0 0 -32px;
+  border-width: 2px;
+  opacity: 0.8;
+}
+
+/* Text selection state */
+.sf-cursor--text .sf-cursor__dot {
+  width: 2px;
+  height: 20px;
+  margin: -10px 0 0 -1px;
+  border-radius: 1px;
+}
+
+.sf-cursor--text .sf-cursor__ring {
+  opacity: 0;
+}
+
+/* Hidden state */
+.sf-cursor--hidden {
+  opacity: 0;
+}
+
+
+/* ==========================================================================
+   4. SERVICE CARD HOVER ENHANCEMENTS
+   Subtle interaction refinements
+   ========================================================================== */
+
+.sf-service {
+  transition: box-shadow 0.3s ease;
+}
+
+.sf-service:hover {
+  box-shadow:
+    0 0 0 1px rgba(11, 11, 11, 0.03),
+    0 0 40px rgba(11, 11, 11, 0.02);
+}
+
+/* Dark theme variant */
+.sf-service--dark:hover {
+  box-shadow:
+    0 0 0 1px rgba(250, 250, 250, 0.05),
+    0 0 40px rgba(250, 250, 250, 0.02);
+}
+
+.sf-service__number {
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
+}
+
+.sf-service:hover .sf-service__number {
+  opacity: 0.6;
+  transform: translateY(-2px);
+}
+
+.sf-service__title {
+  transition: letter-spacing 0.3s ease;
+}
+
+.sf-service:hover .sf-service__title {
+  letter-spacing: 0.01em;
+}
+
+/* Subtle pulse animation for number on hover */
+@keyframes subtle-pulse {
+  0%, 100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+.sf-service:hover .sf-service__number--pulse {
+  animation: subtle-pulse 2s ease-in-out infinite;
+}
+
+
+/* ==========================================================================
+   5. MAGNETIC LINK INDICATOR
+   Transform transitions for JS-driven magnetic effect
+   ========================================================================== */
+
+.magnetic {
+  transition: transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+  will-change: transform;
+}
+
+.magnetic--active {
+  transition: transform 0.15s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+/* Inner content that moves with magnetic effect */
+.magnetic__inner {
+  transition: transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+
+/* ==========================================================================
+   6. HIDE DEFAULT CURSOR
+   Applied via JS when custom cursor is active
+   ========================================================================== */
+
+html.has-custom-cursor {
+  cursor: none;
+}
+
+html.has-custom-cursor *,
+html.has-custom-cursor a,
+html.has-custom-cursor button,
+html.has-custom-cursor input,
+html.has-custom-cursor textarea,
+html.has-custom-cursor select,
+html.has-custom-cursor [role="button"] {
+  cursor: none !important;
+}
+
+/* Restore cursor for users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  html.has-custom-cursor,
+  html.has-custom-cursor *,
+  html.has-custom-cursor a,
+  html.has-custom-cursor button {
+    cursor: auto !important;
+  }
+
+  .sf-cursor {
+    display: none;
+  }
+
+  .magnetic {
+    transition: none;
+  }
+}
+
+
+/* ==========================================================================
+   UTILITY CLASSES
+   ========================================================================== */
+
+/* Smooth appearance for dynamically added elements */
+.fx-fade-in {
+  animation: fx-fade 0.4s ease forwards;
+}
+
+@keyframes fx-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Prevents flash of unstyled cursor */
+.sf-cursor--initializing {
+  opacity: 0;
+}
+
+
+/* ==========================================================================
+   7. SCROLL THEATRE - Horizontal Scroll Services
+   ========================================================================== */
+
+@media (min-width: 901px) {
+  .sf-services.is-pinned .sf-services__grid {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 0;
+    background: transparent;
+    width: max-content;
+  }
+
+  .sf-services.is-pinned .sf-service {
+    flex: 0 0 min(450px, 35vw);
+    height: 70vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-right: 1px solid rgba(0, 0, 0, 0.08);
+  }
+
+  .sf-services.is-pinned .sf-service:last-child {
+    border-right: none;
+  }
+}
+
+
+/* ==========================================================================
+   8. 3D CARD TILT EFFECTS
+   ========================================================================== */
+
+.sf-service {
+  transform-style: preserve-3d;
+  transition:
+    transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1),
+    box-shadow 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+.sf-service:hover {
+  box-shadow:
+    0 25px 50px -12px rgba(0, 0, 0, 0.15),
+    0 0 0 1px rgba(0, 0, 0, 0.03);
+}
+
+.sf-service__number,
+.sf-service__title,
+.sf-service__tagline,
+.sf-service__desc {
+  transform: translateZ(20px);
+}
+
+
+/* ==========================================================================
+   9. CLIP-PATH REVEAL SUPPORT
+   ========================================================================== */
+
+.sf-section__header {
+  will-change: clip-path;
+}
+
+
+/* ==========================================================================
+   10. WORD REVEAL ANIMATION SUPPORT
+   ========================================================================== */
+
+.sf-lead .word-wrap {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  line-height: 1.5;
+}
+
+.sf-lead .word {
+  display: inline-block;
+  will-change: transform;
+}
+
+
+/* ==========================================================================
+   11. APPROACH PILLARS - 3D Rotation
+   ========================================================================== */
+
+.sf-approach__pillar {
+  transform-style: preserve-3d;
+  will-change: transform, opacity;
+}
+
+
+/* ==========================================================================
+   12. FIGHT ITEMS - Pop Effect
+   ========================================================================== */
+
+.sf-fight__item {
+  will-change: transform, opacity;
+}
+
+.sf-fight__enemy,
+.sf-fight__virtue {
+  will-change: transform, opacity;
+}
+
+
+/* ==========================================================================
+   13. LOGO GRID - Pop Animation Support
+   ========================================================================== */
+
+.logo-grid__item {
+  will-change: transform, opacity;
+}
+
+.logo-grid__item img {
+  transition:
+    opacity 0.4s ease,
+    filter 0.4s ease,
+    transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+
+/* ==========================================================================
+   14. SEMANTIC TEXT ANIMATIONS
+   Words that move with meaning
+   ========================================================================== */
+
+.sem-word {
+  display: inline-block;
+  will-change: transform, opacity;
+  cursor: default;
+}
+
+/* Flow words - continuous hover effect */
+.sem-flow {
+  transition: color 0.3s ease;
+}
+
+.sem-flow:hover {
+  color: var(--sf-accent, #7d54ff);
+}
+
+/* Love - warm undertone */
+.sem-love {
+  transition: color 0.5s ease;
+}
+
+/* Shimmer - dreamy quality */
+.sem-shimmer {
+  position: relative;
+}
+
+/* Impact - bold presence */
+.sem-impact {
+  font-weight: 700;
+}
+
+/* DANNI - warm, human */
+.sem-danni {
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+/* SubFrac.OS - systematic */
+.sem-system {
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  font-size: 0.95em;
+  letter-spacing: -0.02em;
+}
+
+/* Curious - slight playfulness */
+.sem-curious {
+  font-style: italic;
+}
+
+/* Enemy - defeated state */
+.sem-enemy {
+  color: rgba(11, 11, 11, 0.4);
+}
+
+/* New semantic word classes */
+.sem-pre-extend {
+  display: inline-block;
+  transform-origin: center;
+}
+
+.sem-echo {
+  position: relative;
+  display: inline-block;
+}
+
+.sem-learn {
+  display: inline-block;
+  transform-origin: center;
+}
+
+.sem-sleep {
+  display: inline-block;
+  transform-origin: top center;
+}
+
+.sem-soften {
+  display: inline-block;
+}
+
+.sem-opening {
+  display: inline-block;
+  transform-origin: center;
+}
+
+.sem-pattern {
+  display: inline-block;
+}
+
+.sem-soul {
+  display: inline-block;
+}
+
+.sem-inevitable {
+  display: inline-block;
+  transform-origin: bottom center;
+}
+
+/* Phrase orchestration - multi-word elements */
+.phrase-art {
+  font-style: italic;
+  letter-spacing: 0.01em;
+}
+
+.phrase-systems {
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+.phrase-flowing {
+  font-weight: 300;
+  letter-spacing: 0.02em;
+}
+
+.phrase-together {
+  font-weight: 600;
+}
+
+
+/* ==========================================================================
+   15. AI FLOW SEQUENCE
+   Connected steps with visual rhythm
+   ========================================================================== */
+
+.sf-ai-flow__list {
+  counter-reset: flow-step;
+}
+
+.sf-ai-flow__list li {
+  position: relative;
+  padding-left: 2.5em;
+  margin-bottom: 1em;
+}
+
+.sf-ai-flow__list li::before {
+  counter-increment: flow-step;
+  content: counter(flow-step);
+  position: absolute;
+  left: 0;
+  top: 0.1em;
+  width: 1.8em;
+  height: 1.8em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75em;
+  font-weight: 600;
+  background: var(--sf-black);
+  color: var(--sf-white);
+  border-radius: 50%;
+}
+
+.flow-connector {
+  pointer-events: none;
+}
+
+
+/* ==========================================================================
+   16. FIGHT TRANSFORMATION
+   Enemy dissolves, virtue emerges
+   ========================================================================== */
+
+.sf-fight__enemy {
+  transition:
+    opacity 0.4s ease,
+    filter 0.4s ease,
+    text-decoration 0.3s ease;
+}
+
+.sf-fight__virtue {
+  transition:
+    opacity 0.4s ease,
+    font-weight 0.3s ease,
+    text-shadow 0.3s ease;
+}
+
+.sf-fight__arrow {
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+
+/* ==========================================================================
+   17. CULTURE STUDIO DRAMATICS
+   Premium typography choreography for the identity section
+   ========================================================================== */
+
+/* Title container - 3D perspective */
+.intro-title {
+  perspective: 1200px;
+  perspective-origin: 50% 50%;
+}
+
+.intro-title.cs-title-active {
+  position: relative;
+  perspective: 1000px;
+  transform-style: preserve-3d;
+}
+
+/* Title word containers */
+.cs-word {
+  display: inline-block;
+  transform-style: preserve-3d;
+  cursor: pointer;
+  transition: letter-spacing 0.25s ease;
+}
+
+.cs-culture {
+  margin-right: 0.25em;
+}
+
+/* The space between - meeting point */
+.cs-space-between {
+  display: inline-block;
+  width: 0.3em;
+  height: 1em;
+  vertical-align: baseline;
+  cursor: pointer;
+  position: relative;
+}
+
+.cs-space-between::before {
+  content: '';
+  position: absolute;
+  inset: -0.5em -0.8em;
+  /* Invisible hit area */
+}
+
+/* Glow thread - connective tissue to next section */
+.cs-glow-thread {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(70vw, 700px);
+  height: 300px;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(125, 84, 255, 0.12) 0%,
+    rgba(232, 93, 117, 0.06) 40%,
+    transparent 70%
+  );
+  filter: blur(60px);
+  border-radius: 100%;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0;
+}
+
+/* Interactive states - subtle cursor feedback */
+.cs-culture:hover {
+  cursor: pointer;
+}
+
+.cs-studio:hover {
+  cursor: crosshair; /* Precision cursor for precision word */
+}
+
+/* The period - a statement */
+.cs-period {
+  display: inline-block;
+  font-weight: 700;
+  margin-left: -0.05em;
+  transform-origin: 50% 100%;
+  will-change: transform, opacity;
+  cursor: pointer;
+}
+
+.cs-period:hover {
+  cursor: grab;
+}
+
+/* Selection styling - extends duality to user interaction */
+.cs-culture::selection,
+.cs-culture *::selection {
+  background: rgba(255, 45, 85, 0.3);
+  color: inherit;
+}
+
+.cs-studio::selection,
+.cs-studio *::selection {
+  background: rgba(120, 120, 130, 0.25);
+  color: inherit;
+}
+
+.cs-period::selection {
+  background: rgba(255, 45, 85, 0.4);
+  color: inherit;
+}
+
+/* Lede selection - warm on payoff */
+.cs-love::selection,
+.cs-chunk--payoff::selection,
+.cs-chunk--payoff *::selection {
+  background: rgba(255, 45, 85, 0.25);
+}
+
+/* Split text character styles */
+.split-char,
+.split-word {
+  display: inline-block;
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Philosophy title - convergence effect */
+.sf-what-we-do .sf-section__title {
+  perspective: 1000px;
+}
+
+.cs-art,
+.cs-systems,
+.cs-flow,
+.cs-connector {
+  display: inline-block;
+  transform-style: preserve-3d;
+  will-change: transform, opacity;
+}
+
+.cs-art {
+  font-style: italic;
+  letter-spacing: 0.01em;
+}
+
+.cs-systems {
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+.cs-flow {
+  position: relative;
+}
+
+/* Lede semantic chunks - progressive reveal */
+.cs-chunk {
+  display: block; /* Each chunk on its own line */
+  will-change: transform, opacity;
+}
+
+.cs-chunk--qualifier {
+  /* "that deserve more than campaigns" - the raised eyebrow */
+  font-style: italic;
+  letter-spacing: 0.01em;
+}
+
+.cs-emphasis-more {
+  font-style: normal; /* Override parent italic */
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.cs-chunk--action {
+  /* "we co-design movements" */
+}
+
+.cs-chunk--payoff {
+  /* "that generate acceptance and love" - the landing */
+}
+
+/* Semantic word emphasis within chunks */
+.cs-movements {
+  display: inline-block;
+  font-weight: 500;
+}
+
+.cs-love {
+  display: inline-block;
+  transition: color 0.3s ease;
+}
+
+/* Lead statement payload */
+.cs-payload,
+.cs-emphasis {
+  display: inline-block;
+  position: relative;
+}
+
+.cs-payload {
+  font-weight: 600;
+}
+
+/* Body copy semantic phrases */
+.cs-worlds,
+.cs-shifting,
+.cs-generating,
+.cs-lasting,
+.cs-inevitable,
+.cs-flowing {
+  display: inline-block;
+  position: relative;
+  will-change: transform, opacity;
+}
+
+.cs-worlds {
+  transform-style: preserve-3d;
+}
+
+.cs-inevitable {
+  font-weight: 500;
+}
+
+/* Ensure proper line height for split text */
+.intro-lede,
+.sf-what-we-do .sf-lead,
+.sf-what-we-do .sf-body {
+  line-height: 1.65;
+}
+
+/* Reduced motion - graceful degradation */
+@media (prefers-reduced-motion: reduce) {
+  .intro-title,
+  .intro-lede,
+  .sf-what-we-do .sf-section__title,
+  .sf-what-we-do .sf-lead,
+  .sf-what-we-do .sf-body {
+    animation: none !important;
+    transition: opacity 0.3s ease !important;
+  }
+
+  .cs-art,
+  .cs-systems,
+  .cs-flow,
+  .cs-movements,
+  .cs-love,
+  .cs-payload,
+  .cs-worlds,
+  .cs-inevitable,
+  .split-char,
+  .split-word {
+    transform: none !important;
+  }
+}
+
+
+/* ==========================================================================
+   18. CLIENTS BANNER - LIPS REVEAL
+   Vertical unfold animation - "opening from behind"
+   ========================================================================== */
+
+/* APPROACH: Hero lifts up, header-block fixed at bottom, clients revealed between */
+/* Using CSS Grid for smooth height animation (0fr → 1fr) */
+.clients-reveal {
+  position: relative;
+  background: #fafafa;
+  z-index: 90;
+  display: grid;
+  grid-template-rows: 0fr;
+  /* Performance: Contain layout recalculations */
+  contain: layout style;
+}
+
+/* All direct children need overflow:hidden + min-height:0 for grid collapse */
+.clients-reveal > * {
+  overflow: hidden;
+  min-height: 0;
+}
+
+.clients-reveal__content {
+  position: relative;
+  z-index: 1;
+  background: #fafafa;
+  box-sizing: border-box;
+  padding: 2rem 0;
+  /* Flexbox centering without min-height for grid collapse */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  /* Smooth transition for min-height expansion */
+  transition: min-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Only apply min-height AFTER reveal completes */
+.clients-reveal.is-revealed .clients-reveal__content {
+  min-height: 75vh;
+}
+
+/* Dwell state - subtle visual emphasis */
+.clients-reveal.is-dwelling .clients-reveal__content {
+  /* Subtle glow to indicate focused state */
+  box-shadow: inset 0 0 80px rgba(125, 84, 255, 0.02);
+}
+
+/* PHASE 3: Inner shadow depth - reveals depth as lips open */
+.clients-reveal__content::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 5;
+  box-shadow:
+    inset 0 25px 50px -25px rgba(0, 0, 0, 0.12),
+    inset 0 -25px 50px -25px rgba(0, 0, 0, 0.12);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.clients-reveal.is-animating .clients-reveal__content::before {
+  opacity: 1;
+}
+
+/* Fade out shadow when fully revealed */
+.clients-reveal.is-revealed .clients-reveal__content::before {
+  opacity: 0;
+}
+
+.clients-reveal__content > .container {
+  padding: 2rem;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto; /* Center horizontally */
+  /* Will be vertically centered by JS */
+}
+
+/* The lips are absolute, not part of grid */
+/* Perspective moved here to avoid overflow:hidden conflict on parent */
+.clients-reveal__lips {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 10;
+  perspective: 1200px;
+  perspective-origin: 50% 50%;
+}
+
+/* Individual lip panels - solid covers that mask the content */
+.clients-reveal__lip {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: #fafafa;
+  transform-style: preserve-3d;
+  will-change: transform;
+  /* Shadow on the inner edge for depth - transitions smoothly */
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+  transition: box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Enhanced shadow during animation for 3D depth */
+.clients-reveal.is-animating .clients-reveal__lip {
+  box-shadow:
+    0 0 30px rgba(0, 0, 0, 0.08),
+    0 4px 15px rgba(0, 0, 0, 0.06);
+}
+
+/* Top lip - starts flat, rotates upward from top edge */
+.clients-reveal__lip--top {
+  top: 0;
+  transform-origin: 50% 0%;
+  transform: rotateX(0deg);
+  /* Inner shadow at bottom edge */
+  border-bottom: 1px solid rgba(0, 0, 0, 0.03);
+}
+
+/* Bottom lip - starts flat, rotates downward from bottom edge */
+.clients-reveal__lip--bottom {
+  bottom: 0;
+  transform-origin: 50% 100%;
+  transform: rotateX(0deg);
+  /* Inner shadow at top edge */
+  border-top: 1px solid rgba(0, 0, 0, 0.03);
+}
+
+/* PHASE 4: The Crack - anticipation hairline before reveal */
+.clients-reveal__crack {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(0, 0, 0, 0.15) 15%,
+    rgba(0, 0, 0, 0.25) 50%,
+    rgba(0, 0, 0, 0.15) 85%,
+    transparent 100%);
+  transform: scaleX(0);
+  transform-origin: center;
+  z-index: 11;
+  pointer-events: none;
+  /* Smooth transitions for all properties */
+  box-shadow: 0 0 0 rgba(125, 84, 255, 0);
+  transition:
+    box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+    background 0.15s ease-out,
+    height 0.1s ease-out;
+}
+
+/* Building anticipation - subtle pulse before flash */
+.clients-reveal__crack.is-building {
+  height: 2px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(0, 0, 0, 0.2) 15%,
+    rgba(0, 0, 0, 0.35) 50%,
+    rgba(0, 0, 0, 0.2) 85%,
+    transparent 100%);
+  animation: crack-pulse 0.6s ease-in-out infinite;
+}
+
+@keyframes crack-pulse {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 1; }
+}
+
+/* PHASE 5: Purple brand flash when crack is glowing */
+.clients-reveal__crack.is-glowing {
+  height: 2px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(125, 84, 255, 0.5) 15%,
+    rgba(125, 84, 255, 0.85) 50%,
+    rgba(125, 84, 255, 0.5) 85%,
+    transparent 100%);
+  box-shadow:
+    0 0 20px rgba(125, 84, 255, 0.7),
+    0 0 40px rgba(125, 84, 255, 0.4),
+    0 0 60px rgba(125, 84, 255, 0.2);
+  animation: none;
+}
+
+/* When fully revealed, ensure full height */
+.clients-reveal.is-revealed {
+  height: auto;
+}
+
+.clients-reveal.is-revealed .clients-reveal__lips {
+  pointer-events: none;
+  visibility: hidden;
+}
+
+/* Inner shadow on lips for 3D depth */
+.clients-reveal__lip--top::after,
+.clients-reveal__lip--bottom::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 20px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.clients-reveal__lip--top::after {
+  bottom: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.1), transparent);
+}
+
+.clients-reveal__lip--bottom::after {
+  top: 0;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1), transparent);
+}
+
+/* Show shadows during animation */
+.clients-reveal.is-animating .clients-reveal__lip--top::after,
+.clients-reveal.is-animating .clients-reveal__lip--bottom::after {
+  opacity: 1;
+}
+
+/* PHASE 6: Optimize lip transforms during animation */
+.clients-reveal.is-animating .clients-reveal__lip {
+  will-change: transform;
+}
+
+.clients-reveal.is-revealed .clients-reveal__lip {
+  will-change: auto;
+}
+
+/* Logo grid within reveal - visible, masked by lips */
+.clients-reveal .logo-grid {
+  opacity: 1;
+  /* Center and size appropriately */
+  width: 100%;
+  max-width: 1200px;
+  justify-content: center;
+  gap: 3rem 4rem; /* More generous spacing */
+}
+
+.clients-reveal .logo-grid__item {
+  opacity: 1;
+}
+
+/* Larger logos in the reveal section */
+.clients-reveal .logo-grid img {
+  max-height: 48px;
+  max-width: 140px;
+}
+
+/* PHASE 6: Performance optimization - will-change during animation */
+.clients-reveal.is-animating .logo-grid__item {
+  will-change: transform, opacity;
+}
+
+/* Clean up will-change after animation */
+.clients-reveal.is-revealed .logo-grid__item {
+  will-change: auto;
+}
+
+/* Smooth logo appearance with subtle transform origin */
+.clients-reveal .logo-grid__item {
+  transform-origin: center center;
+}
+
+/* Clean up will-change after animation completes */
+.clients-reveal.is-revealed .logo-grid__item {
+  will-change: auto;
+}
+
+/* PHASE 6: Smooth scroll-snap alignment */
+.clients-reveal {
+  scroll-snap-align: end;
+  scroll-snap-stop: normal;
+}
+
+/* Header-block fixed at bottom during reveal */
+.header-block.is-fixed-bottom {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 40;
+  background: var(--sf-bg, #fafafa);
+}
+
+/* DWELL PHASE: Visual "continue" affordance */
+/* Subtle gradient at the seam between clients and header-block */
+.clients-reveal.is-dwelling::after {
+  content: '';
+  position: fixed;
+  bottom: 25vh; /* At the header-block boundary */
+  left: 0;
+  right: 0;
+  height: 80px;
+  background: linear-gradient(to bottom,
+    transparent 0%,
+    rgba(0, 0, 0, 0.015) 40%,
+    rgba(0, 0, 0, 0.03) 100%);
+  pointer-events: none;
+  z-index: 35;
+  animation: dwell-breathe 3s ease-in-out infinite;
+}
+
+/* Gentle breathing animation - sophisticated, not aggressive */
+@keyframes dwell-breathe {
+  0%, 100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* Spacer to maintain document flow when header is fixed */
+.header-block-spacer {
+  height: 25vh;
+  display: none;
+}
+
+.header-block-spacer.is-active {
+  display: block;
+}
+
+/* Reduced motion - simple reveal */
+@media (prefers-reduced-motion: reduce) {
+  .clients-reveal {
+    height: auto; /* Always visible */
+  }
+
+  .clients-reveal__lips {
+    display: none;
+  }
+
+  .header-block.is-fixed-bottom {
+    position: relative;
+  }
+
+  /* Disable dwell animations */
+  .clients-reveal.is-dwelling::after {
+    animation: none;
+    opacity: 0.5;
+  }
+}

@@ -1,0 +1,134 @@
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║                   DANNI vs SubFrac.OS Animation Timeline                     ║
+║                         (Side-by-side comparison)                             ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ DANNI (Organic Warmth)                                                       │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+0.0s  ┃
+      ┃ ╭─────────────╮  Phase 1: Warm Arrival
+0.8s  ┃ │ sine.out    │  Duration: 0.725-0.875s (random)
+      ┃ │ glow: 0→24px│  Easing: Smooth curve
+      ┃ ╰─────────────╯
+      ┃
+      ┃ ╭───────────────────╮  Phase 2: Settle
+2.0s  ┃ │ sine.inOut        │  Duration: 1.2s
+      ┃ │ glow: 24px→12px   │  Easing: Organic ease
+      ┃ ╰───────────────────╯
+      ┃
+      ┃ ╭───────────────────────────────╮  Phase 3: Infinite Breathing
+      ┃ │ sine.inOut                    │  Duration: 3.5-4.0s (varies)
+5.5s  ┃ │ glow: 12px ↔ 16px            │  Pause: 0.3-0.5s between breaths
+      ┃ │ scale: 1.0 ↔ 1.008           │  Easing: Gentle curves
+9.0s  ┃ │ (continues forever)          │  Feeling: Living, breathing
+      ┃ ╰───────────────────────────────╯
+
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ SubFrac.OS (Machine Precision)                                               │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+0.0s  ┃
+      ┃ █▌█▌█▌█▌█▌  Phase 1: Boot Flicker
+      ┃ │steps(1) │  Duration: 5 × 0.08s = 0.4s
+0.5s  ┃ │opacity  │  Interval: Exactly 0.06s
+      ┃ └─────────┘  Easing: Digital on/off
+      ┃
+      ┃ ───┬───  Phase 2: Scan Line
+      ┃    │     Duration: 0.3s
+0.8s  ┃    │     Easing: steps(8) - quantized
+      ┃    ▼     Effect: 4px line descends
+      ┃ ───────
+      ┃
+      ┃ ┌──┐  Phase 3: Glow Lock
+      ┃ │▓▓│  Duration: 0.15s
+1.0s  ┃ └──┘  Easing: steps(2) - two-step snap
+      ┃       Glow: 0→12px (instant)
+      ┃
+      ┃ ┌──┐┌──┐┌──┐┌──┐  Phase 4: Machine Pulse
+      ┃ │▓▓││░░││▓▓││░░│  Duration: 0.8s exactly
+2.0s  ┃ │12││16││12││16│  Easing: steps(3)
+      ┃ └──┘└──┘└──┘└──┘  Pause: 0s (no rest)
+      ┃ (continues forever, metronomic)
+      ┃
+      ┃     █  █      █  Parallel: Grid Flicker
+4.5s  ┃     ▓  ▓      ▓  Duration: 0.05s
+      ┃ opacity: 1→0.85→1  Interval: Every 2.45s exactly
+
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ Visual Conversation (When both visible)                                      │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+4.5s  ┃ [Conversation starts after initial animations settle]
+      ┃
+      ┃ DANNI:    ╭──────────╮  "Speaks" (warm pulse)
+5.5s  ┃           │ 0.6-0.9s │  Glow: 12px → 28px
+      ┃           │ sine.inOut│  Scale: 1.0 → 1.012
+6.3s  ┃           ╰────╮─────╯  Fades back: 0.8s
+      ┃                │
+      ┃                ▼
+      ┃ SubFrac.OS:  ┌┴┐  "Responds" (digital pulse)
+7.3s  ┃              │▓│  Duration: 0.12s
+      ┃              └─┘  Glow: 12px → 20px (steps)
+      ┃               █   Flicker: 0.04s
+      ┃              ▓▓   Snap back: 0.15s
+      ┃
+      ┃ [5.5-7.5s pause with random variance]
+      ┃
+      ┃ DANNI:    ╭──────────╮  Exchange 2
+13.0s ┃           │ ...      │  (Timing varies)
+      ┃           ╰──────────╯
+      ┃
+      ┃ SubFrac.OS:  ┌─┐
+14.8s ┃              │▓│
+      ┃              └─┘
+      ┃
+      ┃ [Continues for 4 total exchanges, then stops]
+
+
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║                            Key Timing Contrasts                               ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+
+┌──────────────────┬─────────────────────────┬─────────────────────────┐
+│ Aspect           │ DANNI                   │ SubFrac.OS              │
+├──────────────────┼─────────────────────────┼─────────────────────────┤
+│ Initial arrival  │ 0.725-0.875s (random)   │ 0.4s (exact)            │
+│ Primary easing   │ sine.out / sine.inOut   │ steps(1) / steps(2/3)   │
+│ Breath/Pulse     │ 3.5-4.0s (irregular)    │ 0.8s (metronomic)       │
+│ Pause between    │ 0.3-0.5s (human)        │ 0s (tireless)           │
+│ Response time    │ 0.6-0.9s (thinking)     │ 0.12s (instant)         │
+│ Conversation     │ 5.5-7.5s gaps (natural) │ 1.8s delay (precise)    │
+│ Variance         │ ±75ms micro-random      │ 0ms (perfect timing)    │
+└──────────────────┴─────────────────────────┴─────────────────────────┘
+
+
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║                          Perceptual Experience                                ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+
+DANNI:
+  ◉ Feels like a living presence
+  ◉ Breathing is barely perceptible but subconsciously calming
+  ◉ Warmth spreads naturally, like candlelight
+  ◉ Timing feels "human" - never quite predictable
+  ◉ Evokes: Trust, warmth, intelligence with empathy
+
+SubFrac.OS:
+  ◉ Feels like a system process
+  ◉ Pulse is mechanical, predictable, tireless
+  ◉ Effects snap into place with digital precision
+  ◉ Timing is metronomic - you could set a clock by it
+  ◉ Evokes: Power, precision, intelligence without emotion
+
+Together:
+  ◉ Two different kinds of intelligence
+  ◉ Complementary, not competing
+  ◉ Visual "conversation" suggests collaboration
+  ◉ Contrast makes both more distinctive
+  ◉ User understands the duality without reading a word
+
+═══════════════════════════════════════════════════════════════════════════════

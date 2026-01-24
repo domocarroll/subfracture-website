@@ -1,0 +1,96 @@
+<!--
+  FOOTER DRAMATICS - SVG INLINE EXAMPLE
+
+  For maximum control over letter animation, replace the IMG tag
+  with an inline SVG version of the Subfracture wordmark.
+
+  Current structure:
+  <div class="sf-closer__bigtype">
+    <img src="https://subfrac.com/.../subfracture.svg" alt="Subfracture Logo">
+  </div>
+
+  Enhanced structure (for letter-by-letter animation):
+-->
+
+<div class="sf-closer__bigtype">
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 1000 200"
+    aria-label="Subfracture Logo"
+    role="img"
+  >
+    <!--
+      Replace with actual SVG paths from subfracture.svg
+      Each letter or group should be a separate path/g element for individual animation
+
+      Example structure (not actual logo):
+    -->
+
+    <!-- Letter S -->
+    <g class="letter letter-s">
+      <path d="M10,50 Q20,20 40,30 T60,50 Q50,80 30,70 T10,50" fill="currentColor"/>
+    </g>
+
+    <!-- Letter U -->
+    <g class="letter letter-u">
+      <path d="M80,30 L80,60 Q80,80 100,80 Q120,80 120,60 L120,30" fill="currentColor"/>
+    </g>
+
+    <!-- Letter B -->
+    <g class="letter letter-b">
+      <path d="M140,30 L140,80 Q160,80 160,55 T160,30 Z" fill="currentColor"/>
+    </g>
+
+    <!-- Continue for all letters: F R A C T U R E -->
+
+    <!--
+      To get the actual SVG:
+      1. Download the SVG from https://subfrac.com/wp-content/themes/mkrst-child/assets/media/subfracture.svg
+      2. Open in text editor
+      3. Extract viewBox and path elements
+      4. Organize paths by letter if not already grouped
+      5. Add semantic class names (letter-s, letter-u, etc.)
+      6. Replace the IMG tag with this inline SVG
+    -->
+  </svg>
+</div>
+
+<!--
+  ALTERNATIVE: Keep IMG tag
+
+  If the SVG logo is complex or you want to keep it simple,
+  the animation will still work beautifully with the IMG tag.
+  It will animate as a single unit rather than letter-by-letter.
+
+  The footer-dramatics.js module detects this automatically:
+  - If inline SVG: animates individual paths/groups
+  - If IMG: animates the entire image as one element
+
+  Both look great, inline SVG just provides more control.
+-->
+
+<!--
+  TESTING THE ANIMATION
+
+  Once integrated:
+  1. Scroll to footer
+  2. Watch wordmark rise from below with staggered letter timing
+  3. Move mouse over footer to see parallax depth effect
+  4. Check console for "Footer dramatics initialized" message
+
+  To test reduced motion:
+  1. Enable "prefers-reduced-motion" in browser dev tools
+  2. Reload page
+  3. Should see simple fade-in instead
+-->
+
+<!--
+  CSS REQUIREMENTS
+
+  Already added to custom.css:
+  - .sf-closer__bigtype has perspective and transform-style
+  - SVG paths have will-change hints
+  - Reduced motion media query
+
+  No additional CSS needed!
+-->

@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tomoe Integration Example - Subfracture</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #0a0014;
+      min-height: 100vh;
+      font-family: system-ui, -apple-system, sans-serif;
+      color: #ffffff;
+      overflow-x: hidden;
+    }
+
+    /* Hero Section */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      padding: 40px 20px;
+    }
+
+    #hero-tomoe {
+      width: 360px;
+      height: 360px;
+      margin-bottom: 60px;
+    }
+
+    .hero-content {
+      text-align: center;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    .hero-content.visible {
+      animation: fadeInUp 1s ease forwards;
+    }
+
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    h1 {
+      font-size: clamp(48px, 8vw, 96px);
+      font-weight: 700;
+      color: #7d54ff;
+      margin-bottom: 24px;
+      letter-spacing: -0.03em;
+      line-height: 1;
+    }
+
+    .tagline {
+      font-size: clamp(18px, 3vw, 28px);
+      color: rgba(255, 255, 255, 0.7);
+      font-weight: 400;
+      margin-bottom: 16px;
+    }
+
+    .subtitle {
+      font-size: clamp(14px, 2vw, 18px);
+      color: rgba(255, 255, 255, 0.5);
+      font-style: italic;
+    }
+
+    /* Scroll indicator */
+    .scroll-indicator {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      opacity: 0;
+      animation: fadeIn 1s ease 4s forwards, bounce 2s ease infinite 5s;
+    }
+
+    @keyframes fadeIn {
+      to { opacity: 0.6; }
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translate(-50%, 0); }
+      50% { transform: translate(-50%, 10px); }
+    }
+
+    .scroll-indicator svg {
+      width: 24px;
+      height: 24px;
+      stroke: #7d54ff;
+    }
+
+    /* Content section (to show scroll works) */
+    .content {
+      min-height: 100vh;
+      padding: 100px 40px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .content h2 {
+      font-size: 48px;
+      color: #7d54ff;
+      margin-bottom: 32px;
+    }
+
+    .content p {
+      font-size: 18px;
+      line-height: 1.8;
+      color: rgba(255, 255, 255, 0.7);
+      margin-bottom: 24px;
+    }
+
+    /* Loading state (optional) */
+    .loading {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: #0a0014;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      transition: opacity 0.6s ease, visibility 0.6s ease;
+    }
+
+    .loading.hidden {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    #loading-tomoe {
+      width: 200px;
+      height: 200px;
+    }
+
+    @media (max-width: 768px) {
+      #hero-tomoe {
+        width: 280px;
+        height: 280px;
+        margin-bottom: 40px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Optional: Loading screen -->
+  <div class="loading" id="loading-screen">
+    <div id="loading-tomoe"></div>
+  </div>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div id="hero-tomoe"></div>
+
+    <div class="hero-content" id="hero-text">
+      <h1>Subfracture</h1>
+      <p class="tagline">Culture Studio</p>
+      <p class="subtitle">Art and systems, flowing together</p>
+    </div>
+
+    <div class="scroll-indicator">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 5v14M19 12l-7 7-7-7"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- Content Section -->
+  <section class="content">
+    <h2>The Tomoe Symbol</h2>
+    <p>
+      The Tomoe is an ancient Japanese symbol representing the flow of energy,
+      cycles of nature, and the interconnection of forces. Its three-way spiral
+      embodies the continuous movement and balance that defines natural systems.
+    </p>
+    <p>
+      For Subfracture, the Tomoe represents our approach: where art and systems
+      flow together, where strategy and creativity spiral in harmony, where
+      culture emerges from the intersection of multiple forces.
+    </p>
+    <p>
+      This self-drawing animation captures that moment of emergence - watching
+      the symbol come into being, line by line, until the pattern reveals itself.
+    </p>
+  </section>
+
+  <script type="module">
+    import { initTomoe } from './assets/js/tomoe-draw.js';
+
+    // APPROACH 1: Simple hero integration
+    // The Tomoe draws on page load, then reveals content
+    function simpleHeroIntegration() {
+      const heroContainer = document.getElementById('hero-tomoe');
+      const heroText = document.getElementById('hero-text');
+
+      initTomoe(heroContainer, {
+        onComplete: () => {
+          console.log('✨ Tomoe complete - revealing hero content');
+
+          // Fade in the text after Tomoe completes
+          setTimeout(() => {
+            heroText.classList.add('visible');
+          }, 300);
+        }
+      });
+    }
+
+    // APPROACH 2: Loading screen integration
+    // Tomoe animates during page load, then transitions to hero
+    function loadingScreenIntegration() {
+      const loadingScreen = document.getElementById('loading-screen');
+      const loadingContainer = document.getElementById('loading-tomoe');
+      const heroContainer = document.getElementById('hero-tomoe');
+      const heroText = document.getElementById('hero-text');
+
+      // Animate Tomoe in loading screen
+      initTomoe(loadingContainer, {
+        onComplete: () => {
+          console.log('✨ Loading complete');
+
+          // Hide loading screen
+          setTimeout(() => {
+            loadingScreen.classList.add('hidden');
+
+            // Start hero Tomoe after loading is hidden
+            setTimeout(() => {
+              initTomoe(heroContainer, {
+                onComplete: () => {
+                  heroText.classList.add('visible');
+                }
+              });
+            }, 600);
+          }, 300);
+        }
+      });
+    }
+
+    // APPROACH 3: Scroll-triggered replay
+    // Tomoe replays when scrolled back into view
+    function scrollTriggerIntegration() {
+      const heroContainer = document.getElementById('hero-tomoe');
+      const heroText = document.getElementById('hero-text');
+
+      const animation = initTomoe(heroContainer, {
+        onComplete: () => {
+          heroText.classList.add('visible');
+        }
+      });
+
+      // Replay when scrolled back to top
+      let hasScrolled = false;
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > 200) {
+          hasScrolled = true;
+        }
+
+        if (hasScrolled && window.scrollY < 100) {
+          animation.replay();
+          hasScrolled = false;
+        }
+      });
+    }
+
+    // Choose your approach:
+    // simpleHeroIntegration();      // Clean and simple
+    // loadingScreenIntegration();   // With loading screen
+    // scrollTriggerIntegration();   // With scroll replay
+
+    // Default: Simple approach
+    simpleHeroIntegration();
+
+    // Hide loading screen immediately for this demo
+    document.getElementById('loading-screen').classList.add('hidden');
+  </script>
+</body>
+</html>

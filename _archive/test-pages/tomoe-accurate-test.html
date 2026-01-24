@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tomoe - Accurate Trace Test</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #0a0014;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 60px;
+      padding: 40px;
+    }
+    .panel {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+    .label {
+      color: #7d54ff;
+      font-family: system-ui;
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      opacity: 0.5;
+    }
+    #tomoe-container {
+      width: 400px;
+      height: 400px;
+    }
+    .reference {
+      width: 400px;
+      height: 400px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #fff;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .reference img {
+      max-width: 95%;
+      max-height: 95%;
+    }
+    .hint {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: #7d54ff;
+      font-family: system-ui;
+      font-size: 12px;
+      opacity: 0.4;
+    }
+    /* Overlay mode */
+    .overlay-mode .reference {
+      position: absolute;
+      opacity: 0.3;
+      background: transparent;
+    }
+    .overlay-mode .reference img {
+      filter: invert(1);
+    }
+  </style>
+</head>
+<body>
+  <div class="panel">
+    <div class="label">Original Drawing</div>
+    <div class="reference">
+      <img src="/assets/drawings/IMG_0156.jpg" alt="Original Tomoe">
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="label">SVG Animation</div>
+    <div id="tomoe-container"></div>
+  </div>
+
+  <div class="hint">R = replay | O = toggle overlay</div>
+
+  <script type="module">
+    import { createTomoe } from './assets/js/tomoe-v3.js';
+
+    const tomoe = createTomoe(document.getElementById('tomoe-container'), {
+      color: '#7d54ff',
+      onComplete: () => console.log('Done')
+    });
+
+    document.addEventListener('keydown', e => {
+      if (e.key.toLowerCase() === 'r') tomoe.replay();
+      if (e.key.toLowerCase() === 'o') document.body.classList.toggle('overlay-mode');
+    });
+  </script>
+</body>
+</html>

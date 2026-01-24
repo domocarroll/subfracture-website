@@ -1,0 +1,15 @@
+{
+  "name": "living-ink-generator",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "AI breathing video generator for Living Ink vision system",
+  "scripts": {
+    "generate": "node generate-breathing-videos.js",
+    "generate:all": "PROCESS_ALL=true node generate-breathing-videos.js"
+  },
+  "dependencies": {
+    "replicate": "^0.31.0",
+    "dotenv": "^16.4.0"
+  },
+  "devDependencies": {}
+}

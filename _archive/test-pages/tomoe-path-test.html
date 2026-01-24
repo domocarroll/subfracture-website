@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tomoe Path Accuracy Test</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 40px;
+      background: #0a0014;
+      display: flex;
+      gap: 40px;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    h2 {
+      color: #7d54ff;
+      margin-bottom: 20px;
+      font-family: system-ui;
+    }
+
+    .comparison {
+      display: flex;
+      gap: 40px;
+      align-items: flex-start;
+    }
+
+    #source-image {
+      width: 400px;
+      height: auto;
+      border: 2px solid rgba(125, 84, 255, 0.3);
+      border-radius: 8px;
+    }
+
+    #svg-overlay {
+      width: 400px;
+      height: 400px;
+    }
+
+    .controls {
+      margin-top: 20px;
+      display: flex;
+      gap: 12px;
+    }
+
+    button {
+      background: #7d54ff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-family: system-ui;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    button:hover {
+      background: #9370ff;
+    }
+
+    .info {
+      color: rgba(255, 255, 255, 0.6);
+      font-family: monospace;
+      font-size: 12px;
+      margin-top: 12px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="comparison">
+    <div class="container">
+      <h2>Source Drawing</h2>
+      <img id="source-image" src="/assets/drawings/IMG_0156.jpg" alt="Original Tomoe drawing">
+      <div class="info">Hand-drawn source</div>
+    </div>
+
+    <div class="container">
+      <h2>SVG Trace</h2>
+      <div id="svg-overlay"></div>
+      <div class="controls">
+        <button onclick="window.location.reload()">Replay</button>
+        <button onclick="showStatic()">Show Static</button>
+      </div>
+      <div class="info">Programmatic recreation</div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initTomoe } from './assets/js/tomoe-draw.js';
+
+    // Animate the SVG trace
+    const animation = initTomoe(document.getElementById('svg-overlay'), {
+      onComplete: () => {
+        console.log('✨ Path trace complete - compare with source');
+      }
+    });
+
+    // Function to show static version (no animation)
+    window.showStatic = () => {
+      const container = document.getElementById('svg-overlay');
+      initTomoe(container, {
+        autoStart: false
+      });
+
+      // Force all paths to be visible immediately
+      setTimeout(() => {
+        const paths = container.querySelectorAll('path, circle');
+        paths.forEach(path => {
+          path.style.strokeDashoffset = '0';
+          path.style.transition = 'none';
+        });
+      }, 100);
+    };
+  </script>
+</body>
+</html>

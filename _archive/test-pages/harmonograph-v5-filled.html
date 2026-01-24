@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Subfracture // Filled</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #050510;
+      overflow: hidden;
+      cursor: crosshair;
+    }
+
+    .canvas-container {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /*
+     * The key: CSS mask clips the canvas to logo shape.
+     * Harmonograph draws freely, only letter-shaped pixels visible.
+     */
+    #canvas {
+      /* Size canvas to match logo display area */
+      width: 70vw;
+      max-width: 900px;
+      height: auto;
+      aspect-ratio: 1 / 1; /* Match logo's square container */
+
+      /* CSS mask - only show pixels where logo has alpha */
+      -webkit-mask-image: url('assets/subfracture-wordmark.png');
+      mask-image: url('assets/subfracture-wordmark.png');
+      -webkit-mask-size: contain;
+      mask-size: contain;
+      -webkit-mask-position: center;
+      mask-position: center;
+      -webkit-mask-repeat: no-repeat;
+      mask-repeat: no-repeat;
+    }
+
+    .hint {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: rgba(255, 255, 255, 0.15);
+      font-family: 'Courier New', monospace;
+      font-size: 10px;
+      letter-spacing: 2px;
+      z-index: 100;
+      transition: opacity 1s ease;
+    }
+
+    .hint.hidden { opacity: 0; }
+  </style>
+</head>
+<body>
+  <div class="canvas-container">
+    <canvas id="canvas"></canvas>
+  </div>
+
+  <div class="hint" id="hint">click to regenerate &nbsp;|&nbsp; 1-5 presets</div>
+
+  <script>
+    // ===== CURATED PRESETS =====
+    const PRESETS = {
+      // Ember: Warm tones, organic decay, smoldering energy
+      ember: {
+        name: 'Ember',
+        xExtentMult: 0.46,
+        yExtentMult: 0.13,
+        pendulumConfig: (xE, yE) => [
+          { A: xE * 1.0, f: 4.01,  d: 0.0006, p: 0 },
+          { A: xE * 0.45, f: 2.5,  d: 0.0005, p: Math.PI/4 },
+          { A: yE * 1.0, f: 3.0,   d: 0.0006, p: Math.PI/2 },
+          { A: yE * 0.45, f: 2.51, d: 0.0005, p: Math.PI/6 }
+        ],
+        hue: 15,
+        saturation: 75,
+        lightness: 55,
+        opacity: 0.16,
+        lineWidth: 1.8,
+        maxT: 2800
+      },
+
+      // Dense: Heavy fill, cyan gradient
+      dense: {
+        name: 'Dense',
+        xExtentMult: 0.48,
+        yExtentMult: 0.14,
+        pendulumConfig: (xE, yE) => [
+          { A: xE * 1.1, f: 5.01,  d: 0.0003, p: 0 },
+          { A: xE * 0.5, f: 3.0,   d: 0.0003, p: Math.PI/4 },
+          { A: yE * 1.1, f: 4.0,   d: 0.0003, p: Math.PI/2 },
+          { A: yE * 0.5, f: 3.01,  d: 0.0003, p: Math.PI/6 }
+        ],
+        hue: 190,
+        saturation: 65,
+        lightness: 55,
+        opacity: 0.18,
+        lineWidth: 2.2,
+        maxT: 3500
+      },
+
+      // Voltage: Electric, high frequency interference patterns
+      voltage: {
+        name: 'Voltage',
+        xExtentMult: 0.47,
+        yExtentMult: 0.14,
+        pendulumConfig: (xE, yE) => [
+          { A: xE * 0.9, f: 8.03,  d: 0.0005, p: 0 },
+          { A: xE * 0.7, f: 7.0,   d: 0.0004, p: Math.PI/3 },
+          { A: yE * 0.9, f: 6.0,   d: 0.0005, p: Math.PI/4 },
+          { A: yE * 0.7, f: 8.01,  d: 0.0004, p: Math.PI/2 }
+        ],
+        hue: 270,
+        saturation: 65,
+        lightness: 60,
+        opacity: 0.14,
+        lineWidth: 1.2,
+        maxT: 2200
+      },
+
+      // Fracture: Sharp, crystalline, faster decay
+      fracture: {
+        name: 'Fracture',
+        xExtentMult: 0.46,
+        yExtentMult: 0.13,
+        pendulumConfig: (xE, yE) => [
+          { A: xE * 1.0, f: 7.02,  d: 0.0008, p: 0 },
+          { A: xE * 0.6, f: 5.0,   d: 0.0007, p: Math.PI/5 },
+          { A: yE * 1.0, f: 5.0,   d: 0.0008, p: Math.PI/3 },
+          { A: yE * 0.6, f: 7.01,  d: 0.0007, p: 0 }
+        ],
+        hue: 185,
+        saturation: 70,
+        lightness: 50,
+        opacity: 0.2,
+        lineWidth: 1.4,
+        maxT: 2000
+      },
+
+      // Drift: Irrational ratios, organic chaos
+      drift: {
+        name: 'Drift',
+        xExtentMult: 0.45,
+        yExtentMult: 0.12,
+        pendulumConfig: (xE, yE) => [
+          { A: xE * 1.0, f: Math.PI,     d: 0.0004, p: 0 },
+          { A: xE * 0.5, f: Math.E,      d: 0.0005, p: 1 },
+          { A: yE * 1.0, f: Math.SQRT2,  d: 0.0004, p: 2 },
+          { A: yE * 0.5, f: 1.618,       d: 0.0005, p: 3 }
+        ],
+        hue: 175,
+        saturation: 55,
+        lightness: 58,
+        opacity: 0.15,
+        lineWidth: 1.6,
+        maxT: 3200
+      }
+    };
+
+    let currentPreset = null;
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+
+    // Fixed high-res canvas size (CSS scales display)
+    const SIZE = 1361; // Match logo dimensions
+    canvas.width = SIZE;
+    canvas.height = SIZE;
+
+    const state = {
+      pendulums: [],
+      t: 0,
+      dt: 0.015,
+      pointsPerFrame: 80,
+      maxT: 2500,
+      isDrawing: true,
+      // Color state
+      hue: 190,
+      saturation: 60,
+      lightness: 55,
+      opacity: 0.18,
+      lineWidth: 2,
+      // Position
+      centerX: SIZE / 2,
+      centerY: SIZE / 2,
+    };
+
+    let lastPoint = null;
+    let hasInteracted = false;
+
+    function harmonographPoint(t) {
+      const p = state.pendulums;
+
+      // Two pendulums for X, two for Y
+      const x = p[0].A * Math.exp(-p[0].d * t) * Math.sin(p[0].f * t + p[0].p) +
+                p[1].A * Math.exp(-p[1].d * t) * Math.sin(p[1].f * t + p[1].p);
+
+      const y = p[2].A * Math.exp(-p[2].d * t) * Math.sin(p[2].f * t + p[2].p) +
+                p[3].A * Math.exp(-p[3].d * t) * Math.sin(p[3].f * t + p[3].p);
+
+      return {
+        x: state.centerX + x,
+        y: state.centerY + y
+      };
+    }
+
+    function drawSegment(from, to, t) {
+      ctx.beginPath();
+      ctx.moveTo(from.x, from.y);
+      ctx.lineTo(to.x, to.y);
+
+      const progress = t / state.maxT;
+      const hueShift = state.saturation > 0 ? progress * 30 : 0;
+      const hue = (state.hue + hueShift) % 360;
+      const opacityFade = state.opacity * (1 - progress * 0.4);
+
+      ctx.strokeStyle = `hsla(${hue}, ${state.saturation}%, ${state.lightness}%, ${Math.max(0.04, opacityFade)})`;
+      ctx.lineWidth = state.lineWidth;
+      ctx.stroke();
+    }
+
+    function animate() {
+      if (state.isDrawing) {
+        for (let i = 0; i < state.pointsPerFrame; i++) {
+          if (state.t > state.maxT) {
+            state.isDrawing = false;
+            break;
+          }
+          const currentPoint = harmonographPoint(state.t);
+          if (lastPoint) {
+            drawSegment(lastPoint, currentPoint, state.t);
+          }
+          lastPoint = currentPoint;
+          state.t += state.dt;
+        }
+      }
+      requestAnimationFrame(animate);
+    }
+
+    function randomize() {
+      // Clear canvas
+      ctx.fillStyle = '#050510';
+      ctx.fillRect(0, 0, SIZE, SIZE);
+
+      state.t = 0;
+      state.isDrawing = true;
+      lastPoint = null;
+
+      // The wordmark is horizontal - roughly 80% of width, 20% of height
+      // We need X amplitude >> Y amplitude to fill horizontally
+      const xExtent = SIZE * 0.45; // Horizontal reach
+      const yExtent = SIZE * 0.12; // Vertical reach (wordmark is short)
+
+      const ratios = [[3, 2], [4, 3], [5, 4], [5, 3], [7, 4], [7, 5], [8, 5]];
+      const ratio = ratios[Math.floor(Math.random() * ratios.length)];
+      const baseFreq = 2 + Math.random() * 2;
+      const detune = () => 0.995 + Math.random() * 0.01;
+
+      state.pendulums = [
+        // X components - wide amplitude
+        {
+          A: xExtent * (0.8 + Math.random() * 0.4),
+          f: baseFreq * ratio[0] * detune(),
+          d: 0.0006 + Math.random() * 0.0008, // Low damping for long life
+          p: Math.random() * Math.PI * 2
+        },
+        {
+          A: xExtent * (0.3 + Math.random() * 0.3),
+          f: baseFreq * ratio[1] * detune() * 0.7,
+          d: 0.0005 + Math.random() * 0.0006,
+          p: Math.random() * Math.PI * 2
+        },
+        // Y components - narrow amplitude (wordmark is short vertically)
+        {
+          A: yExtent * (0.8 + Math.random() * 0.4),
+          f: baseFreq * ratio[1] * detune(),
+          d: 0.0006 + Math.random() * 0.0008,
+          p: Math.random() * Math.PI * 2
+        },
+        {
+          A: yExtent * (0.3 + Math.random() * 0.3),
+          f: baseFreq * ratio[0] * detune() * 0.7,
+          d: 0.0005 + Math.random() * 0.0006,
+          p: Math.random() * Math.PI * 2
+        }
+      ];
+
+      state.hue = 175 + Math.random() * 50;
+
+      if (!hasInteracted) {
+        hasInteracted = true;
+        document.getElementById('hint').classList.add('hidden');
+      }
+    }
+
+    function applyPreset(presetName) {
+      const preset = PRESETS[presetName];
+      if (!preset) return;
+
+      currentPreset = presetName;
+
+      // Clear canvas
+      ctx.fillStyle = '#050510';
+      ctx.fillRect(0, 0, SIZE, SIZE);
+
+      // Reset drawing state
+      state.t = 0;
+      state.isDrawing = true;
+      lastPoint = null;
+
+      // Apply preset parameters
+      const xExtent = SIZE * preset.xExtentMult;
+      const yExtent = SIZE * preset.yExtentMult;
+
+      state.pendulums = preset.pendulumConfig(xExtent, yExtent);
+      state.hue = preset.hue;
+      state.saturation = preset.saturation;
+      state.lightness = preset.lightness;
+      state.opacity = preset.opacity;
+      state.lineWidth = preset.lineWidth;
+      state.maxT = preset.maxT;
+
+      if (!hasInteracted) {
+        hasInteracted = true;
+        document.getElementById('hint').classList.add('hidden');
+      }
+    }
+
+    canvas.addEventListener('click', randomize);
+
+    document.addEventListener('keydown', e => {
+      switch(e.code) {
+        case 'Space':
+        case 'KeyR':
+          e.preventDefault();
+          randomize();
+          break;
+        case 'Digit1':
+          applyPreset('ember');
+          break;
+        case 'Digit2':
+          applyPreset('dense');
+          break;
+        case 'Digit3':
+          applyPreset('voltage');
+          break;
+        case 'Digit4':
+          applyPreset('fracture');
+          break;
+        case 'Digit5':
+          applyPreset('drift');
+          break;
+      }
+    });
+
+    // Start with a curated preset
+    applyPreset('ember');
+    animate();
+  </script>
+</body>
+</html>

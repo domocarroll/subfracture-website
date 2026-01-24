@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tomoe — v1 vs v2</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #0a0014;
+      min-height: 100vh;
+      display: flex;
+      font-family: system-ui, -apple-system, sans-serif;
+    }
+
+    .panel {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+      position: relative;
+    }
+
+    .panel:first-child {
+      border-right: 1px solid rgba(125, 84, 255, 0.2);
+    }
+
+    .label {
+      position: absolute;
+      top: 30px;
+      color: #7d54ff;
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      opacity: 0.5;
+    }
+
+    .container {
+      width: min(35vw, 350px);
+      height: min(35vw, 350px);
+    }
+
+    .hint {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: #7d54ff;
+      font-size: 12px;
+      opacity: 0.4;
+      letter-spacing: 0.1em;
+    }
+
+    .divider {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: rgba(125, 84, 255, 0.3);
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="panel">
+    <div class="label">v1 — Original</div>
+    <div class="container" id="v1"></div>
+  </div>
+
+  <div class="divider">vs</div>
+
+  <div class="panel">
+    <div class="label">v2 — Rebuilt</div>
+    <div class="container" id="v2"></div>
+  </div>
+
+  <div class="hint">R to replay both</div>
+
+  <script type="module">
+    import { initTomoe } from './assets/js/tomoe-draw.js';
+    import { init as initV2 } from './assets/js/tomoe-draw-v2.js';
+
+    const v1 = initTomoe(document.getElementById('v1'));
+    const v2 = initV2(document.getElementById('v2'));
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key.toLowerCase() === 'r') {
+        v1.replay();
+        v2.replay();
+      }
+    });
+  </script>
+</body>
+</html>

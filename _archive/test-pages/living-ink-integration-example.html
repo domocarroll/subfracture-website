@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Living Ink Integration | Subfracture</title>
+
+  <!-- Import Living Ink CSS -->
+  <link rel="stylesheet" href="/assets/css/visions/living-ink.css">
+
+  <style>
+    /* Minimal page styles for context */
+    :root {
+      --clr-text: #1a1a1a;
+      --clr-bg: #ffffff;
+      --clr-accent: #ffd700;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      line-height: 1.6;
+      color: var(--clr-text);
+      background: var(--clr-bg);
+    }
+
+    .page-section {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 4rem 2rem;
+    }
+
+    h1 {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+
+    h2 {
+      font-size: clamp(1.5rem, 4vw, 2.5rem);
+      font-weight: 600;
+      margin: 3rem 0 1.5rem;
+    }
+
+    p {
+      font-size: 1.125rem;
+      max-width: 65ch;
+      margin: 1rem 0;
+    }
+
+    .hero-section {
+      min-height: 80vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .hero-content {
+      max-width: 800px;
+    }
+
+    .spacer {
+      height: 10vh;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===================== -->
+  <!-- HERO WITH DIAGRAM     -->
+  <!-- ===================== -->
+
+  <section class="hero-section">
+    <div class="hero-content">
+      <h1>Strategy Through Sacred Geometry</h1>
+      <p style="max-width: 100%; text-align: center;">
+        Where ancient wisdom meets modern brand architecture
+      </p>
+
+      <div style="margin: 3rem 0;">
+        <div class="living-ink__diagram-wrapper">
+          <div
+            class="living-ink__diagram"
+            data-diagram-type="bagua"
+            data-stroke-color="#1a1a1a"
+            data-stroke-width="2"
+            data-duration="4"
+          >
+            <!-- SVG will be injected here -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="spacer"></div>
+
+  <!-- ===================== -->
+  <!-- PHILOSOPHY SECTION    -->
+  <!-- ===================== -->
+
+  <section class="page-section">
+    <h2>The Way of the Warrior Brand</h2>
+
+    <div class="living-ink__composite">
+      <!-- Breathing drawing -->
+      <div
+        class="living-ink__breathing"
+        data-fallback-src="/assets/drawings/IMG_0161.jpg"
+        data-video-src="/assets/videos/breathing/IMG_0161_breathing.mp4"
+        data-alt="Shaolin monk in stance - discipline and presence"
+      >
+        <!-- Auto-generated -->
+      </div>
+
+      <!-- Diagram -->
+      <div class="living-ink__diagram-wrapper">
+        <div
+          class="living-ink__diagram"
+          data-diagram-type="trinity"
+          data-stroke-color="#008000"
+          data-stroke-width="2.5"
+          data-duration="3"
+        >
+          <!-- Auto-generated -->
+        </div>
+        <p class="living-ink__caption">
+          Three pillars: Mind, Body, Spirit
+        </p>
+
+        <p style="margin-top: 2rem;">
+          The warrior's path isn't about aggression—it's about presence.
+          Every stance, every breath, every decision made with complete awareness.
+          This is how brands should move through the world.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <div class="spacer"></div>
+
+  <!-- ===================== -->
+  <!-- DUALITY SECTION       -->
+  <!-- ===================== -->
+
+  <section class="page-section">
+    <h2>Joy and Fear: The Twin Spirals</h2>
+
+    <p>
+      Every brand strategy navigates between two forces:
+      the upward spiral of joy (growth, expansion, possibility)
+      and the downward spiral of fear (constraint, limitation, risk).
+      Understanding both is essential.
+    </p>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; margin-top: 3rem;">
+      <!-- Joy Spiral -->
+      <div>
+        <div class="living-ink__diagram-wrapper">
+          <div
+            class="living-ink__diagram"
+            data-diagram-type="joySpiral"
+            data-stroke-color="#DAA520"
+            data-stroke-width="3"
+            data-duration="4"
+          >
+          </div>
+        </div>
+        <h3 style="text-align: center; margin-top: 1rem;">The Joy Spiral</h3>
+        <p style="text-align: center; font-size: 1rem; color: #666;">
+          Upward expansion, possibility, growth mindset
+        </p>
+      </div>
+
+      <!-- Fear Spiral -->
+      <div>
+        <div class="living-ink__diagram-wrapper">
+          <div
+            class="living-ink__diagram"
+            data-diagram-type="fearSpiral"
+            data-stroke-color="#8B0000"
+            data-stroke-width="3"
+            data-duration="3"
+          >
+          </div>
+        </div>
+        <h3 style="text-align: center; margin-top: 1rem;">The Fear Spiral</h3>
+        <p style="text-align: center; font-size: 1rem; color: #666;">
+          Downward contraction, constraint, protective thinking
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <div class="spacer"></div>
+
+  <!-- ===================== -->
+  <!-- MEDITATION SECTION    -->
+  <!-- ===================== -->
+
+  <section class="page-section">
+    <h2>Stillness as Strategy</h2>
+
+    <div class="living-ink__composite living-ink__composite--reverse">
+      <!-- Breathing meditation drawing -->
+      <div
+        class="living-ink__breathing"
+        data-fallback-src="/assets/drawings/IMG_0159.jpg"
+        data-video-src="/assets/videos/breathing/IMG_0159_breathing.mp4"
+        data-alt="Sadhu in deep meditation"
+      >
+        <!-- Auto-generated -->
+      </div>
+
+      <div>
+        <p>
+          The sadhu sits for hours, days, years. Not in inaction, but in
+          profound observation. This is the state where true strategy emerges—
+          not from frantic planning, but from deep seeing.
+        </p>
+
+        <div class="living-ink__diagram-wrapper" style="margin-top: 2rem;">
+          <div
+            class="living-ink__diagram"
+            data-diagram-type="infinity"
+            data-stroke-color="#0064C8"
+            data-stroke-width="2.5"
+            data-duration="5"
+          >
+          </div>
+          <p class="living-ink__caption">
+            The eternal return: observation → insight → action → observation
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="spacer"></div>
+
+  <!-- ===================== -->
+  <!-- CREATIVE FIRE         -->
+  <!-- ===================== -->
+
+  <section class="page-section">
+    <h2>The Creative Fire</h2>
+
+    <div style="max-width: 800px; margin: 2rem auto;">
+      <div
+        class="living-ink__breathing"
+        data-fallback-src="/assets/drawings/IMG_0165.jpg"
+        data-video-src="/assets/videos/breathing/IMG_0165_breathing.mp4"
+        data-alt="Jimi Hendrix - channeling the creative fire"
+        style="margin-bottom: 2rem;"
+      >
+        <!-- Auto-generated -->
+      </div>
+
+      <p style="text-align: center;">
+        Hendrix didn't play guitar—he channeled electricity, emotion, cosmos.
+        This is the level of creative fire we bring to brand work.
+        Not polite. Not safe. Transformative.
+      </p>
+    </div>
+  </section>
+
+  <div class="spacer"></div>
+
+  <!-- ===================== -->
+  <!-- GALLERY FOOTER        -->
+  <!-- ===================== -->
+
+  <section class="page-section">
+    <h2>The Living Archive</h2>
+
+    <p style="margin-bottom: 2rem;">
+      Drawings from the Subfracture sketchbooks—now breathing with AI-generated motion.
+    </p>
+
+    <div class="living-ink__gallery">
+      <div class="living-ink__gallery-item">
+        <div
+          class="living-ink__breathing"
+          data-fallback-src="/assets/drawings/IMG_0159.jpg"
+          data-video-src="/assets/videos/breathing/IMG_0159_breathing.mp4"
+          data-alt="Sadhu meditation"
+        ></div>
+        <p class="living-ink__caption">Meditation</p>
+      </div>
+
+      <div class="living-ink__gallery-item">
+        <div
+          class="living-ink__breathing"
+          data-fallback-src="/assets/drawings/IMG_0161.jpg"
+          data-video-src="/assets/videos/breathing/IMG_0161_breathing.mp4"
+          data-alt="Shaolin warrior"
+        ></div>
+        <p class="living-ink__caption">Warrior</p>
+      </div>
+
+      <div class="living-ink__gallery-item">
+        <div
+          class="living-ink__breathing"
+          data-fallback-src="/assets/drawings/IMG_0165.jpg"
+          data-video-src="/assets/videos/breathing/IMG_0165_breathing.mp4"
+          data-alt="Psychedelic portrait"
+        ></div>
+        <p class="living-ink__caption">Fire</p>
+      </div>
+    </div>
+  </section>
+
+  <div style="height: 20vh;"></div>
+
+  <!-- ===================== -->
+  <!-- INITIALIZE MODULE     -->
+  <!-- ===================== -->
+
+  <script type="module">
+    import LivingInk from './assets/js/visions/living-ink.js';
+
+    // Wait for DOM
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+
+    function init() {
+      // Initialize Living Ink
+      LivingInk.init();
+
+      console.log('🖋️  Living Ink activated');
+      console.log('   - Breathing videos: ready');
+      console.log('   - Self-drawing diagrams: ready');
+      console.log('   - Scroll triggers: active');
+    }
+  </script>
+</body>
+</html>

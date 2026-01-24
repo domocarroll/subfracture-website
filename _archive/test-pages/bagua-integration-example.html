@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bagua Hero Integration Example | Subfracture</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      width: 100%;
+      min-height: 100vh;
+      background: #0a0014;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      color: #fff;
+      overflow-x: hidden;
+    }
+
+    /* Hero Section with Bagua */
+    .hero {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      max-width: 800px;
+      padding: 0 40px;
+    }
+
+    .hero-bagua {
+      margin-bottom: 60px;
+      opacity: 1;
+    }
+
+    .hero-title {
+      font-size: clamp(32px, 5vw, 56px);
+      font-weight: 300;
+      letter-spacing: -1px;
+      margin-bottom: 20px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 1s ease-out;
+    }
+
+    .hero-title.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .hero-subtitle {
+      font-size: clamp(16px, 2vw, 20px);
+      color: #7d54ff;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 30px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 1s ease-out 0.3s;
+    }
+
+    .hero-subtitle.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .hero-description {
+      font-size: clamp(14px, 1.5vw, 18px);
+      line-height: 1.8;
+      color: rgba(255, 255, 255, 0.7);
+      max-width: 600px;
+      margin: 0 auto 40px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 1s ease-out 0.6s;
+    }
+
+    .hero-description.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .hero-cta {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 1s ease-out 0.9s;
+    }
+
+    .hero-cta.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .cta-button {
+      display: inline-block;
+      padding: 16px 40px;
+      background: transparent;
+      border: 2px solid #7d54ff;
+      color: #7d54ff;
+      font-size: 14px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: #7d54ff;
+      transition: left 0.3s ease;
+      z-index: -1;
+    }
+
+    .cta-button:hover {
+      color: #0a0014;
+    }
+
+    .cta-button:hover::before {
+      left: 0;
+    }
+
+    /* Next Section */
+    .content-section {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 100px 40px;
+      background: linear-gradient(180deg, #0a0014 0%, #1a0a2e 100%);
+    }
+
+    .content-inner {
+      max-width: 1200px;
+      text-align: center;
+    }
+
+    .content-title {
+      font-size: 48px;
+      font-weight: 300;
+      margin-bottom: 30px;
+      color: #7d54ff;
+    }
+
+    .content-text {
+      font-size: 18px;
+      line-height: 1.8;
+      color: rgba(255, 255, 255, 0.7);
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    /* Scroll indicator */
+    .scroll-indicator {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      opacity: 0;
+      transition: opacity 1s ease-out 1.2s;
+    }
+
+    .scroll-indicator.visible {
+      opacity: 0.5;
+      animation: bounce 2s ease-in-out infinite;
+    }
+
+    .scroll-indicator svg {
+      width: 24px;
+      height: 24px;
+      stroke: #7d54ff;
+      fill: none;
+    }
+
+    @keyframes bounce {
+      0%, 100% {
+        transform: translateX(-50%) translateY(0);
+      }
+      50% {
+        transform: translateX(-50%) translateY(10px);
+      }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hero-bagua {
+        margin-bottom: 40px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Hero Section with Bagua -->
+  <section class="hero">
+    <div class="hero-content">
+      <!-- Bagua Animation Container -->
+      <div id="hero-bagua" class="hero-bagua"></div>
+
+      <!-- Content (appears after animation) -->
+      <h1 class="hero-title" id="hero-title">Subfracture</h1>
+      <p class="hero-subtitle" id="hero-subtitle">Culture Studio</p>
+      <p class="hero-description" id="hero-description">
+        Where art and systems flow together. We build brands that resonate
+        at the intersection of creativity and structure, intuition and strategy.
+      </p>
+      <div class="hero-cta" id="hero-cta">
+        <a href="#work" class="cta-button">Explore Our Work</a>
+      </div>
+    </div>
+
+    <div class="scroll-indicator" id="scroll-indicator">
+      <svg viewBox="0 0 24 24" stroke-width="2">
+        <polyline points="6 9 12 15 18 9"></polyline>
+      </svg>
+    </div>
+  </section>
+
+  <!-- Next Section -->
+  <section class="content-section" id="work">
+    <div class="content-inner">
+      <h2 class="content-title">Art and Systems</h2>
+      <p class="content-text">
+        The Bagua represents the eight fundamental principles of reality in I-Ching philosophy.
+        For us, it symbolizes the balance between creative expression and systematic thinking —
+        the duality at the heart of everything we create.
+      </p>
+    </div>
+  </section>
+
+  <script type="module">
+    import { init } from './assets/js/bagua-draw.js';
+    import gsap from 'gsap';
+
+    // Make GSAP globally available
+    window.gsap = gsap;
+
+    // Initialize Bagua animation
+    const bagua = init('#hero-bagua', {
+      size: window.innerWidth < 768 ? 300 : 400,
+      strokeColor: '#7d54ff',
+      strokeWidth: 2.5,
+      autoStart: true,
+      enableRotation: true,
+      onComplete: () => {
+        console.log('✨ Bagua complete - revealing content');
+        revealHeroContent();
+      }
+    });
+
+    // Reveal hero content after Bagua completes
+    function revealHeroContent() {
+      const elements = [
+        document.getElementById('hero-title'),
+        document.getElementById('hero-subtitle'),
+        document.getElementById('hero-description'),
+        document.getElementById('hero-cta'),
+        document.getElementById('scroll-indicator')
+      ];
+
+      elements.forEach(el => {
+        if (el) el.classList.add('visible');
+      });
+    }
+
+    // Smooth scroll for CTA
+    document.querySelector('.cta-button').addEventListener('click', (e) => {
+      e.preventDefault();
+      document.getElementById('work').scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
+    });
+
+    // Resize handling
+    let resizeTimeout;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        // Recreate bagua at new size if needed
+        const newSize = window.innerWidth < 768 ? 300 : 400;
+        // Could implement resize logic here
+      }, 250);
+    });
+
+    // Console art
+    console.log(`
+    %c
+    ╔════════════════════════════════════╗
+    ║                                    ║
+    ║         八卦  B A G U A             ║
+    ║                                    ║
+    ║    Art and Systems                 ║
+    ║    Flowing Together                ║
+    ║                                    ║
+    ╚════════════════════════════════════╝
+    `,
+    'color: #7d54ff; font-family: monospace; font-size: 12px;'
+    );
+  </script>
+</body>
+</html>
