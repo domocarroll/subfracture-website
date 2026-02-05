@@ -10,47 +10,39 @@
 
 **Milestone:** v1.0
 **Phase:** 2 of 8 - Navigation & Layout
-**Plan:** Not yet created
-**Status:** Ready for planning
-**Last activity:** 2026-02-05 - Completed 01-03-PLAN.md (Typography/Grid Components and Demo Page)
+**Plan:** 1 of 2 complete
+**Status:** In progress
+**Last activity:** 2026-02-05 - Completed 02-01-PLAN.md (Navigation Components)
 
 **Progress:**
 ```
-[###     ] 19% (3/16 plans complete)
+[####    ] 25% (4/16 plans complete)
 ```
 
-## Phase 1 Overview
+## Phase 2 Overview
 
-**Goal:** Establish editorial visual language (typography, color, grid) and GSAP animation patterns.
+**Goal:** Build navigation system with sticky header, mobile menu, and scroll progress indicator.
 
 **Requirements:**
-- FOUND-01: Typography system (Playfair Display, numbered sections)
-- FOUND-02: Color palette (terracotta, cream, black, accents)
-- FOUND-03: Responsive two-column asymmetric grid
-- FOUND-04: Tailwind CSS 4 design tokens
-- FOUND-05: SSR-safe GSAP installation
-
-**Success Criteria:**
-1. Terracotta headings on cream with consistent typography across viewports
-2. Two-column (desktop) to single-column (mobile) layout shifts
-3. Section numbers (01, 02...) with consistent styling
-4. No hydration errors or GSAP/SSR console warnings
+- NAV-01: Sticky navigation with auto-hide on scroll down
+- NAV-02: Mobile menu with Disclosure pattern
+- NAV-03: Scroll progress indicator
+- NAV-04: Reduced motion support
 
 **Plans Status:**
 | Plan | Name | Status |
 |------|------|--------|
-| 01-01 | Design Tokens | Complete |
-| 01-02 | GSAP Animation Utilities | Complete |
-| 01-03 | Typography/Grid Components and Demo Page | Complete |
+| 02-01 | Navigation Components | Complete |
+| 02-02 | Page Layout | Pending |
 
 ## Performance Metrics
 
 | Metric | Target | Current |
 |--------|--------|---------|
 | Phases Complete | 8 | 1 |
-| Plans Complete | 16 | 3 |
-| Requirements Done | 37 | 5 |
-| Coverage | 100% | 19% |
+| Plans Complete | 16 | 4 |
+| Requirements Done | 37 | 9 |
+| Coverage | 100% | 25% |
 
 ## Accumulated Context
 
@@ -69,6 +61,7 @@
 - **Section numbering**: Editorial style with small terracotta labels (01, 02...)
 - **Container variants**: Two widths (narrow: 900px, wide: 1200px)
 - **Grid system**: Golden ratio (1.618fr 1fr) for major/minor columns
+- **NAV-01**: Use GSAP ScrollTrigger direction detection for auto-hide behavior
 
 ### Research Findings
 - GSAP plugins (DrawSVG, MorphSVG, SplitText) now 100% free
@@ -91,6 +84,7 @@
 - Dynamic GSAP loading: always use await import('gsap') inside functions
 - Animation cleanup: use Svelte action destroy() to kill tweens and ScrollTriggers
 - Reduced motion: wrap getMotionSafeProps() or check prefersReducedMotion() before animating
+- Disclosure pattern: `id` on menu, `aria-controls` on toggle, `aria-expanded` state
 
 ### Artifacts Created
 - `src/lib/styles/tokens.css` - Complete design token system
@@ -99,6 +93,10 @@
 - `src/lib/actions/animate.ts` - Svelte action for GSAP animations
 - `src/lib/components/ui/SectionHeading.svelte` - Editorial section headings
 - `src/lib/components/ui/Container.svelte` - Responsive layout container
+- `src/lib/components/navigation/Navigation.svelte` - Main navigation with auto-hide
+- `src/lib/components/navigation/NavLink.svelte` - Reusable nav link
+- `src/lib/components/navigation/MobileMenu.svelte` - Mobile menu overlay
+- `src/lib/components/navigation/ScrollProgress.svelte` - Scroll progress bar
 - `src/routes/+page.svelte` - Design system demo page
 - GSAP, Fontsource packages installed
 
@@ -134,6 +132,10 @@ None
       01-03-PLAN.md    # Typography/grid components plan
       01-03-SUMMARY.md # Typography/grid components summary
       01-RESEARCH.md   # Phase research
+    02-navigation-layout/
+      02-01-PLAN.md    # Navigation components plan
+      02-01-SUMMARY.md # Navigation components summary
+      02-RESEARCH.md   # Phase research
 ```
 
 ### WIP Files (from exploration)
@@ -143,22 +145,22 @@ None
 
 ### Last Session
 - **Date:** 2026-02-05
-- **Stopped at:** Completed Phase 1 - Foundation & Design System (all 3 plans)
-- **Resume file:** None - ready for Phase 2
+- **Stopped at:** Completed 02-01-PLAN.md (Navigation Components)
+- **Resume file:** None - ready for 02-02 planning
 
 ### Resume Command
 ```
-/gsd:plan-phase 2
+/gsd:execute-phase 2
 ```
 
-### Phase 1 Achievement
-All foundational systems validated via demo page:
-- Design tokens (colors, typography, spacing, easing)
-- Self-hosted fonts (Playfair Display, Source Sans 3)
-- GSAP animation infrastructure with ScrollTrigger
-- Editorial components (SectionHeading, Container)
-- Responsive grid with golden ratio layout
+### Phase 2 Progress
+Navigation components complete:
+- Navigation with auto-hide via GSAP ScrollTrigger direction detection
+- ScrollProgress with GSAP ScrollTrigger progress binding
+- MobileMenu with Svelte slide transition and reduced motion check
+- NavLink with hash-based active detection
+- All components SSR-safe with proper cleanup
 
 ---
 *Last updated: 2026-02-05*
-*Phase: 1 - Foundation & Design System (Complete)*
+*Phase: 2 - Navigation & Layout (In Progress)*
