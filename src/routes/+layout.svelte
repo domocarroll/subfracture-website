@@ -11,6 +11,10 @@
 	import { onMount } from 'svelte';
 	import { initGSAP } from '$lib/utils/gsap';
 
+	// Layout components
+	import Navigation from '$lib/components/navigation/Navigation.svelte';
+	import Footer from '$lib/components/layout/Footer.svelte';
+
 	let { children } = $props();
 
 	onMount(() => {
@@ -22,4 +26,19 @@
 	<link rel="icon" href={favicon} />
 </svelte:head>
 
-{@render children()}
+<!-- Navigation includes ScrollProgress -->
+<Navigation />
+
+<main class="main-content">
+	{@render children()}
+</main>
+
+<Footer />
+
+<style>
+	.main-content {
+		/* Account for fixed navigation height */
+		padding-top: 5rem; /* ~80px to match nav height */
+		min-height: 100vh;
+	}
+</style>
