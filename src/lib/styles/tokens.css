@@ -1,0 +1,72 @@
+/* Subfracture Design System - Design Tokens
+ * Nigrum Corpus aesthetic: neo-classical, editorial, scholarly warmth
+ *
+ * Usage: Import in app.css after tailwindcss import
+ * All tokens available as CSS custom properties and Tailwind utilities
+ */
+
+@theme {
+  /* === COLORS (Semantic naming) === */
+
+  /* Surfaces */
+  --color-surface: #f5f0e8;           /* Cream/parchment background */
+  --color-surface-warm: #f0ebe0;      /* Slightly warmer variant */
+  --color-bone: #e8e0d4;              /* Light stone tone */
+
+  /* Text */
+  --color-text: #1a1a1a;              /* Black ink - primary text */
+  --color-text-muted: #4a4a4a;        /* Secondary/muted text */
+
+  /* Accent */
+  --color-primary: #c55a3d;           /* Terracotta - primary accent */
+  --color-primary-dark: #a84830;      /* Terracotta hover state */
+  --color-botanical: #5a7c65;         /* Muted green - botanical elements ONLY */
+  --color-burgundy: #722f37;          /* Deep red accent */
+
+  /* === TYPOGRAPHY === */
+
+  /* Font Families */
+  --font-serif: "Playfair Display Variable", Georgia, serif;
+  --font-sans: "Source Sans 3", system-ui, sans-serif;
+
+  /* Golden Ratio Scale (1.618) - base 18px */
+  --text-xs: 0.69rem;                 /* ~11px - labels, captions */
+  --text-sm: 0.875rem;                /* 14px - small UI */
+  --text-base: 1.125rem;              /* 18px - body */
+  --text-lg: 1.5rem;                  /* 24px - lead paragraphs */
+  --text-xl: 1.875rem;                /* 30px - H4 */
+  --text-2xl: 2.44rem;                /* ~39px - H3 */
+  --text-3xl: 3.05rem;                /* ~49px - H2 */
+  --text-4xl: 3.95rem;                /* ~63px - H1 */
+  --text-5xl: 4.94rem;                /* ~79px - Display */
+  --text-6xl: 6.4rem;                 /* ~102px - Hero display */
+
+  /* Line Heights (tighter as size increases) */
+  --text-base--line-height: 1.8;      /* Generous body - art book feel */
+  --text-lg--line-height: 1.7;
+  --text-xl--line-height: 1.4;
+  --text-2xl--line-height: 1.3;
+  --text-3xl--line-height: 1.2;
+  --text-4xl--line-height: 1.1;
+  --text-5xl--line-height: 1.05;
+  --text-6xl--line-height: 1;
+
+  /* === SPACING === */
+  --spacing-section: 10rem;           /* 160px between sections */
+  --spacing-section-sm: 7.5rem;       /* 120px mobile */
+
+  /* === BREAKPOINTS === */
+  --breakpoint-sm: 40rem;             /* 640px */
+  --breakpoint-md: 48rem;             /* 768px - two-column collapse */
+  --breakpoint-lg: 64rem;             /* 1024px */
+  --breakpoint-xl: 80rem;             /* 1280px */
+
+  /* === GRID / LAYOUT === */
+  --content-max: 56.25rem;            /* 900px - narrow editorial */
+  --content-wide: 75rem;              /* 1200px - when needed */
+
+  /* === EASING (Organic/Botanical feel) === */
+  --ease-organic: cubic-bezier(0.22, 1, 0.36, 1);   /* Out-quint - primary */
+  --ease-reveal: cubic-bezier(0.16, 1, 0.3, 1);     /* Out-expo - dramatic reveals */
+  --ease-subtle: cubic-bezier(0.4, 0, 0.2, 1);      /* Material standard - UI */
+}
