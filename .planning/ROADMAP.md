@@ -28,9 +28,9 @@
 **Plans:** 3 plans in 2 waves
 
 Plans:
-- [ ] 01-01-PLAN.md - Install dependencies and create design tokens
-- [ ] 01-02-PLAN.md - Create GSAP utilities with SSR safety
-- [ ] 01-03-PLAN.md - Build typography/grid components and demo page
+- [x] 01-01-PLAN.md - Install dependencies and create design tokens
+- [x] 01-02-PLAN.md - Create GSAP utilities with SSR safety
+- [x] 01-03-PLAN.md - Build typography/grid components and demo page
 
 **Requirements:**
 - FOUND-01: Typography system implements editorial serif (Playfair Display) with numbered section labels
@@ -239,7 +239,7 @@ Phase 2: Navigation & Layout
 
 | Phase | Status | Started | Completed |
 |-------|--------|---------|-----------|
-| 1 - Foundation | Planned (3 plans) | - | - |
+| 1 - Foundation | ✓ Complete | 2026-02-05 | 2026-02-05 |
 | 2 - Navigation | Pending | - | - |
 | 3 - Hero | Pending | - | - |
 | 4 - Content | Pending | - | - |

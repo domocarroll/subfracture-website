@@ -9,11 +9,11 @@ Requirements for initial launch. Each maps to roadmap phases.
 
 ### Foundation
 
-- [ ] **FOUND-01**: Typography system implements editorial serif (Playfair Display) with numbered section labels
-- [ ] **FOUND-02**: Color palette implements terracotta (#c55a3d), cream background, black body text, muted accents
-- [ ] **FOUND-03**: Responsive grid uses two-column asymmetric layout with generous whitespace
-- [ ] **FOUND-04**: Global styles configured in Tailwind CSS 4 with design tokens
-- [ ] **FOUND-05**: GSAP installed with SSR-safe browser guards and cleanup utilities
+- [x] **FOUND-01**: Typography system implements editorial serif (Playfair Display) with numbered section labels
+- [x] **FOUND-02**: Color palette implements terracotta (#c55a3d), cream background, black body text, muted accents
+- [x] **FOUND-03**: Responsive grid uses two-column asymmetric layout with generous whitespace
+- [x] **FOUND-04**: Global styles configured in Tailwind CSS 4 with design tokens
+- [x] **FOUND-05**: GSAP installed with SSR-safe browser guards and cleanup utilities
 
 ### Navigation
 
