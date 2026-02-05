@@ -1,26 +1,35 @@
 # Subfracture Website v2 - Project Memory
 
 ## Project Status
-- **Version**: 2.0 (Fresh build)
+- **Version**: 2.0 (SvelteKit rebuild)
 - **v1 Archive**: `/_archive/v1/` (preserved for reference)
 
 ## Tech Stack
-- **Build**: Vite
+- **Framework**: SvelteKit (Svelte 5)
+- **Styling**: Tailwind CSS 4
+- **Build**: Vite 7
+- **Language**: TypeScript
+- **CMS**: Sanity (to be added before deployment)
 - **Deployment**: Vercel
-- **Styling**: Vanilla CSS (no framework)
-- **JavaScript**: Vanilla JS with GSAP for animations
 
 ## Directory Structure
 ```
 /
-├── assets/
-│   ├── css/        # Stylesheets
-│   ├── js/         # Scripts
-│   ├── images/     # Visual assets
-│   └── fonts/      # Typography
-├── index.html      # Main entry
-├── _archive/v1/    # Previous version (reference)
-└── CLAUDE.md       # This file
+├── src/
+│   ├── routes/         # SvelteKit pages
+│   ├── lib/            # Shared components & utilities
+│   └── app.css         # Global Tailwind styles
+├── static/             # Static assets
+├── _archive/v1/        # Previous version (reference)
+└── CLAUDE.md           # This file
+```
+
+## Commands
+```bash
+npm run dev      # Development server
+npm run build    # Production build
+npm run preview  # Preview production build
+npm run check    # Type checking
 ```
 
 ## Design Direction
@@ -32,11 +41,8 @@
 - ScrollTrigger can fire on page load - always check `scrollY > threshold` before animating
 - `overflow: hidden` + `perspective` are CSS-incompatible (spec flattens 3D)
 - CSS Grid `grid-template-rows: 0fr/1fr` is excellent for smooth height animations
-- Content wrapper needs `overflow: hidden; min-height: 0` for grid collapse
 
-## Build Commands
-```bash
-npm run dev      # Development server
-npm run build    # Production build
-npm run preview  # Preview production build
-```
+### Svelte 5
+- Uses runes (`$state`, `$derived`, `$effect`) instead of stores
+- `$props()` for component props
+- `{@render children()}` for slot content
