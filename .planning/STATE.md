@@ -10,12 +10,13 @@
 
 **Milestone:** v1.0
 **Phase:** 1 of 8 - Foundation & Design System
-**Plan:** Not yet created
-**Status:** Ready for planning
+**Plan:** 1 of 2 complete
+**Status:** In progress
+**Last activity:** 2026-02-05 - Completed 01-01-PLAN.md (Design Tokens)
 
 **Progress:**
 ```
-[        ] 0% (0/8 phases complete)
+[#       ] 6% (1/16 plans complete)
 ```
 
 ## Phase 1 Overview
@@ -35,13 +36,20 @@
 3. Section numbers (01, 02...) with consistent styling
 4. No hydration errors or GSAP/SSR console warnings
 
+**Plans Status:**
+| Plan | Name | Status |
+|------|------|--------|
+| 01-01 | Design Tokens | Complete |
+| 01-02 | GSAP Animation Utilities | Not started |
+
 ## Performance Metrics
 
 | Metric | Target | Current |
 |--------|--------|---------|
 | Phases Complete | 8 | 0 |
-| Requirements Done | 37 | 0 |
-| Coverage | 100% | 0% |
+| Plans Complete | 16 | 1 |
+| Requirements Done | 37 | 4 |
+| Coverage | 100% | 11% |
 
 ## Accumulated Context
 
@@ -51,6 +59,9 @@
 - **Colors**: Terracotta primary accent (#c55a3d) on cream background
 - **Stack**: SvelteKit 2 + Svelte 5 + Tailwind CSS 4 + GSAP (100% free)
 - **CMS**: Sanity (deferred until static frontend complete)
+- **Typography**: Golden ratio scale (1.618) with 18px base
+- **Fonts**: Playfair Display Variable (body/headings), Source Sans 3 (UI)
+- **Font hosting**: Self-hosted via Fontsource (no Google CDN)
 
 ### Research Findings
 - GSAP plugins (DrawSVG, MorphSVG, SplitText) now 100% free
@@ -63,9 +74,16 @@
 - Guard all GSAP code with browser check from $app/environment
 - Use onMount for animation setup, NOT $effect
 - Create horizontal ScrollTriggers in correct DOM order
+- Import tokens.css after tailwindcss in app.css
+- Font imports in +layout.svelte before app.css
+
+### Artifacts Created
+- `src/lib/styles/tokens.css` - Complete design token system
+- GSAP, Fontsource packages installed
 
 ### Open TODOs
-- [ ] Source specific fonts (Canela, Editorial New) or use Playfair Display initially
+- [x] Source specific fonts (Canela, Editorial New) or use Playfair Display initially
+  - Resolved: Using Playfair Display Variable + Source Sans 3
 
 ### Blockers
 None
@@ -86,19 +104,29 @@ None
     ARCHITECTURE.md  # Component structure
     PITFALLS.md      # Common mistakes to avoid
     SUMMARY.md       # Executive synthesis
+  phases/
+    01-foundation-design-system/
+      01-01-PLAN.md    # Design tokens plan
+      01-01-SUMMARY.md # Design tokens summary
+      01-02-PLAN.md    # GSAP utilities plan
+      01-RESEARCH.md   # Phase research
 ```
 
 ### WIP Files (from exploration)
 - `src/lib/components/Hero.svelte` - Basic hero component
 - `src/lib/assets/SacredGeometry.svelte` - SVG asset
 - `src/lib/assets/VitruvianFigure.svelte` - SVG asset
-- Typography tokens in `src/app.css`
+
+### Last Session
+- **Date:** 2026-02-05
+- **Stopped at:** Completed 01-01-PLAN.md
+- **Resume file:** .planning/phases/01-foundation-design-system/01-02-PLAN.md
 
 ### Resume Command
 ```
-/gsd:plan-phase 1
+/gsd:execute-phase
 ```
 
 ---
 *Last updated: 2026-02-05*
-*Phase: Ready for planning*
+*Phase: 1 - Foundation & Design System (Plan 1/2 complete)*
