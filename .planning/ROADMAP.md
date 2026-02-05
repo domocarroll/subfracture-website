@@ -55,6 +55,12 @@ Plans:
 
 **Goal:** Create persistent navigation and footer that provides orientation and establishes the editorial rhythm across the page.
 
+**Plans:** 2 plans in 2 waves
+
+Plans:
+- [ ] 02-01-PLAN.md - Create navigation components (Navigation, NavLink, MobileMenu, ScrollProgress)
+- [ ] 02-02-PLAN.md - Create footer and integrate into layout
+
 **Requirements:**
 - NAV-01: Sticky navigation with clear hierarchy visible on all pages
 - NAV-02: Mobile menu with accessible toggle (44x44px touch target)
