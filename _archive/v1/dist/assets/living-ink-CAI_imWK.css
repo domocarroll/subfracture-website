@@ -1,0 +1,362 @@
+/**
+ * AVENUE A: THE LIVING INK
+ * Styles for breathing drawings and self-revealing diagrams
+ */
+
+/* =====================
+   BREATHING VIDEO SYSTEM
+   ===================== */
+
+.living-ink__breathing {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+}
+
+.living-ink__video,
+.living-ink__image,
+.living-ink__fallback {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+.living-ink__video {
+  /* Subtle breathing effect via filter */
+  animation: living-ink-breathe 8s ease-in-out infinite;
+  will-change: filter;
+}
+
+.living-ink__fallback {
+  display: none;
+}
+
+/* Breathing animation - very subtle */
+@keyframes living-ink-breathe {
+  0%, 100% {
+    filter: brightness(1) contrast(1);
+  }
+  50% {
+    filter: brightness(1.02) contrast(1.01);
+  }
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .living-ink__video {
+    animation: none;
+  }
+}
+
+/* =====================
+   SVG DIAGRAM SYSTEM
+   ===================== */
+
+.living-ink__diagram-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.living-ink__diagram {
+  position: relative;
+  display: inline-block;
+  max-width: 100%;
+}
+
+.living-ink__svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.living-ink__path {
+  vector-effect: non-scaling-stroke;
+}
+
+/* Diagram variations */
+.living-ink__svg--bagua {
+  /* Sacred geometry - octagon */
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.08));
+}
+
+.living-ink__svg--joySpiral {
+  /* Upward expansion */
+  filter: drop-shadow(0 4px 12px rgba(255, 215, 0, 0.15));
+}
+
+.living-ink__svg--fearSpiral {
+  /* Downward contraction */
+  filter: drop-shadow(0 4px 12px rgba(139, 0, 0, 0.15));
+}
+
+.living-ink__svg--infinity {
+  /* Continuous flow */
+  filter: drop-shadow(0 2px 10px rgba(0, 100, 200, 0.12));
+}
+
+.living-ink__svg--trinity {
+  /* Stability */
+  filter: drop-shadow(0 3px 10px rgba(0, 128, 0, 0.12));
+}
+
+/* =====================
+   COMPOSITE LAYOUTS
+   ===================== */
+
+/* Side-by-side layout: drawing + diagram */
+.living-ink__composite {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  align-items: center;
+  margin: 4rem 0;
+}
+
+.living-ink__composite--reverse {
+  grid-template-columns: 1fr 1fr;
+}
+
+.living-ink__composite--reverse .living-ink__breathing {
+  order: 2;
+}
+
+.living-ink__composite--reverse .living-ink__diagram-wrapper {
+  order: 1;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .living-ink__composite,
+  .living-ink__composite--reverse {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .living-ink__composite--reverse .living-ink__breathing,
+  .living-ink__composite--reverse .living-ink__diagram-wrapper {
+    order: 0;
+  }
+
+  .living-ink__diagram-wrapper {
+    padding: 1rem;
+  }
+}
+
+/* =====================
+   CAPTION SYSTEM
+   ===================== */
+
+.living-ink__caption {
+  margin-top: 1rem;
+  font-size: 0.875rem;
+  color: rgba(0, 0, 0, 0.6);
+  font-style: italic;
+  text-align: center;
+}
+
+.living-ink__breathing + .living-ink__caption {
+  margin-top: 0.75rem;
+}
+
+/* =====================
+   HERO INTEGRATION
+   ===================== */
+
+.living-ink__hero {
+  position: relative;
+  width: 100%;
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.living-ink__hero .living-ink__breathing {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.living-ink__hero .living-ink__diagram-wrapper {
+  position: relative;
+  z-index: 2;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 12px;
+  padding: 3rem;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+}
+
+@media (max-width: 768px) {
+  .living-ink__hero {
+    min-height: 50vh;
+  }
+
+  .living-ink__hero .living-ink__diagram-wrapper {
+    padding: 2rem;
+    margin: 1rem;
+  }
+}
+
+/* =====================
+   GALLERY GRID
+   ===================== */
+
+.living-ink__gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  margin: 3rem 0;
+}
+
+.living-ink__gallery-item {
+  position: relative;
+}
+
+@media (max-width: 768px) {
+  .living-ink__gallery {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}
+
+/* =====================
+   LOADING STATES
+   ===================== */
+
+.living-ink__breathing[data-loading="true"]::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.4) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  animation: living-ink-shimmer 2s infinite;
+  z-index: 1;
+}
+
+@keyframes living-ink-shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* =====================
+   INTERACTION STATES
+   ===================== */
+
+.living-ink__breathing:hover .living-ink__video {
+  filter: brightness(1.05) contrast(1.02);
+  transition: filter 0.3s ease;
+}
+
+.living-ink__diagram:hover .living-ink__svg {
+  transform: scale(1.02);
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* =====================
+   ACCESSIBILITY
+   ===================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .living-ink__video,
+  .living-ink__svg,
+  .living-ink__breathing,
+  .living-ink__diagram {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .living-ink__path {
+    stroke-width: 3;
+  }
+
+  .living-ink__svg {
+    filter: none;
+  }
+}
+
+/* =====================
+   PRINT STYLES
+   ===================== */
+
+@media print {
+  .living-ink__video {
+    display: none;
+  }
+
+  .living-ink__fallback,
+  .living-ink__image {
+    display: block !important;
+  }
+
+  .living-ink__svg {
+    filter: none;
+  }
+}
+
+/* =====================
+   DARK MODE SUPPORT
+   ===================== */
+
+@media (prefers-color-scheme: dark) {
+  .living-ink__breathing {
+    background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+  }
+
+  .living-ink__caption {
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .living-ink__hero .living-ink__diagram-wrapper {
+    background: rgba(20, 20, 20, 0.95);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  }
+}
+
+/* =====================
+   PERFORMANCE OPTIMIZATIONS
+   ===================== */
+
+.living-ink__video,
+.living-ink__svg {
+  /* GPU acceleration */
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* Limit animations on mobile for performance */
+@media (max-width: 768px) {
+  .living-ink__breathing:hover .living-ink__video {
+    filter: none;
+  }
+
+  .living-ink__diagram:hover .living-ink__svg {
+    transform: none;
+  }
+}
