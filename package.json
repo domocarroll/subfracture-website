@@ -21,5 +21,15 @@
 		"tailwindcss": "^4.1.18",
 		"typescript": "^5.9.3",
 		"vite": "^7.3.1"
+	},
+	"dependencies": {
+		"@fontsource-variable/playfair-display": "^5.2.8",
+		"@fontsource/source-sans-3": "^5.2.9",
+		"@tailwindcss/typography": "^0.5.19",
+		"@threlte/core": "^8.3.1",
+		"@threlte/extras": "^9.7.1",
+		"@types/three": "^0.182.0",
+		"gsap": "^3.14.2",
+		"three": "^0.182.0"
 	}
 }
