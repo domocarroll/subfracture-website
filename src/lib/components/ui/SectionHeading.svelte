@@ -8,6 +8,7 @@
 	 * @example
 	 * <SectionHeading number="01" title="Typography" />
 	 * <SectionHeading number="02" title="Our Process" level="h3" />
+	 * <SectionHeading number="04" title="Contact" variant="light" />
 	 */
 
 	interface Props {
@@ -17,12 +18,14 @@
 		title: string;
 		/** Semantic heading level (default 'h2') */
 		level?: 'h1' | 'h2' | 'h3';
+		/** Color variant: 'default' (dark text) or 'light' (light text on dark bg) */
+		variant?: 'default' | 'light';
 	}
 
-	let { number, title, level = 'h2' }: Props = $props();
+	let { number, title, level = 'h2', variant = 'default' }: Props = $props();
 </script>
 
-<div class="section-heading">
+<div class="section-heading" class:section-heading--light={variant === 'light'}>
 	<span class="section-number">{number}</span>
 	{#if level === 'h1'}
 		<h1 class="section-title">{title}</h1>
@@ -71,5 +74,10 @@
 	h3.section-title {
 		font-size: var(--text-2xl);
 		line-height: var(--text-2xl--line-height);
+	}
+
+	/* Light variant for dark backgrounds */
+	.section-heading--light .section-title {
+		color: var(--color-surface);
 	}
 </style>
