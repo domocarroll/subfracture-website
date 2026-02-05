@@ -10,6 +10,24 @@ A complete rebuild of the Subfracture website using SvelteKit, Tailwind CSS, and
 
 Subfracture designs brand worlds — systems that build meaning, momentum, and relevance over time. The website must embody this philosophy: scholarly authority, warm humanity, systems thinking.
 
+## Current Milestone: v1.0 Website Launch
+
+**Goal:** Build complete Culture Studio website with editorial aesthetic, botanical hero, lips reveal portfolio, and all core sections.
+
+**Target features:**
+- Foundation design system (Playfair Display, terracotta/cream palette, asymmetric grid)
+- Navigation with scroll progress
+- Simplified botanical hero (full animation deferred to v1.1)
+- Content sections: Services (5 pillars), Problems (6 pain points), Approach, Statistics
+- Portfolio: Lips reveal + horizontal scroll gallery
+- Team section with hover interactions
+- Contact form + two-location footer
+- Accessibility (WCAG 2.1 AA) and micro-interactions
+
+**8 phases | 37 requirements | See ROADMAP.md for details**
+
+---
+
 ## The Shift (v1 → v2)
 
 | v1 | v2 |
@@ -255,4 +273,4 @@ Botanicals should feel **illustrative and intentional**, not decorative filler.
 
 ---
 
-*Last updated: 2026-02-05 after initialization*
+*Last updated: 2026-02-05 after milestone v1.0 roadmap creation*
