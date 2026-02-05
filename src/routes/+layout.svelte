@@ -8,7 +8,14 @@
 	import '../app.css';
 	import favicon from '$lib/assets/favicon.svg';
 
+	import { onMount } from 'svelte';
+	import { initGSAP } from '$lib/utils/gsap';
+
 	let { children } = $props();
+
+	onMount(() => {
+		initGSAP();
+	});
 </script>
 
 <svelte:head>
