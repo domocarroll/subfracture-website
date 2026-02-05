@@ -10,13 +10,13 @@
 
 **Milestone:** v1.0
 **Phase:** 1 of 8 - Foundation & Design System
-**Plan:** 1 of 2 complete
-**Status:** In progress
-**Last activity:** 2026-02-05 - Completed 01-01-PLAN.md (Design Tokens)
+**Plan:** 2 of 2 complete
+**Status:** Phase 1 complete
+**Last activity:** 2026-02-05 - Completed 01-02-PLAN.md (GSAP Animation Utilities)
 
 **Progress:**
 ```
-[#       ] 6% (1/16 plans complete)
+[##      ] 12% (2/16 plans complete)
 ```
 
 ## Phase 1 Overview
@@ -40,16 +40,16 @@
 | Plan | Name | Status |
 |------|------|--------|
 | 01-01 | Design Tokens | Complete |
-| 01-02 | GSAP Animation Utilities | Not started |
+| 01-02 | GSAP Animation Utilities | Complete |
 
 ## Performance Metrics
 
 | Metric | Target | Current |
 |--------|--------|---------|
-| Phases Complete | 8 | 0 |
-| Plans Complete | 16 | 1 |
-| Requirements Done | 37 | 4 |
-| Coverage | 100% | 11% |
+| Phases Complete | 8 | 1 |
+| Plans Complete | 16 | 2 |
+| Requirements Done | 37 | 5 |
+| Coverage | 100% | 14% |
 
 ## Accumulated Context
 
@@ -62,6 +62,9 @@
 - **Typography**: Golden ratio scale (1.618) with 18px base
 - **Fonts**: Playfair Display Variable (body/headings), Source Sans 3 (UI)
 - **Font hosting**: Self-hosted via Fontsource (no Google CDN)
+- **GSAP loading**: Dynamic imports for SSR safety and lazy loading
+- **Animation defaults**: 0.6s duration, power3.out ease
+- **Reduced motion**: Returns duration: 0 for instant transitions
 
 ### Research Findings
 - GSAP plugins (DrawSVG, MorphSVG, SplitText) now 100% free
@@ -76,9 +79,20 @@
 - Create horizontal ScrollTriggers in correct DOM order
 - Import tokens.css after tailwindcss in app.css
 - Font imports in +layout.svelte before app.css
+- Use `animate` action from $lib/actions/animate for declarative animations
+- Use `initGSAP()` in root layout for global registration
+
+### Patterns Established
+- SSR guard: check `browser` from $app/environment before any window/document access
+- Dynamic GSAP loading: always use await import('gsap') inside functions
+- Animation cleanup: use Svelte action destroy() to kill tweens and ScrollTriggers
+- Reduced motion: wrap getMotionSafeProps() or check prefersReducedMotion() before animating
 
 ### Artifacts Created
 - `src/lib/styles/tokens.css` - Complete design token system
+- `src/lib/utils/gsap.ts` - SSR-safe GSAP initialization
+- `src/lib/utils/motion.ts` - Reduced motion utilities
+- `src/lib/actions/animate.ts` - Svelte action for GSAP animations
 - GSAP, Fontsource packages installed
 
 ### Open TODOs
@@ -109,6 +123,7 @@ None
       01-01-PLAN.md    # Design tokens plan
       01-01-SUMMARY.md # Design tokens summary
       01-02-PLAN.md    # GSAP utilities plan
+      01-02-SUMMARY.md # GSAP utilities summary
       01-RESEARCH.md   # Phase research
 ```
 
@@ -119,14 +134,14 @@ None
 
 ### Last Session
 - **Date:** 2026-02-05
-- **Stopped at:** Completed 01-01-PLAN.md
-- **Resume file:** .planning/phases/01-foundation-design-system/01-02-PLAN.md
+- **Stopped at:** Completed Phase 1 - Foundation & Design System
+- **Resume file:** None - ready for Phase 2
 
 ### Resume Command
 ```
-/gsd:execute-phase
+/gsd:plan-phase 2
 ```
 
 ---
 *Last updated: 2026-02-05*
-*Phase: 1 - Foundation & Design System (Plan 1/2 complete)*
+*Phase: 1 - Foundation & Design System (Complete)*
