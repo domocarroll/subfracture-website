@@ -10,13 +10,13 @@
 
 **Milestone:** v1.0
 **Phase:** 3 of 8 - In Progress (Hero Section)
-**Plan:** 2 of 4 complete
+**Plan:** 3 of 4 complete
 **Status:** In progress
-**Last activity:** 2026-02-06 - Completed 03-02-PLAN.md (Hero Content & Logo Carousel)
+**Last activity:** 2026-02-06 - Completed 03-01-PLAN.md (GSAP Plugins & Hero Illustration)
 
 **Progress:**
 ```
-[######  ] 38% (6/16 plans complete)
+[#######  ] 44% (7/16 plans complete)
 ```
 
 ## Phase 3 Overview
@@ -26,7 +26,7 @@
 **Plans Status:**
 | Plan | Name | Status |
 |------|------|--------|
-| 03-01 | Hero Illustration SVG | Pending |
+| 03-01 | Hero Illustration SVG | Complete |
 | 03-02 | Hero Content & Logo Carousel | Complete |
 | 03-03 | Hero Orchestrator | Pending |
 | 03-04 | Hero Polish & Verification | Pending |
@@ -36,9 +36,9 @@
 | Metric | Target | Current |
 |--------|--------|---------|
 | Phases Complete | 8 | 2 |
-| Plans Complete | 16 | 6 |
+| Plans Complete | 16 | 7 |
 | Requirements Done | 37 | 13 |
-| Coverage | 100% | 38% |
+| Coverage | 100% | 44% |
 
 ## Accumulated Context
 
@@ -90,6 +90,9 @@
 - CSS-only marquee using @keyframes with staggered animation-delay
 - prefers-reduced-motion static fallback for animation components
 - Initial opacity: 0 + translateY pattern for GSAP orchestration
+- hero-path class: All GSAP-animated SVG paths get class="hero-path" with stroke and stroke-width attributes
+- hero-detail group: Mobile-hidden detail paths wrapped in g.hero-detail for responsive CSS hiding
+- SVG path-only rule: Use path elements exclusively for DrawSVG (no rect/circle/ellipse — iOS Safari bug)
 
 ### Artifacts Created
 - `src/lib/styles/tokens.css` - Complete design token system
@@ -102,6 +105,7 @@
 - `src/lib/components/navigation/NavLink.svelte` - Reusable nav link
 - `src/lib/components/navigation/MobileMenu.svelte` - Mobile menu overlay
 - `src/lib/components/navigation/ScrollProgress.svelte` - Scroll progress bar
+- `src/lib/components/hero/HeroIllustration.svelte` - Abstract organic SVG linework (24 paths)
 - `src/lib/components/hero/HeroContent.svelte` - Typography + CTAs foreground layer
 - `src/lib/components/hero/LogoCarousel.svelte` - CSS-only infinite marquee
 - `src/routes/+page.svelte` - Design system demo page
@@ -147,6 +151,7 @@ None
       02-RESEARCH.md   # Phase research
     03-hero-section/
       03-01-PLAN.md    # Hero Illustration SVG plan
+      03-01-SUMMARY.md # Hero Illustration SVG summary
       03-02-PLAN.md    # Hero Content & Logo Carousel plan
       03-02-SUMMARY.md # Hero Content & Logo Carousel summary
       03-03-PLAN.md    # Hero Orchestrator plan
@@ -162,7 +167,7 @@ None
 
 ### Last Session
 - **Date:** 2026-02-06
-- **Stopped at:** Completed 03-02-PLAN.md (Hero Content & Logo Carousel)
+- **Stopped at:** Completed 03-01-PLAN.md (GSAP Plugins & Hero Illustration)
 - **Resume file:** None
 
 ### Resume Command
@@ -172,4 +177,4 @@ None
 
 ---
 *Last updated: 2026-02-06*
-*Phase: 3 - Hero Section (In Progress)*
+*Phase: 3 - Hero Section (In Progress - 3/4 plans complete)*
