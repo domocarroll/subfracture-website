@@ -10,13 +10,13 @@
 
 **Milestone:** v1.0
 **Phase:** 3 of 8 - In Progress (Hero Section)
-**Plan:** 3 of 4 complete
+**Plan:** 3 of 4 complete (03-03 done, 03-04 pending)
 **Status:** In progress
-**Last activity:** 2026-02-06 - Completed 03-01-PLAN.md (GSAP Plugins & Hero Illustration)
+**Last activity:** 2026-02-06 - Completed 03-03-PLAN.md (Hero Orchestrator + Page Integration)
 
 **Progress:**
 ```
-[#######  ] 44% (7/16 plans complete)
+[########=] 50% (8/16 plans complete)
 ```
 
 ## Phase 3 Overview
@@ -28,7 +28,7 @@
 |------|------|--------|
 | 03-01 | Hero Illustration SVG | Complete |
 | 03-02 | Hero Content & Logo Carousel | Complete |
-| 03-03 | Hero Orchestrator | Pending |
+| 03-03 | Hero Orchestrator | Complete |
 | 03-04 | Hero Polish & Verification | Pending |
 
 ## Performance Metrics
@@ -36,9 +36,9 @@
 | Metric | Target | Current |
 |--------|--------|---------|
 | Phases Complete | 8 | 2 |
-| Plans Complete | 16 | 7 |
-| Requirements Done | 37 | 13 |
-| Coverage | 100% | 44% |
+| Plans Complete | 16 | 8 |
+| Requirements Done | 37 | 14 |
+| Coverage | 100% | 50% |
 
 ## Accumulated Context
 
@@ -61,6 +61,9 @@
 - **Hero CTAs**: Understated text links on desktop (vertical bar divider), stacked tappable buttons on mobile
 - **Logo carousel**: CSS-only marquee with absolute positioning + staggered animation-delay (Smashing Magazine pattern)
 - **Placeholder logos**: Geometric inline SVGs (no external assets)
+- **Hero nav offset**: Negative margin-top: -5rem for full-bleed illustration under nav, padding-top: 5rem on foreground content
+- **Hero animation**: GSAP matchMedia with no-preference (animated) and reduce (static) branches
+- **SplitText skipped**: HeroContent uses pre-set CSS classes rather than runtime text splitting
 
 ### Research Findings
 - GSAP plugins (DrawSVG, MorphSVG, SplitText) now 100% free
@@ -92,7 +95,10 @@
 - Initial opacity: 0 + translateY pattern for GSAP orchestration
 - hero-path class: All GSAP-animated SVG paths get class="hero-path" with stroke and stroke-width attributes
 - hero-detail group: Mobile-hidden detail paths wrapped in g.hero-detail for responsive CSS hiding
-- SVG path-only rule: Use path elements exclusively for DrawSVG (no rect/circle/ellipse — iOS Safari bug)
+- SVG path-only rule: Use path elements exclusively for DrawSVG (no rect/circle/ellipse -- iOS Safari bug)
+- matchMedia branching: Use gsap.matchMedia() with no-preference vs reduce branches for animated sections
+- Orchestrator pattern: Parent component owns GSAP timeline, child components provide targeting classes
+- Full-bleed hero: negative margin pulls section behind nav, content padding preserves readability
 
 ### Artifacts Created
 - `src/lib/styles/tokens.css` - Complete design token system
@@ -108,7 +114,8 @@
 - `src/lib/components/hero/HeroIllustration.svelte` - Abstract organic SVG linework (24 paths)
 - `src/lib/components/hero/HeroContent.svelte` - Typography + CTAs foreground layer
 - `src/lib/components/hero/LogoCarousel.svelte` - CSS-only infinite marquee
-- `src/routes/+page.svelte` - Design system demo page
+- `src/lib/components/hero/Hero.svelte` - Hero orchestrator with GSAP animation timeline
+- `src/routes/+page.svelte` - Home page with Hero component and section placeholders
 - GSAP, Fontsource packages installed
 
 ### Open TODOs
@@ -155,6 +162,7 @@ None
       03-02-PLAN.md    # Hero Content & Logo Carousel plan
       03-02-SUMMARY.md # Hero Content & Logo Carousel summary
       03-03-PLAN.md    # Hero Orchestrator plan
+      03-03-SUMMARY.md # Hero Orchestrator summary
       03-04-PLAN.md    # Hero Polish & Verification plan
       03-CONTEXT.md    # Phase context
       03-RESEARCH.md   # Phase research
@@ -167,7 +175,7 @@ None
 
 ### Last Session
 - **Date:** 2026-02-06
-- **Stopped at:** Completed 03-01-PLAN.md (GSAP Plugins & Hero Illustration)
+- **Stopped at:** Completed 03-03-PLAN.md (Hero Orchestrator + Page Integration)
 - **Resume file:** None
 
 ### Resume Command
@@ -177,4 +185,4 @@ None
 
 ---
 *Last updated: 2026-02-06*
-*Phase: 3 - Hero Section (In Progress - 3/4 plans complete)*
+*Phase: 3 - Hero Section (In Progress - 3/4 plans complete, 03-04 pending)*
