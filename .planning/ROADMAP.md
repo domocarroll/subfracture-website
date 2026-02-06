@@ -82,6 +82,14 @@ Plans:
 
 **Goal:** Deliver a first impression that immediately communicates Culture Studio positioning with botanical/anatomical visual storytelling.
 
+**Plans:** 4 plans in 3 waves
+
+Plans:
+- [ ] 03-01-PLAN.md — Extend GSAP utilities (DrawSVGPlugin, SplitText) + create HeroIllustration SVG
+- [ ] 03-02-PLAN.md — Create HeroContent typography layer + LogoCarousel CSS marquee
+- [ ] 03-03-PLAN.md — Create Hero orchestrator with GSAP timeline + integrate into page
+- [ ] 03-04-PLAN.md — Visual verification checkpoint
+
 **Requirements:**
 - HERO-01: Hero section displays clear value proposition ("Culture Studio" positioning)
 - HERO-02: Botanical/anatomical illustration establishes brand aesthetic
