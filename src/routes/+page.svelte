@@ -2,6 +2,7 @@
 	import SectionHeading from '$lib/components/ui/SectionHeading.svelte';
 	import Container from '$lib/components/ui/Container.svelte';
 	import { animate } from '$lib/actions/animate';
+	import Hero from '$lib/components/hero/Hero.svelte';
 </script>
 
 <svelte:head>
@@ -10,30 +11,7 @@
 </svelte:head>
 
 <!-- Hero -->
-<header class="hero">
-	<Container>
-		<h1 class="hero-title" use:animate={{
-			type: 'from',
-			opacity: 0,
-			y: 40,
-			duration: 0.8
-		}}>Subfracture</h1>
-		<p class="hero-subtitle" use:animate={{
-			type: 'from',
-			opacity: 0,
-			y: 30,
-			duration: 0.8,
-			delay: 0.15
-		}}>Culture Studio</p>
-		<p class="hero-lead" use:animate={{
-			type: 'from',
-			opacity: 0,
-			y: 20,
-			duration: 0.6,
-			delay: 0.3
-		}}>For brands that outgrow campaigns</p>
-	</Container>
-</header>
+<Hero />
 
 <!-- Work Section -->
 <section id="work" class="section">
@@ -144,41 +122,6 @@
 </section>
 
 <style>
-	/* Hero */
-	.hero {
-		background-color: var(--color-surface);
-		padding: var(--spacing-section) 0;
-		text-align: center;
-		min-height: 70vh;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-	}
-
-	.hero-title {
-		font-family: var(--font-serif);
-		font-size: var(--text-5xl);
-		line-height: var(--text-5xl--line-height);
-		color: var(--color-text);
-		margin: 0 0 0.5rem;
-		font-weight: 400;
-	}
-
-	.hero-subtitle {
-		font-family: var(--font-serif);
-		font-size: var(--text-xl);
-		font-style: italic;
-		color: var(--color-text-muted);
-		margin: 0 0 2rem;
-	}
-
-	.hero-lead {
-		font-family: var(--font-sans);
-		font-size: var(--text-lg);
-		color: var(--color-text-muted);
-		margin: 0;
-	}
-
 	/* Sections */
 	.section {
 		padding: var(--spacing-section) 0;
@@ -282,14 +225,6 @@
 
 	/* Responsive adjustments */
 	@media (max-width: 48rem) {
-		.hero-title {
-			font-size: var(--text-4xl);
-		}
-
-		.hero {
-			min-height: 60vh;
-		}
-
 		.section {
 			padding: var(--spacing-section-sm) 0;
 			min-height: auto;
