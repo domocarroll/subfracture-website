@@ -16,7 +16,7 @@
 
   <nav class="hero-ctas" aria-label="Hero actions">
     <a href="#contact" class="hero-cta">Start a conversation</a>
-    <span class="hero-cta-divider" aria-hidden="true">|</span>
+    <span class="hero-cta-divider" aria-hidden="true"></span>
     <a href="#work" class="hero-cta">See the work</a>
   </nav>
 </div>
@@ -27,8 +27,7 @@
     flex-direction: column;
     align-items: center;
     text-align: center;
-    padding-top: 5rem;
-    gap: 1.25rem;
+    margin-top: -1.5rem;
   }
 
   .hero-headline {
@@ -36,10 +35,11 @@
     font-size: var(--text-4xl);
     font-weight: 400;
     line-height: var(--text-4xl--line-height);
+    letter-spacing: 0.01em;
     color: var(--color-primary);
-    margin: 0;
+    margin: 0 0 0.5rem 0;
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(12px);
   }
 
   .hero-tagline {
@@ -47,10 +47,11 @@
     font-size: var(--text-xl);
     font-style: italic;
     line-height: var(--text-xl--line-height);
-    color: var(--color-text-muted);
-    margin: 0;
+    letter-spacing: 0.02em;
+    color: color-mix(in srgb, var(--color-text) 75%, var(--color-text-muted));
+    margin: 0 0 1.75rem 0;
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(12px);
   }
 
   .hero-subline {
@@ -58,24 +59,25 @@
     font-size: var(--text-base);
     line-height: var(--text-base--line-height);
     color: var(--color-text-muted);
-    max-width: 40ch;
-    margin: 0;
+    max-width: 48ch;
+    margin: 0 0 1.5rem 0;
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(12px);
   }
 
   .hero-ctas {
     display: flex;
     align-items: center;
     gap: 1rem;
-    margin-top: 0.5rem;
+    margin-top: 0;
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(12px);
   }
 
   .hero-cta {
     font-family: var(--font-sans);
-    font-size: var(--text-sm);
+    font-size: var(--text-base);
+    letter-spacing: 0.02em;
     color: var(--color-text-muted);
     text-decoration: none;
     transition: color 0.3s var(--ease-subtle);
@@ -95,10 +97,14 @@
   }
 
   .hero-cta-divider {
-    color: var(--color-text-muted);
-    opacity: 0.3;
-    font-size: var(--text-sm);
+    display: inline-block;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background-color: var(--color-primary);
+    opacity: 0.4;
     user-select: none;
+    vertical-align: middle;
   }
 
   @media (min-width: 48rem) {
