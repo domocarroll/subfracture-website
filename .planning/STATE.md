@@ -9,40 +9,36 @@
 ## Current Position
 
 **Milestone:** v1.0
-**Phase:** 2 of 8 - Complete (ready for Phase 3)
-**Plan:** 2 of 2 complete
-**Status:** Phase 2 complete
-**Last activity:** 2026-02-05 - Completed 02-02-PLAN.md (Footer & Layout Integration)
+**Phase:** 3 of 8 - In Progress (Hero Section)
+**Plan:** 2 of 4 complete
+**Status:** In progress
+**Last activity:** 2026-02-06 - Completed 03-02-PLAN.md (Hero Content & Logo Carousel)
 
 **Progress:**
 ```
-[#####   ] 31% (5/16 plans complete)
+[######  ] 38% (6/16 plans complete)
 ```
 
-## Phase 2 Overview
+## Phase 3 Overview
 
-**Goal:** Build navigation system with sticky header, mobile menu, and scroll progress indicator.
-
-**Requirements:**
-- NAV-01: Sticky navigation with auto-hide on scroll down
-- NAV-02: Mobile menu with Disclosure pattern
-- NAV-03: Scroll progress indicator
-- NAV-04: Reduced motion support
+**Goal:** Build the hero section with illustration, typography, logo carousel, and GSAP animation orchestration.
 
 **Plans Status:**
 | Plan | Name | Status |
 |------|------|--------|
-| 02-01 | Navigation Components | Complete |
-| 02-02 | Footer & Layout Integration | Complete |
+| 03-01 | Hero Illustration SVG | Pending |
+| 03-02 | Hero Content & Logo Carousel | Complete |
+| 03-03 | Hero Orchestrator | Pending |
+| 03-04 | Hero Polish & Verification | Pending |
 
 ## Performance Metrics
 
 | Metric | Target | Current |
 |--------|--------|---------|
 | Phases Complete | 8 | 2 |
-| Plans Complete | 16 | 5 |
+| Plans Complete | 16 | 6 |
 | Requirements Done | 37 | 13 |
-| Coverage | 100% | 31% |
+| Coverage | 100% | 38% |
 
 ## Accumulated Context
 
@@ -62,6 +58,9 @@
 - **Container variants**: Two widths (narrow: 900px, wide: 1200px)
 - **Grid system**: Golden ratio (1.618fr 1fr) for major/minor columns
 - **NAV-01**: Use GSAP ScrollTrigger direction detection for auto-hide behavior
+- **Hero CTAs**: Understated text links on desktop (vertical bar divider), stacked tappable buttons on mobile
+- **Logo carousel**: CSS-only marquee with absolute positioning + staggered animation-delay (Smashing Magazine pattern)
+- **Placeholder logos**: Geometric inline SVGs (no external assets)
 
 ### Research Findings
 - GSAP plugins (DrawSVG, MorphSVG, SplitText) now 100% free
@@ -85,6 +84,12 @@
 - Animation cleanup: use Svelte action destroy() to kill tweens and ScrollTriggers
 - Reduced motion: wrap getMotionSafeProps() or check prefersReducedMotion() before animating
 - Disclosure pattern: `id` on menu, `aria-controls` on toggle, `aria-expanded` state
+- Hero sub-components provide semantic GSAP targeting classes (.hero-headline, .hero-tagline, etc.)
+- Mobile CTAs convert from inline links to full-width tappable buttons at 48rem breakpoint
+- CSS mask-image gradient for smooth edge fade on scrolling content
+- CSS-only marquee using @keyframes with staggered animation-delay
+- prefers-reduced-motion static fallback for animation components
+- Initial opacity: 0 + translateY pattern for GSAP orchestration
 
 ### Artifacts Created
 - `src/lib/styles/tokens.css` - Complete design token system
@@ -97,6 +102,8 @@
 - `src/lib/components/navigation/NavLink.svelte` - Reusable nav link
 - `src/lib/components/navigation/MobileMenu.svelte` - Mobile menu overlay
 - `src/lib/components/navigation/ScrollProgress.svelte` - Scroll progress bar
+- `src/lib/components/hero/HeroContent.svelte` - Typography + CTAs foreground layer
+- `src/lib/components/hero/LogoCarousel.svelte` - CSS-only infinite marquee
 - `src/routes/+page.svelte` - Design system demo page
 - GSAP, Fontsource packages installed
 
@@ -135,7 +142,17 @@ None
     02-navigation-layout/
       02-01-PLAN.md    # Navigation components plan
       02-01-SUMMARY.md # Navigation components summary
+      02-02-PLAN.md    # Footer & Layout Integration plan
+      02-02-SUMMARY.md # Footer & Layout Integration summary
       02-RESEARCH.md   # Phase research
+    03-hero-section/
+      03-01-PLAN.md    # Hero Illustration SVG plan
+      03-02-PLAN.md    # Hero Content & Logo Carousel plan
+      03-02-SUMMARY.md # Hero Content & Logo Carousel summary
+      03-03-PLAN.md    # Hero Orchestrator plan
+      03-04-PLAN.md    # Hero Polish & Verification plan
+      03-CONTEXT.md    # Phase context
+      03-RESEARCH.md   # Phase research
 ```
 
 ### WIP Files (from exploration)
@@ -145,22 +162,14 @@ None
 
 ### Last Session
 - **Date:** 2026-02-06
-- **Stopped at:** Phase 2 complete
-- **Resume file:** None - ready for Phase 3 planning
+- **Stopped at:** Completed 03-02-PLAN.md (Hero Content & Logo Carousel)
+- **Resume file:** None
 
 ### Resume Command
 ```
-/gsd:discuss-phase 3
+/gsd:execute-phase
 ```
 
-### Phase 2 Progress
-Navigation components complete:
-- Navigation with auto-hide via GSAP ScrollTrigger direction detection
-- ScrollProgress with GSAP ScrollTrigger progress binding
-- MobileMenu with Svelte slide transition and reduced motion check
-- NavLink with hash-based active detection
-- All components SSR-safe with proper cleanup
-
 ---
-*Last updated: 2026-02-05*
-*Phase: 2 - Navigation & Layout (In Progress)*
+*Last updated: 2026-02-06*
+*Phase: 3 - Hero Section (In Progress)*
