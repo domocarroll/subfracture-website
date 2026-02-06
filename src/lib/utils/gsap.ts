@@ -1,7 +1,7 @@
 /**
  * SSR-safe GSAP initialization utility
  *
- * Provides lazy-loaded GSAP with ScrollTrigger, DrawSVGPlugin, and SplitText
+ * Provides lazy-loaded GSAP with ScrollTrigger and DrawSVGPlugin
  * registration and global defaults. Safe to call multiple times (idempotent).
  *
  * @example
@@ -10,7 +10,7 @@
  * onMount(async () => {
  *   const gsap = await initGSAP();
  *   if (gsap) {
- *     // Use gsap with ScrollTrigger, DrawSVGPlugin, SplitText...
+ *     // Use gsap with ScrollTrigger, DrawSVGPlugin...
  *   }
  * });
  */
@@ -22,7 +22,7 @@ let initialized = false;
 let gsapInstance: typeof import('gsap').gsap | null = null;
 
 /**
- * Initialize GSAP with ScrollTrigger, DrawSVGPlugin, and SplitText plugins
+ * Initialize GSAP with ScrollTrigger and DrawSVGPlugin plugins
  * and global defaults.
  *
  * @returns The gsap instance for optional chaining, or null on server
@@ -40,10 +40,9 @@ export async function initGSAP(): Promise<typeof import('gsap').gsap | null> {
   const { gsap } = await import('gsap');
   const { ScrollTrigger } = await import('gsap/ScrollTrigger');
   const { DrawSVGPlugin } = await import('gsap/DrawSVGPlugin');
-  const { SplitText } = await import('gsap/SplitText');
 
   // Register all plugins
-  gsap.registerPlugin(ScrollTrigger, DrawSVGPlugin, SplitText);
+  gsap.registerPlugin(ScrollTrigger, DrawSVGPlugin);
 
   // Set global defaults matching motion personality from CONTEXT.md
   // - Organic feel with gentle ease-out

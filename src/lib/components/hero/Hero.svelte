@@ -33,39 +33,41 @@
       });
 
       // Phase 2: Headline reveal (overlaps SVG by 0.2s)
-      tl.from('.hero-headline', {
-        opacity: 0,
-        y: 30,
+      // Using .to() because child components start at opacity:0 via CSS
+      tl.to('.hero-headline', {
+        opacity: 1,
+        y: 0,
         duration: 0.5,
         ease: 'power3.out'
       }, '-=0.2');
 
       // Phase 3: Tagline
-      tl.from('.hero-tagline', {
-        opacity: 0,
-        y: 20,
+      tl.to('.hero-tagline', {
+        opacity: 1,
+        y: 0,
         duration: 0.35,
         ease: 'power3.out'
       }, '-=0.15');
 
       // Phase 4: Subline
-      tl.from('.hero-subline', {
-        opacity: 0,
-        y: 15,
+      tl.to('.hero-subline', {
+        opacity: 1,
+        y: 0,
         duration: 0.3,
         ease: 'power3.out'
       }, '-=0.1');
 
       // Phase 5: CTAs fade in
-      tl.from('.hero-ctas', {
-        opacity: 0,
+      tl.to('.hero-ctas', {
+        opacity: 1,
+        y: 0,
         duration: 0.3,
         ease: 'power3.out'
       }, '-=0.1');
 
       // Phase 6: Carousel fades in last
-      tl.from('.hero-carousel', {
-        opacity: 0,
+      tl.to('.hero-carousel', {
+        opacity: 1,
         duration: 0.4,
         ease: 'power3.out'
       }, '-=0.2');
