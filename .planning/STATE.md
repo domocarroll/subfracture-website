@@ -4,19 +4,19 @@
 
 **Core Value:** For brands that outgrow campaigns - scholarly authority, warm humanity, systems thinking.
 
-**Current Focus:** Phase 4 - Content Sections (In Progress)
+**Current Focus:** Phase 4 - Content Sections (Complete)
 
 ## Current Position
 
 **Milestone:** v1.0
 **Phase:** 4 of 8 - Content Sections
-**Plan:** 1 of 2 complete (Content Components)
-**Status:** In progress
-**Last activity:** 2026-02-09 - Completed 04-01-PLAN.md (Content Components)
+**Plan:** 04-02 complete
+**Status:** All content sections rendering correctly with GSAP scroll animations
+**Last activity:** 2026-02-09 - Fixed gsap.from→fromTo visibility bug (ea5dc12), checkpoint passed
 
 **Progress:**
 ```
-[###########====] 68.75% (11/16 plans complete)
+[#############==] 81.25% (13/16 plans complete)
 ```
 
 ## Phase 4 Overview
@@ -27,16 +27,16 @@
 | Plan | Name | Status |
 |------|------|--------|
 | 04-01 | Content Components | Complete |
-| 04-02 | Page Integration | Pending |
+| 04-02 | Page Integration | Complete |
 
 ## Performance Metrics
 
 | Metric | Target | Current |
 |--------|--------|---------|
-| Phases Complete | 8 | 3 |
-| Plans Complete | 16 | 11 |
-| Requirements Done | 37 | 20 |
-| Coverage | 100% | 68.75% |
+| Phases Complete | 8 | 4 |
+| Plans Complete | 16 | 13 |
+| Requirements Done | 37 | 23 |
+| Coverage | 100% | 81.25% |
 
 ## Accumulated Context
 
@@ -110,6 +110,7 @@
 - Content section pattern: section > Container > content with animate action + imperative GSAP stagger
 - Background alternation: surface -> surface-warm -> surface for visual rhythm between sections
 - CSS initial opacity:0/translateY(24px) on GSAP stagger targets prevents flash before animation
+- CRITICAL: Use gsap.fromTo() (not gsap.from()) when elements have CSS opacity:0 — from() reads current CSS as destination, animating 0→0
 
 ### Artifacts Created
 - `src/lib/styles/tokens.css` - Complete design token system
@@ -193,7 +194,7 @@ None
 
 ### Last Session
 - **Date:** 2026-02-09
-- **Stopped at:** Completed 04-01-PLAN.md (Content Components)
+- **Stopped at:** Phase 4 complete (all content sections integrated and verified)
 - **Resume file:** None
 
 ### Resume Command
@@ -203,5 +204,5 @@ None
 
 ---
 *Last updated: 2026-02-09*
-*Phase: 4 - Content Sections (Plan 1 of 2 complete)*
-*Next: 04-02 Page Integration*
+*Phase: 4 - Content Sections (Complete)*
+*Next: Phase 5 - Portfolio Gallery*
