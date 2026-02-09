@@ -85,10 +85,10 @@ Plans:
 **Plans:** 4 plans in 3 waves
 
 Plans:
-- [ ] 03-01-PLAN.md — Extend GSAP utilities (DrawSVGPlugin, SplitText) + create HeroIllustration SVG
-- [ ] 03-02-PLAN.md — Create HeroContent typography layer + LogoCarousel CSS marquee
-- [ ] 03-03-PLAN.md — Create Hero orchestrator with GSAP timeline + integrate into page
-- [ ] 03-04-PLAN.md — Visual verification checkpoint
+- [x] 03-01-PLAN.md — Extend GSAP utilities (DrawSVGPlugin, SplitText) + create HeroIllustration SVG
+- [x] 03-02-PLAN.md — Create HeroContent typography layer + LogoCarousel CSS marquee
+- [x] 03-03-PLAN.md — Create Hero orchestrator with GSAP timeline + integrate into page
+- [x] 03-04-PLAN.md — Visual verification + three-branch recursive improvement synthesis
 
 **Requirements:**
 - HERO-01: Hero section displays clear value proposition ("Culture Studio" positioning)
@@ -110,22 +110,28 @@ Plans:
 
 ## Phase 4: Content Sections
 
-**Goal:** Present the studio's services, the problems it solves, its methodology, and statistical proof points in editorial format.
+**Goal:** Build the editorial content sections (Problems Solved, Services, Closing Statement) between hero and portfolio, with confrontational tone, numbered service pillars, and scroll-triggered reveals.
+
+**Plans:** 2 plans in 2 waves
+
+Plans:
+- [ ] 04-01-PLAN.md — Build all 5 content components (ProblemsSolved, ProblemCard, Services, ServicePillar, ClosingStatement)
+- [ ] 04-02-PLAN.md — Integrate into home page and visual verification
 
 **Requirements:**
 - CONT-01: Services section displays 5 numbered pillars with descriptions
 - CONT-02: Problems section displays 6 pain points Subfracture solves
 - CONT-03: Approach/methodology section explains how Subfracture works
-- CONT-04: Statistical callouts display key metrics (+485hr style)
+- CONT-04: Statistical callouts display key metrics (+485hr style) [DEFERRED]
 
 **Success Criteria:**
 1. Visitor can identify all 5 service pillars with numbered labels (01-05) and descriptions
 2. Visitor recognizes at least one pain point from Problems section that resonates with their situation
-3. Statistical callouts (+XXXhr style) are visually prominent and communicate value at a glance
+3. Statistical callouts (+XXXhr style) are visually prominent and communicate value at a glance [DEFERRED]
 
 **Dependencies:** Phase 1 (grid, typography), Phase 2 (section numbering system)
 
-**Research Notes:** Standard patterns - content + basic reveal animations. Can parallelize subsections (Services, Problems, Approach, Stats) once foundation exists.
+**Research Notes:** Standard patterns - content + basic reveal animations. CONT-03 satisfied by Problems intro (philosophy/WHY) + Services section (process/HOW) layered approach. CONT-04 deferred until real numbers available.
 
 ---
 
@@ -255,7 +261,7 @@ Phase 2: Navigation & Layout
 |-------|--------|---------|-----------|
 | 1 - Foundation | ✓ Complete | 2026-02-05 | 2026-02-05 |
 | 2 - Navigation | ✓ Complete | 2026-02-05 | 2026-02-05 |
-| 3 - Hero | Pending | - | - |
+| 3 - Hero | ✓ Complete | 2026-02-06 | 2026-02-06 |
 | 4 - Content | Pending | - | - |
 | 5 - Portfolio | Pending | - | - |
 | 6 - Team | Pending | - | - |
