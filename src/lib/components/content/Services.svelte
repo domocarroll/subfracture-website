@@ -96,17 +96,21 @@
 		ctx = gsap.matchMedia();
 
 		ctx.add('(prefers-reduced-motion: no-preference)', () => {
-			gsap.from(servicesEl.querySelectorAll('.service-pillar'), {
-				opacity: 0,
-				y: 24,
-				duration: 0.6,
-				stagger: 0.12,
-				ease: 'power3.out',
-				scrollTrigger: {
-					trigger: servicesEl,
-					start: 'top 80%'
+			gsap.fromTo(
+				servicesEl.querySelectorAll('.service-pillar'),
+				{ opacity: 0, y: 24 },
+				{
+					opacity: 1,
+					y: 0,
+					duration: 0.6,
+					stagger: 0.12,
+					ease: 'power3.out',
+					scrollTrigger: {
+						trigger: servicesEl,
+						start: 'top 80%'
+					}
 				}
-			});
+			);
 		});
 
 		ctx.add('(prefers-reduced-motion: reduce)', () => {
