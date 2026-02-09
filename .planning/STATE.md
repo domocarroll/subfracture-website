@@ -4,41 +4,39 @@
 
 **Core Value:** For brands that outgrow campaigns - scholarly authority, warm humanity, systems thinking.
 
-**Current Focus:** Phase 3 - Hero Section
+**Current Focus:** Phase 4 - Content Sections (In Progress)
 
 ## Current Position
 
 **Milestone:** v1.0
-**Phase:** 3 of 8 - In Progress (Hero Section)
-**Plan:** 3 of 4 complete (03-03 done, 03-04 pending)
+**Phase:** 4 of 8 - Content Sections
+**Plan:** 1 of 2 complete (Content Components)
 **Status:** In progress
-**Last activity:** 2026-02-06 - Completed 03-03-PLAN.md (Hero Orchestrator + Page Integration)
+**Last activity:** 2026-02-09 - Completed 04-01-PLAN.md (Content Components)
 
 **Progress:**
 ```
-[########=] 50% (8/16 plans complete)
+[###########====] 68.75% (11/16 plans complete)
 ```
 
-## Phase 3 Overview
+## Phase 4 Overview
 
-**Goal:** Build the hero section with illustration, typography, logo carousel, and GSAP animation orchestration.
+**Goal:** Build editorial content sections (ProblemsSolved, Services, ClosingStatement) and integrate into page.
 
 **Plans Status:**
 | Plan | Name | Status |
 |------|------|--------|
-| 03-01 | Hero Illustration SVG | Complete |
-| 03-02 | Hero Content & Logo Carousel | Complete |
-| 03-03 | Hero Orchestrator | Complete |
-| 03-04 | Hero Polish & Verification | Pending |
+| 04-01 | Content Components | Complete |
+| 04-02 | Page Integration | Pending |
 
 ## Performance Metrics
 
 | Metric | Target | Current |
 |--------|--------|---------|
-| Phases Complete | 8 | 2 |
-| Plans Complete | 16 | 8 |
-| Requirements Done | 37 | 14 |
-| Coverage | 100% | 50% |
+| Phases Complete | 8 | 3 |
+| Plans Complete | 16 | 11 |
+| Requirements Done | 37 | 20 |
+| Coverage | 100% | 68.75% |
 
 ## Accumulated Context
 
@@ -58,12 +56,19 @@
 - **Container variants**: Two widths (narrow: 900px, wide: 1200px)
 - **Grid system**: Golden ratio (1.618fr 1fr) for major/minor columns
 - **NAV-01**: Use GSAP ScrollTrigger direction detection for auto-hide behavior
-- **Hero CTAs**: Understated text links on desktop (vertical bar divider), stacked tappable buttons on mobile
+- **Hero CTAs**: Understated text links on desktop (terracotta dot divider), stacked tappable buttons on mobile
 - **Logo carousel**: CSS-only marquee with absolute positioning + staggered animation-delay (Smashing Magazine pattern)
 - **Placeholder logos**: Geometric inline SVGs (no external assets)
 - **Hero nav offset**: Negative margin-top: -5rem for full-bleed illustration under nav, padding-top: 5rem on foreground content
 - **Hero animation**: GSAP matchMedia with no-preference (animated) and reduce (static) branches
 - **SplitText skipped**: HeroContent uses pre-set CSS classes rather than runtime text splitting
+- **Hero illustration**: Asymmetric composition — trunk shifted left (M540), secondary emergence right (M830)
+- **Hero animation layers**: 4-wave DrawSVG (root/arc/flow/detail) with per-layer easing vocabulary
+- **Hero typography synthesis**: Graduated spacing, enriched tagline color-mix, 12px translateY travel
+- **Content stagger targeting**: querySelectorAll('.problem-card'/'.service-pillar') for GSAP stagger instead of child ref binding
+- **Bullet markers**: Terracotta dash (6px line, opacity 0.6) for editorial consistency
+- **Section padding**: clamp(12rem, 15vw, 18rem) for responsive breathing room
+- **Declarative vs imperative**: animate action for simple reveals, imperative GSAP matchMedia for stagger
 
 ### Research Findings
 - GSAP plugins (DrawSVG, MorphSVG, SplitText) now 100% free
@@ -92,13 +97,19 @@
 - CSS mask-image gradient for smooth edge fade on scrolling content
 - CSS-only marquee using @keyframes with staggered animation-delay
 - prefers-reduced-motion static fallback for animation components
-- Initial opacity: 0 + translateY pattern for GSAP orchestration
-- hero-path class: All GSAP-animated SVG paths get class="hero-path" with stroke and stroke-width attributes
+- Initial opacity: 0 + translateY(12px) pattern for GSAP orchestration
+- hero-path class: All GSAP-animated SVG paths get hero-path + layer class (hero-path-root/arc/flow/detail)
 - hero-detail group: Mobile-hidden detail paths wrapped in g.hero-detail for responsive CSS hiding
 - SVG path-only rule: Use path elements exclusively for DrawSVG (no rect/circle/ellipse -- iOS Safari bug)
 - matchMedia branching: Use gsap.matchMedia() with no-preference vs reduce branches for animated sections
 - Orchestrator pattern: Parent component owns GSAP timeline, child components provide targeting classes
 - Full-bleed hero: negative margin pulls section behind nav, content padding preserves readability
+- Parallel recursive improvement: Three branches (typography/illustration/animation) run independently, synthesize best-of-all
+- Per-layer easing vocabulary: Each animation layer gets its own easing character (power2.inOut, circ.out, power3.out, etc.)
+- Terracotta dot divider: 4px circle with opacity 0.4 replaces pipe character between CTAs
+- Content section pattern: section > Container > content with animate action + imperative GSAP stagger
+- Background alternation: surface -> surface-warm -> surface for visual rhythm between sections
+- CSS initial opacity:0/translateY(24px) on GSAP stagger targets prevents flash before animation
 
 ### Artifacts Created
 - `src/lib/styles/tokens.css` - Complete design token system
@@ -111,11 +122,16 @@
 - `src/lib/components/navigation/NavLink.svelte` - Reusable nav link
 - `src/lib/components/navigation/MobileMenu.svelte` - Mobile menu overlay
 - `src/lib/components/navigation/ScrollProgress.svelte` - Scroll progress bar
-- `src/lib/components/hero/HeroIllustration.svelte` - Abstract organic SVG linework (24 paths)
-- `src/lib/components/hero/HeroContent.svelte` - Typography + CTAs foreground layer
+- `src/lib/components/hero/HeroIllustration.svelte` - Asymmetric organic SVG (36 paths, 4 layers)
+- `src/lib/components/hero/HeroContent.svelte` - Typography + CTAs with graduated spacing
 - `src/lib/components/hero/LogoCarousel.svelte` - CSS-only infinite marquee
-- `src/lib/components/hero/Hero.svelte` - Hero orchestrator with GSAP animation timeline
+- `src/lib/components/hero/Hero.svelte` - Hero orchestrator with 4-wave GSAP animation
 - `src/routes/+page.svelte` - Home page with Hero component and section placeholders
+- `src/lib/components/content/ProblemCard.svelte` - Single pain point card (confrontational typography)
+- `src/lib/components/content/ProblemsSolved.svelte` - Problems section with 6 cards and stagger reveal
+- `src/lib/components/content/ServicePillar.svelte` - Single service pillar (number, tagline, description, bullets)
+- `src/lib/components/content/Services.svelte` - Services section with 5 pillars and stagger reveal
+- `src/lib/components/content/ClosingStatement.svelte` - Closing statement bridge
 - GSAP, Fontsource packages installed
 
 ### Open TODOs
@@ -164,25 +180,28 @@ None
       03-03-PLAN.md    # Hero Orchestrator plan
       03-03-SUMMARY.md # Hero Orchestrator summary
       03-04-PLAN.md    # Hero Polish & Verification plan
+      03-04-SUMMARY.md # Hero Polish & Three-Branch Synthesis summary
       03-CONTEXT.md    # Phase context
       03-RESEARCH.md   # Phase research
+    04-content-sections/
+      04-01-PLAN.md    # Content Components plan
+      04-01-SUMMARY.md # Content Components summary
+      04-02-PLAN.md    # Page Integration plan
+      04-CONTEXT.md    # Phase context
+      04-RESEARCH.md   # Phase research
 ```
 
-### WIP Files (from exploration)
-- `src/lib/components/Hero.svelte` - Basic hero component
-- `src/lib/assets/SacredGeometry.svelte` - SVG asset
-- `src/lib/assets/VitruvianFigure.svelte` - SVG asset
-
 ### Last Session
-- **Date:** 2026-02-06
-- **Stopped at:** Completed 03-03-PLAN.md (Hero Orchestrator + Page Integration)
+- **Date:** 2026-02-09
+- **Stopped at:** Completed 04-01-PLAN.md (Content Components)
 - **Resume file:** None
 
 ### Resume Command
 ```
-/gsd:execute-phase
+/gsd:progress
 ```
 
 ---
-*Last updated: 2026-02-06*
-*Phase: 3 - Hero Section (In Progress - 3/4 plans complete, 03-04 pending)*
+*Last updated: 2026-02-09*
+*Phase: 4 - Content Sections (Plan 1 of 2 complete)*
+*Next: 04-02 Page Integration*
