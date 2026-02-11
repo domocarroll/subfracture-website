@@ -1,25 +1,26 @@
 <script lang="ts">
 	/**
-	 * ProblemsSolved - Editorial section with confrontational pain point cards
+	 * ProblemsSolved - Editorial section with scroll-driven 3D fold-behind carousel
 	 *
-	 * Renders section heading, intro paragraph, subsection label, and 6 borderless
-	 * typographic problem cards in a 2-column grid (1-column mobile).
+	 * Renders section heading, intro paragraph, subsection label, then a scroll-driven
+	 * carousel of 6 problem cards with spring physics, drag, and keyboard nav.
 	 *
-	 * Animation: GSAP matchMedia with staggered scroll-triggered card reveals.
-	 * Cards use `.problem-card` class for stagger targeting.
-	 * Reduced motion branch shows all content immediately.
+	 * Reduced motion: falls back to a static 2-column grid with visible cards.
 	 *
 	 * Section ID: "about" (matches existing nav link #about)
 	 * Background: --color-surface (default cream)
 	 */
 
-	import { onMount, onDestroy } from 'svelte';
+	import { onMount } from 'svelte';
 	import { browser } from '$app/environment';
 
 	import Container from '$lib/components/ui/Container.svelte';
 	import SectionHeading from '$lib/components/ui/SectionHeading.svelte';
 	import ProblemCard from './ProblemCard.svelte';
+	import ScrollCarousel from '$lib/components/carousel/ScrollCarousel.svelte';
+	import CarouselCard from '$lib/components/carousel/CarouselCard.svelte';
 	import { animate } from '$lib/actions/animate';
+	import { prefersReducedMotion, onReducedMotionChange } from '$lib/utils/motion';
 
 	const problems = [
 		'Campaign-led thinking with no long-term platform',
@@ -30,46 +31,16 @@
 		'Unclear positioning \u2014 people don\u2019t get it'
 	];
 
-	let gridEl: HTMLElement;
-	let ctx: gsap.MatchMedia | null = null;
+	const carouselItems = problems.map((text) => ({ text }));
 
-	onMount(async () => {
-		if (!browser) return;
+	let reducedMotion = $state(false);
 
-		const { gsap } = await import('gsap');
-		const { ScrollTrigger } = await import('gsap/ScrollTrigger');
-		gsap.registerPlugin(ScrollTrigger);
-
-		ctx = gsap.matchMedia();
-
-		ctx.add('(prefers-reduced-motion: no-preference)', () => {
-			gsap.fromTo(
-				gridEl.querySelectorAll('.problem-card'),
-				{ opacity: 0, y: 24 },
-				{
-					opacity: 1,
-					y: 0,
-					duration: 0.5,
-					stagger: 0.08,
-					ease: 'power3.out',
-					scrollTrigger: {
-						trigger: gridEl,
-						start: 'top 80%'
-					}
-				}
-			);
+	onMount(() => {
+		reducedMotion = prefersReducedMotion();
+		const cleanup = onReducedMotionChange((prefers) => {
+			reducedMotion = prefers;
 		});
-
-		ctx.add('(prefers-reduced-motion: reduce)', () => {
-			gsap.set(gridEl.querySelectorAll('.problem-card'), { opacity: 1, y: 0 });
-		});
-	});
-
-	onDestroy(() => {
-		if (ctx) {
-			ctx.revert();
-			ctx = null;
-		}
+		return cleanup;
 	});
 </script>
 
@@ -106,21 +77,33 @@
 		</p>
 
 		<span class="label">Problems we help solve</span>
-
-		<div class="problem-grid" bind:this={gridEl}>
-			{#each problems as text}
-				<ProblemCard {text} />
-			{/each}
-		</div>
-
-		<!-- Stats insertion point (CONT-04) -->
-		<div class="stats-placeholder" aria-hidden="true"></div>
 	</Container>
+
+	{#if reducedMotion}
+		<!-- Reduced motion fallback: static grid -->
+		<Container>
+			<div class="problem-grid">
+				{#each problems as text}
+					<ProblemCard {text} />
+				{/each}
+			</div>
+		</Container>
+	{:else}
+		<!-- Full motion: scroll-driven 3D carousel -->
+		<ScrollCarousel items={carouselItems}>
+			{#snippet card({ item, index })}
+				<CarouselCard text={item.text} {index} />
+			{/snippet}
+		</ScrollCarousel>
+	{/if}
+
+	<!-- Stats insertion point (CONT-04) -->
+	<div class="stats-placeholder" aria-hidden="true"></div>
 </section>
 
 <style>
 	.problems-solved {
-		padding: clamp(12rem, 15vw, 18rem) 0;
+		padding-top: clamp(12rem, 15vw, 18rem);
 		background-color: var(--color-surface);
 	}
 
