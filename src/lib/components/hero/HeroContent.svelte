@@ -25,9 +25,10 @@
   .hero-content {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    text-align: center;
+    align-items: flex-start;
+    text-align: left;
     margin-top: -1.5rem;
+    max-width: 600px;
   }
 
   .hero-headline {
@@ -115,6 +116,12 @@
   }
 
   @media (max-width: 47.999rem) {
+    .hero-content {
+      align-items: flex-start;
+      text-align: left;
+      max-width: 100%;
+    }
+
     .hero-ctas {
       flex-direction: column;
       width: 100%;

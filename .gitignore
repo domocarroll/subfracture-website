@@ -21,3 +21,15 @@ Thumbs.db
 # Vite
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+
+# Debug screenshots
+/*.png
+
+# Playwright MCP
+.playwright-mcp/
+
+# Planning artifacts
+.planning/agent-history.json
+
+# Binary assets (keep in cloud storage)
+*.pdf

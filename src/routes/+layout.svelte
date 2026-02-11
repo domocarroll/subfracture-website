@@ -8,8 +8,9 @@
 	import '../app.css';
 	import favicon from '$lib/assets/favicon.svg';
 
-	import { onMount } from 'svelte';
+	import { onMount, onDestroy } from 'svelte';
 	import { initGSAP } from '$lib/utils/gsap';
+	import { prefersReducedMotion } from '$lib/utils/motion';
 
 	// Layout components
 	import Navigation from '$lib/components/navigation/Navigation.svelte';
@@ -17,9 +18,45 @@
 
 	let { children } = $props();
 
+	let lenisCleanup: (() => void) | null = null;
+
 	onMount(() => {
-		initGSAP();
+		initLenis();
 	});
+
+	onDestroy(() => {
+		if (lenisCleanup) lenisCleanup();
+	});
+
+	async function initLenis() {
+		const gsap = await initGSAP();
+
+		// Lenis smooth scroll — skip if reduced motion preferred
+		if (gsap && !prefersReducedMotion()) {
+			const { default: Lenis } = await import('lenis');
+			const { ScrollTrigger } = await import('gsap/ScrollTrigger');
+
+			const lenis = new Lenis({
+				lerp: 0.1,
+				wheelMultiplier: 0.8,
+				touchMultiplier: 1,
+			});
+
+			// Sync Lenis scroll position with GSAP ScrollTrigger
+			lenis.on('scroll', ScrollTrigger.update);
+
+			gsap.ticker.add((time: number) => {
+				lenis.raf(time * 1000);
+			});
+
+			gsap.ticker.lagSmoothing(0);
+
+			lenisCleanup = () => {
+				gsap.ticker.remove(lenis.raf);
+				lenis.destroy();
+			};
+		}
+	}
 </script>
 
 <svelte:head>

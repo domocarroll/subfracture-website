@@ -2,117 +2,67 @@
   import { onMount, onDestroy } from 'svelte';
   import { browser } from '$app/environment';
 
-  import HeroIllustration from './HeroIllustration.svelte';
+  import HeroCrack from './HeroCrack.svelte';
+  import HeroRose from './HeroRose.svelte';
   import HeroContent from './HeroContent.svelte';
   import LogoCarousel from './LogoCarousel.svelte';
 
   let heroSection: HTMLElement;
   let matchMedia: gsap.MatchMedia | null = null;
+  let animateRose = $state(false);
 
   onMount(async () => {
     if (!browser) return;
 
     const { gsap } = await import('gsap');
-    const { DrawSVGPlugin } = await import('gsap/DrawSVGPlugin');
     const { ScrollTrigger } = await import('gsap/ScrollTrigger');
 
-    gsap.registerPlugin(DrawSVGPlugin, ScrollTrigger);
+    gsap.registerPlugin(ScrollTrigger);
 
     matchMedia = gsap.matchMedia();
 
-    // Full animation for users without motion preference
+    // Text reveals start immediately — simultaneous with crack
     matchMedia.add('(prefers-reduced-motion: no-preference)', () => {
-      const tl = gsap.timeline({ delay: 0.15 });
+      // Trigger rose animation at 0.8s (after crack has started opening)
+      const roseTimer = setTimeout(() => { animateRose = true; }, 800);
 
-      // Wave 1: Root/growth paths draw first — structural, deliberate
-      // Stagger from center: trunk draws first, dendrites radiate outward.
-      // 1.0s duration — unhurried, like a scholar's pen on parchment.
-      tl.from('.hero-path-root', {
-        drawSVG: 0,
-        duration: 1.0,
-        stagger: { each: 0.07, from: 'center' },
-        ease: 'power2.inOut'
-      });
+      const tl = gsap.timeline({ delay: 0.3 });
 
-      // Wave 2: Circular geometry arcs — mathematical framework appears
-      // Stagger from edges: outer arcs draw first, inner last — convergence.
-      // Overlaps late root drawing; circ easing for organic circular feel.
-      tl.from('.hero-path-arc', {
-        drawSVG: 0,
-        duration: 0.8,
-        stagger: { each: 0.1, from: 'edges' },
-        ease: 'circ.out'
-      }, '-=0.5');
-
-      // Wave 3: Flowing organic lines — atmosphere and context
-      // Begin as arcs are still settling; power3 for flowing motion.
-      // Slightly wider stagger (0.06) for individual line distinction.
-      tl.from('.hero-path-flow', {
-        drawSVG: 0,
-        duration: 0.7,
-        stagger: 0.06,
-        ease: 'power3.out'
-      }, '-=0.5');
-
-      // Wave 4: Detail paths — fine dendrites, capillaries, annotation marks
-      // Emerge as a soft bloom rather than individually. Tighter stagger (0.015)
-      // so they feel like texture appearing rather than sequential drawing.
-      tl.from('.hero-path-detail', {
-        drawSVG: 0,
-        duration: 0.5,
-        stagger: 0.015,
-        ease: 'power2.out'
-      }, '-=0.35');
-
-      // Phase 5: Headline reveal — emerges while illustration is still settling.
-      // The headline should feel born from the illustration, not waiting for it.
-      // power4.out for dramatic deceleration — like type being struck into place.
-      // Using .to() because child components start at opacity:0/translateY(12px) via CSS.
       tl.to('.hero-headline', {
         opacity: 1,
         y: 0,
-        duration: 0.65,
+        duration: 0.7,
         ease: 'power4.out'
-      }, '-=0.5');
+      });
 
-      // Phase 6: Tagline — intimate whispered aside following the headline
-      // expo.out — sharp initial appearance, then a very long soft tail.
-      // The italic text materializes quickly then takes time to fully settle,
-      // like a breath after a declaration.
       tl.to('.hero-tagline', {
         opacity: 1,
         y: 0,
-        duration: 0.5,
+        duration: 0.55,
         ease: 'expo.out'
-      }, '-=0.3');
+      }, '-=0.35');
 
-      // Phase 7: Subline — gentler deceleration, supporting copy settles quietly
-      // power1.out — nearly linear at end, no dramatic stop
       tl.to('.hero-subline', {
         opacity: 1,
         y: 0,
-        duration: 0.4,
+        duration: 0.45,
         ease: 'power1.out'
-      }, '-=0.2');
+      }, '-=0.25');
 
-      // Phase 8: CTAs fade in — functional, not dramatic
-      // power1.out — same gentle deceleration as subline for cohesion
       tl.to('.hero-ctas', {
         opacity: 1,
         y: 0,
         duration: 0.35,
         ease: 'power1.out'
-      }, '-=0.12');
+      }, '-=0.15');
 
-      // Phase 9: Carousel — last element, quiet entrance from below
-      // Longer duration, very gentle — this is ambient, not a reveal
       tl.to('.hero-carousel', {
         opacity: 1,
         duration: 0.6,
         ease: 'power1.out'
       }, '-=0.25');
 
-      // Parallax: illustration moves slower than scroll
+      // Parallax: crack layer moves slower than scroll
       gsap.to('.hero-bg', {
         yPercent: -8,
         ease: 'none',
@@ -125,13 +75,14 @@
       });
 
       return () => {
+        clearTimeout(roseTimer);
         tl.kill();
       };
     });
 
-    // Reduced motion: show everything immediately, no animation
+    // Reduced motion: show everything immediately
     matchMedia.add('(prefers-reduced-motion: reduce)', () => {
-      gsap.set('.hero-path', { drawSVG: '0% 100%' });
+      animateRose = true;
       gsap.set(
         ['.hero-headline', '.hero-tagline', '.hero-subline', '.hero-ctas', '.hero-carousel'],
         { opacity: 1, y: 0 }
@@ -148,41 +99,18 @@
 </script>
 
 <!--
-  Hero: Full-viewport orchestrator composing illustration, content, and carousel.
+  Hero: Full-viewport orchestrator composing WebGL crack, content, and carousel.
 
-  Synthesis: B's asymmetric illustration composition + C's layered animation
-  timing + A's typography hierarchy and micro-details.
+  The crack is the brand — a deep fissure in the parchment surface revealing
+  psychedelic life beneath. Text floats above on the z-index.
 
-  Layout:
-  - hero-bg: Absolute-positioned illustration layer behind everything
-  - hero-fg: Relative-positioned foreground with vertically centered text
-  - hero-bottom: Absolute-positioned carousel pinned to bottom edge
-
-  Animation sequence (~3.8s total with 0.15s initial delay, heavily layered):
-
-  0.15s     — Breath: contemplative pause before anything moves
-  0.15-1.3s — Roots draw from center outward (power2.inOut, 1.0s)
-  0.8-1.7s  — Arcs converge from edges inward (circ.out, 0.8s)
-  1.2-2.1s  — Flow lines sweep across (power3.out, 0.7s)
-  1.7-2.5s  — Detail paths bloom as texture (power2.out, 0.5s, tight stagger)
-  2.0-2.7s  — Headline strikes into place (power4.out, 0.65s)
-  2.4-2.9s  — Tagline whispers in (expo.out, 0.5s)
-  2.7-3.1s  — Subline settles quietly (power1.out, 0.4s)
-  2.9-3.3s  — CTAs appear (power1.out, 0.35s)
-  3.0-3.6s  — Carousel fades ambient (power1.out, 0.6s)
-
-  Easing philosophy: Each layer has its own character.
-  - Roots: power2.inOut (balanced, structural)
-  - Arcs: circ.out (organic, circular)
-  - Flows: power3.out (sweeping momentum)
-  - Details: power2.out (soft bloom)
-  - Headline: power4.out (dramatic strike)
-  - Tagline: expo.out (sharp then whispered)
-  - Supporting: power1.out (gentle, nearly linear)
-
-  The negative margin-top pulls the hero behind the fixed nav so the
-  illustration extends full-bleed, while padding-top on hero-fg keeps
-  text content visible below the nav.
+  Animation sequence:
+  0.0-3.0s  — Crack reveals from center outward (WebGL shader, self-driven)
+  1.2-1.9s  — Headline strikes into place (power4.out)
+  1.5-2.1s  — Tagline whispers in (expo.out)
+  1.8-2.3s  — Subline settles (power1.out)
+  2.0-2.4s  — CTAs appear (power1.out)
+  2.1-2.7s  — Carousel fades ambient (power1.out)
 -->
 
 <section
@@ -190,11 +118,15 @@
   bind:this={heroSection}
 >
   <div class="hero-bg">
-    <HeroIllustration class="hero-illustration" />
+    <HeroCrack />
   </div>
 
   <div class="hero-fg">
     <HeroContent />
+  </div>
+
+  <div class="hero-right" aria-hidden="true">
+    <HeroRose animate={animateRose} class="hero-rose-position" />
   </div>
 
   <div class="hero-bottom">
@@ -212,42 +144,46 @@
     background-color: var(--color-surface);
   }
 
-  /* Background layer: illustration behind everything */
+  /* Background layer: WebGL crack canvas */
   .hero-bg {
     position: absolute;
     inset: 0;
     z-index: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    pointer-events: none;
   }
 
-  .hero-bg :global(.hero-illustration) {
-    width: 100%;
-    max-width: 1200px;
-    height: auto;
-    opacity: 0.7;
-  }
-
-  /* Hide detail paths on mobile for simplification */
-  @media (max-width: 48rem) {
-    .hero-bg :global(.hero-detail) {
-      display: none;
-    }
-  }
-
-  /* Foreground layer: text content on top, centered vertically */
+  /* Foreground layer: text content on top, left-aligned vertically centered */
   .hero-fg {
     position: relative;
     z-index: 2;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     min-height: 100vh;
     min-height: 100svh;
     padding-top: 5rem;
     padding-inline: 1.5rem;
+    padding-left: max(2rem, calc((100vw - 1200px) / 2 + 2rem));
+  }
+
+  /* Right layer: rose growing from the crack */
+  .hero-right {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 50%;
+    height: 80%;
+    z-index: 2;
+    pointer-events: none;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+  }
+
+  .hero-right :global(.hero-rose-position) {
+    width: 6rem;
+    height: auto;
+    margin-bottom: 10%;
+    margin-right: 5%;
   }
 
   /* Bottom layer: carousel pinned to bottom edge */
@@ -259,5 +195,17 @@
     z-index: 3;
     padding: 1.5rem;
     padding-bottom: 2rem;
+  }
+
+  /* Mobile: reset to simpler layout */
+  @media (max-width: 47.999rem) {
+    .hero-fg {
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+    }
+
+    .hero-right {
+      display: none;
+    }
   }
 </style>

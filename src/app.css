@@ -3,10 +3,7 @@
 
 /* Subfracture Website v2 - Global Styles */
 
-/* Base styles */
-html {
-	scroll-behavior: smooth;
-}
+/* Base styles — Lenis handles smooth scroll in Phase 8 */
 
 body {
 	font-family: var(--font-serif);
@@ -22,4 +19,39 @@ body {
 ::selection {
 	background-color: var(--color-primary);
 	color: var(--color-surface);
+}
+
+/* Color chapters — section background contexts */
+.chapter-cream {
+	background-color: var(--color-surface);
+	color: var(--color-text);
+}
+
+.chapter-warm {
+	background-color: var(--color-surface-warm);
+	color: var(--color-text);
+}
+
+.chapter-dark {
+	background-color: var(--color-text);
+	color: var(--color-surface);
+}
+
+/* Micro-interactions — CSS only */
+
+/* Focus visible for keyboard navigation */
+:focus-visible {
+	outline: 2px solid var(--color-primary);
+	outline-offset: 4px;
+	border-radius: 2px;
+}
+
+/* Reduce all transitions when motion reduced */
+@media (prefers-reduced-motion: reduce) {
+	*, *::before, *::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+		scroll-behavior: auto !important;
+	}
 }

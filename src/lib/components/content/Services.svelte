@@ -1,31 +1,34 @@
 <script lang="ts">
 	/**
-	 * Services - Editorial numbered stack of 5 service pillars
+	 * Services - Pinned scroll-through with animated typography
 	 *
-	 * Renders "What we build" label and 5 ServicePillar components in vertical
-	 * stack with thin bone dividers between pillars.
+	 * 500vh scroll spacer with 100vh pinned viewport. Each of 5 service pillars
+	 * reveals sequentially via a single GSAP master timeline:
+	 * - Ghost watermark number scales in
+	 * - Tagline words thicken (font-weight 400→700) word-by-word
+	 * - Description and bullets cascade in
+	 * - Cross-fade to next pillar (15% overlap)
 	 *
-	 * Animation: GSAP matchMedia with staggered scroll-triggered pillar reveals.
-	 * Pillars use `.service-pillar` class for stagger targeting.
-	 * Reduced motion branch shows all content immediately.
+	 * "What we build" label stays pinned throughout as persistent wayfinding.
+	 * Last pillar (05) holds for extended scroll before natural unpin.
 	 *
-	 * Section ID: "services" (matches existing nav link #services)
-	 * Background: --color-surface-warm (warm cream shift from ProblemsSolved)
+	 * Reduced motion: static vertical stack with all content visible.
+	 * Section ID: "services" (matches nav link #services)
 	 */
 
 	import { onMount, onDestroy } from 'svelte';
 	import { browser } from '$app/environment';
+	import { prefersReducedMotion } from '$lib/utils/motion';
 
-	import Container from '$lib/components/ui/Container.svelte';
 	import ServicePillar from './ServicePillar.svelte';
-	import { animate } from '$lib/actions/animate';
+	import ServiceProgress from './ServiceProgress.svelte';
 
 	const services = [
 		{
 			number: '01',
 			tagline: 'The foundation everything else sits on.',
 			description:
-				'We define what the world stands for, where it competes, and why it matters \u2014 so decisions stop fragmenting as pressure increases.',
+				'We define what the world stands for, where it competes, and why it matters — so decisions stop fragmenting as pressure increases.',
 			bullets: [
 				'Positioning and value proposition',
 				'Audience and category tension mapping',
@@ -37,7 +40,7 @@
 			number: '02',
 			tagline: 'A system you can build momentum on.',
 			description:
-				'We create platform ideas that hold together across campaigns, channels, and moments \u2014 without resetting every quarter.',
+				'We create platform ideas that hold together across campaigns, channels, and moments — without resetting every quarter.',
 			bullets: [
 				'Central creative platform and territories',
 				'Campaign system across channels',
@@ -61,7 +64,7 @@
 			number: '04',
 			tagline: 'Bring the system to life.',
 			description:
-				'We design and build the things people actually interact with \u2014 quickly, carefully, and with intent.',
+				'We design and build the things people actually interact with — quickly, carefully, and with intent.',
 			bullets: [
 				'Websites and landing pages (design and build)',
 				'Content production (design, motion, photography direction)',
@@ -83,84 +86,240 @@
 		}
 	];
 
-	let servicesEl: HTMLElement;
-	let ctx: gsap.MatchMedia | null = null;
+	let outerEl: HTMLElement | undefined = $state();
+	let pinnedEl: HTMLElement | undefined = $state();
+	let reducedMotion = $state(false);
+	let activePillar = $state(0);
+	let showProgress = $state(false);
 
-	onMount(async () => {
-		if (!browser) return;
+	let timeline: gsap.core.Timeline | null = null;
+	let scrollTriggerInstance: ScrollTrigger | null = null;
 
-		const { gsap } = await import('gsap');
-		const { ScrollTrigger } = await import('gsap/ScrollTrigger');
-		gsap.registerPlugin(ScrollTrigger);
+	onMount(() => {
+		reducedMotion = prefersReducedMotion();
+		if (!browser || !outerEl || !pinnedEl || reducedMotion) return;
 
-		ctx = gsap.matchMedia();
+		const init = async () => {
+			const { gsap } = await import('gsap');
+			const { ScrollTrigger } = await import('gsap/ScrollTrigger');
+			gsap.registerPlugin(ScrollTrigger);
 
-		ctx.add('(prefers-reduced-motion: no-preference)', () => {
-			gsap.fromTo(
-				servicesEl.querySelectorAll('.service-pillar'),
-				{ opacity: 0, y: 24 },
-				{
-					opacity: 1,
-					y: 0,
-					duration: 0.6,
-					stagger: 0.12,
-					ease: 'power3.out',
-					scrollTrigger: {
-						trigger: servicesEl,
-						start: 'top 80%'
+			const pillarEls = pinnedEl!.querySelectorAll('.service-pillar');
+			const totalPillars = pillarEls.length;
+
+			// Master timeline — scrubbed across 500vh
+			const tl = gsap.timeline({
+				scrollTrigger: {
+					trigger: outerEl,
+					start: 'top top',
+					end: 'bottom bottom',
+					scrub: 0.6,
+					pin: pinnedEl,
+					onUpdate: (self) => {
+						// Track active pillar from scroll progress
+						const progress = self.progress;
+						const newActive = Math.min(
+							Math.floor(progress * totalPillars),
+							totalPillars - 1
+						);
+						if (newActive !== activePillar) {
+							activePillar = newActive;
+						}
+
+						// Show/hide progress based on pin state
+						showProgress = self.isActive;
 					}
 				}
-			);
-		});
+			});
 
-		ctx.add('(prefers-reduced-motion: reduce)', () => {
-			gsap.set(servicesEl.querySelectorAll('.service-pillar'), { opacity: 1, y: 0 });
-		});
+			if (tl.scrollTrigger) {
+				scrollTriggerInstance = tl.scrollTrigger as unknown as ScrollTrigger;
+			}
+
+			// Build per-pillar chapters
+			pillarEls.forEach((pillarEl, index) => {
+				const ghost = pillarEl.querySelector('.pillar-ghost');
+				const number = pillarEl.querySelector('.pillar-number');
+				const words = pillarEl.querySelectorAll('.tagline-word');
+				const desc = pillarEl.querySelector('.pillar-description');
+				const bullets = pillarEl.querySelectorAll('.pillar-bullet');
+				const isLast = index === totalPillars - 1;
+
+				const label = `pillar-${index}`;
+
+				// --- ENTER ---
+				tl.addLabel(label);
+
+				// Ghost number scales in
+				tl.fromTo(
+					ghost,
+					{ opacity: 0, scale: 0.8 },
+					{ opacity: 0.06, scale: 1, duration: 5, ease: 'none' },
+					label
+				);
+
+				// Pillar container fades in
+				tl.fromTo(
+					pillarEl,
+					{ opacity: 0 },
+					{ opacity: 1, duration: 5, ease: 'none' },
+					label
+				);
+
+				// Small number fades up
+				tl.fromTo(
+					number,
+					{ opacity: 0, y: 12 },
+					{ opacity: 1, y: 0, duration: 4, ease: 'power2.out' },
+					`${label}+=2`
+				);
+
+				// Tagline words: opacity + font-weight thicken (the signature moment)
+				tl.fromTo(
+					words,
+					{ opacity: 0.15, fontWeight: 400 },
+					{
+						opacity: 1,
+						fontWeight: 700,
+						duration: 6,
+						ease: 'none',
+						stagger: { each: 0.8 }
+					},
+					`${label}+=4`
+				);
+
+				// Description paragraph fades up
+				tl.fromTo(
+					desc,
+					{ opacity: 0, y: 20 },
+					{ opacity: 1, y: 0, duration: 6, ease: 'power2.out' },
+					`${label}+=14`
+				);
+
+				// Bullets stagger in
+				tl.fromTo(
+					bullets,
+					{ opacity: 0, x: -8 },
+					{
+						opacity: 1,
+						x: 0,
+						duration: 5,
+						ease: 'power2.out',
+						stagger: { each: 1 }
+					},
+					`${label}+=18`
+				);
+
+				// --- HOLD --- (reading time)
+				const holdDuration = isLast ? 30 : 10;
+				tl.to({}, { duration: holdDuration }, `${label}+=28`);
+
+				// --- EXIT --- (skip for last pillar)
+				if (!isLast) {
+					const exitLabel = `${label}-exit`;
+					tl.addLabel(exitLabel, `${label}+=38`);
+
+					tl.to(
+						pillarEl,
+						{ opacity: 0, y: -30, duration: 8, ease: 'power2.in' },
+						exitLabel
+					);
+
+					tl.to(
+						ghost,
+						{ opacity: 0, scale: 1.05, duration: 8, ease: 'none' },
+						exitLabel
+					);
+
+					// Gap before next pillar
+					tl.to({}, { duration: 4 }, `${exitLabel}+=8`);
+				}
+			});
+
+			timeline = tl;
+		};
+
+		init();
 	});
 
 	onDestroy(() => {
-		if (ctx) {
-			ctx.revert();
-			ctx = null;
+		if (scrollTriggerInstance) {
+			scrollTriggerInstance.kill();
+			scrollTriggerInstance = null;
+		}
+		if (timeline) {
+			timeline.kill();
+			timeline = null;
 		}
 	});
 </script>
 
-<section id="services" class="services">
-	<Container>
-		<span
-			class="label"
-			use:animate={{
-				type: 'from',
-				opacity: 0,
-				y: 24,
-				duration: 0.6,
-				ease: 'power3.out',
-				scrollTrigger: { start: 'top 85%' }
-			}}
-		>
-			What we build
-		</span>
-
-		<div class="services-stack" bind:this={servicesEl}>
+{#if reducedMotion}
+	<!-- Reduced motion: static vertical stack -->
+	<section id="services" class="services-static">
+		<div class="services-static-inner">
+			<span class="label">What we build</span>
 			{#each services as service}
 				<ServicePillar
 					number={service.number}
 					tagline={service.tagline}
 					description={service.description}
 					bullets={service.bullets}
+					static={true}
 				/>
 			{/each}
 		</div>
-	</Container>
-</section>
+	</section>
+{:else}
+	<!-- Scroll-driven pinned experience -->
+	<section id="services" class="services-outer" bind:this={outerEl}>
+		<div class="services-pinned" bind:this={pinnedEl}>
+			<span class="label">What we build</span>
+
+			<div class="pillar-viewport">
+				{#each services as service}
+					<ServicePillar
+						number={service.number}
+						tagline={service.tagline}
+						description={service.description}
+						bullets={service.bullets}
+					/>
+				{/each}
+			</div>
+		</div>
+	</section>
+
+	{#if showProgress}
+		<ServiceProgress total={services.length} current={activePillar} />
+	{/if}
+{/if}
 
 <style>
-	.services {
-		padding: clamp(12rem, 15vw, 18rem) 0;
+	/* Scroll spacer — 500vh for 5 pillars */
+	.services-outer {
+		height: 500vh;
+		position: relative;
 		background-color: var(--color-surface-warm);
 	}
 
+	/* Pinned viewport — 100vh, pinned by GSAP */
+	.services-pinned {
+		height: 100vh;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		overflow: hidden;
+		padding-top: 3rem;
+	}
+
+	/* Pillar viewport — holds all absolute-positioned pillar slides */
+	.pillar-viewport {
+		position: relative;
+		flex: 1;
+		min-height: 0;
+	}
+
+	/* Label — persistent wayfinding */
 	.label {
 		display: block;
 		font-family: var(--font-sans);
@@ -169,11 +328,50 @@
 		color: var(--color-primary);
 		text-transform: uppercase;
 		letter-spacing: 0.1em;
-		margin-bottom: 3rem;
+		padding-inline: 1rem;
+		max-width: var(--content-max);
+		margin-inline: auto;
+		width: 100%;
 	}
 
-	.services-stack {
-		display: flex;
-		flex-direction: column;
+	@media (min-width: 40rem) {
+		.label {
+			padding-inline: 1.5rem;
+		}
+	}
+
+	@media (min-width: 64rem) {
+		.label {
+			padding-inline: 2rem;
+		}
+	}
+
+	/* Reduced motion static layout */
+	.services-static {
+		background-color: var(--color-surface-warm);
+		padding: clamp(12rem, 15vw, 18rem) 0;
+	}
+
+	.services-static-inner {
+		max-width: var(--content-max);
+		margin-inline: auto;
+		padding-inline: 1rem;
+	}
+
+	@media (min-width: 40rem) {
+		.services-static-inner {
+			padding-inline: 1.5rem;
+		}
+	}
+
+	@media (min-width: 64rem) {
+		.services-static-inner {
+			padding-inline: 2rem;
+		}
+	}
+
+	.services-static .label {
+		margin-bottom: 3rem;
+		padding-inline: 0;
 	}
 </style>

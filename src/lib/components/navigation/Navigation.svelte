@@ -84,15 +84,14 @@
 
 <svelte:window bind:scrollY onkeydown={handleKeydown} />
 
-<!-- Scroll Progress Indicator -->
-<ScrollProgress />
-
 <!-- Navigation Header -->
 <header
   class="fixed left-0 right-0 top-0 z-50 bg-surface transition-[transform,box-shadow]"
   class:shadow-sm={hasScrolled}
   style="transform: {navTransform}; transition-duration: {transitionDuration};"
 >
+  <!-- Scroll Progress Indicator -->
+  <ScrollProgress />
   <nav class="mx-auto flex max-w-[75rem] items-center justify-between px-6 py-4 lg:px-8">
     <!-- Logo / Wordmark -->
     <a href="/" class="font-serif text-xl font-medium text-text hover:text-primary">

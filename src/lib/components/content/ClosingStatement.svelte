@@ -1,46 +1,41 @@
 <script lang="ts">
 	/**
-	 * ClosingStatement - Weighted closing line and paragraph
+	 * ClosingStatement - Scroll-scrubbed closing line with supporting paragraph
 	 *
-	 * Bridge element between Services and the next section. Centers the key
-	 * closing statement with visual weight (large serif) and a supporting
-	 * paragraph underneath.
+	 * Bridge element between Services and Portfolio. The key statement
+	 * "Entry points are flexible. Outputs are deliberate." reveals
+	 * word-by-word via scroll scrub. Supporting paragraph fades up.
 	 *
-	 * Uses the animate action for scroll-triggered reveals.
 	 * No section ID (not a nav target).
-	 * Background: --color-surface (shifts back from warm cream)
+	 * Background: --color-surface (cream)
 	 */
 
 	import Container from '$lib/components/ui/Container.svelte';
+	import ScrubTextReveal from '$lib/components/scroll/ScrubTextReveal.svelte';
 	import { animate } from '$lib/actions/animate';
 </script>
 
 <section class="closing">
 	<Container>
 		<div class="closing-content">
-			<p
+			<ScrubTextReveal
+				text="Entry points are flexible. Outputs are deliberate."
+				tag="p"
 				class="closing-statement"
-				use:animate={{
-					type: 'from',
-					opacity: 0,
-					y: 24,
-					duration: 0.7,
-					ease: 'power3.out',
-					scrollTrigger: { start: 'top 80%' }
-				}}
-			>
-				Entry points are flexible. Outputs are deliberate.
-			</p>
+				start="top 85%"
+				end="top 35%"
+			/>
 			<p
 				class="closing-paragraph"
 				use:animate={{
-					type: 'from',
-					opacity: 0,
-					y: 16,
+					type: 'fromTo',
+					fromVars: { opacity: 0, y: 16 },
+					opacity: 1,
+					y: 0,
 					duration: 0.5,
 					delay: 0.2,
 					ease: 'power3.out',
-					scrollTrigger: { start: 'top 80%' }
+					scrollTrigger: { start: 'top 75%' }
 				}}
 			>
 				We work alongside founders and brand teams to set direction, design systems, and bring
@@ -61,7 +56,7 @@
 		text-align: center;
 	}
 
-	.closing-statement {
+	:global(.closing-statement) {
 		font-family: var(--font-serif);
 		font-size: var(--text-2xl);
 		font-weight: 400;

@@ -1,9 +1,13 @@
 <script lang="ts">
-	import Container from '$lib/components/ui/Container.svelte';
 	import Hero from '$lib/components/hero/Hero.svelte';
 	import ProblemsSolved from '$lib/components/content/ProblemsSolved.svelte';
 	import Services from '$lib/components/content/Services.svelte';
 	import ClosingStatement from '$lib/components/content/ClosingStatement.svelte';
+	import SectionDivider from '$lib/components/scroll/SectionDivider.svelte';
+	import PortfolioSection from '$lib/components/portfolio/PortfolioSection.svelte';
+	import TeamSection from '$lib/components/team/TeamSection.svelte';
+	import ContactSection from '$lib/components/contact/ContactSection.svelte';
+	import InlineCTA from '$lib/components/ui/InlineCTA.svelte';
 </script>
 
 <svelte:head>
@@ -16,48 +20,45 @@
 
 <!-- Problems Solved (About) -->
 <ProblemsSolved />
+<InlineCTA text="Start a conversation" href="#contact" />
 
 <!-- Services -->
 <Services />
+<InlineCTA text="See how we work" href="#work" />
 
-<!-- Closing Statement -->
+<!-- Organic divider: warm cream → cream -->
+<SectionDivider
+	variant="organic"
+	colorFrom="var(--color-surface-warm)"
+	colorTo="var(--color-surface)"
+	height={80}
+/>
+
+<!-- Closing Statement (scrub text reveal) -->
 <ClosingStatement />
+<InlineCTA text="Let's talk" href="#contact" />
 
-<!-- Portfolio placeholder (Phase 5) -->
-<section id="work" class="section">
-	<Container>
-		<p style="font-family: var(--font-sans); color: var(--color-text-muted); font-size: var(--text-sm);">
-			Portfolio section — Phase 5
-		</p>
-	</Container>
-</section>
+<!-- Fracture divider: cream → near-black -->
+<SectionDivider
+	variant="fracture"
+	colorFrom="var(--color-surface)"
+	colorTo="var(--color-text)"
+	height={100}
+/>
 
-<!-- Contact placeholder (Phase 7) -->
-<section id="contact" class="section section--dark">
-	<Container>
-		<p style="font-family: var(--font-sans); color: var(--color-surface); opacity: 0.6; font-size: var(--text-sm);">
-			Contact section — Phase 7
-		</p>
-	</Container>
-</section>
+<!-- Portfolio (circle wipe + scattered cards) -->
+<PortfolioSection />
 
-<style>
-	/* Sections */
-	.section {
-		padding: var(--spacing-section) 0;
-		background-color: var(--color-surface);
-		min-height: 80vh;
-	}
+<!-- Team (cream return — no divider needed) -->
+<TeamSection />
 
-	.section--dark {
-		background-color: var(--color-text);
-	}
+<!-- Fracture divider: cream → near-black -->
+<SectionDivider
+	variant="fracture"
+	colorFrom="var(--color-surface)"
+	colorTo="var(--color-text)"
+	height={100}
+/>
 
-	/* Responsive adjustments */
-	@media (max-width: 48rem) {
-		.section {
-			padding: var(--spacing-section-sm) 0;
-			min-height: auto;
-		}
-	}
-</style>
+<!-- Contact (scrub heading + form, shares dark chapter with footer) -->
+<ContactSection />
