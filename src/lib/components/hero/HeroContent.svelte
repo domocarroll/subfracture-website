@@ -1,152 +1,116 @@
-<script lang="ts">
-  interface Props {
-    class?: string;
-  }
-  let { class: className = '' }: Props = $props();
-</script>
-
-<div class="hero-content {className}">
-  <h1 class="hero-headline">Culture Studio</h1>
-
-  <p class="hero-tagline">For brands that outgrow campaigns</p>
-
-  <p class="hero-subline">
-    We design brand worlds. Systems that build meaning, momentum, and relevance over time.
-  </p>
-
-  <nav class="hero-ctas" aria-label="Hero actions">
-    <a href="#contact" class="hero-cta">Start a conversation</a>
-    <span class="hero-cta-divider" aria-hidden="true"></span>
-    <a href="#work" class="hero-cta">See the work</a>
-  </nav>
+<div class="hero-text">
+  <h1>Culture<br>Studio</h1>
+  <p class="tagline">For brands that outgrow campaigns</p>
+  <p class="subline">We design brand worlds. Systems that build meaning, momentum, and relevance over time.</p>
+  <div class="ctas">
+    <a href="#contact">Start a conversation</a>
+    <span class="dot" aria-hidden="true">&middot;</span>
+    <a href="#work">See the work</a>
+  </div>
 </div>
 
 <style>
-  .hero-content {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    text-align: left;
-    margin-top: -1.5rem;
-    max-width: 600px;
+  .hero-text {
+    position: fixed;
+    top: 50%;
+    left: 3rem;
+    transform: translateY(-50%);
+    z-index: 10;
+    max-width: 42%;
   }
 
-  .hero-headline {
-    font-family: var(--font-serif);
-    font-size: var(--text-4xl);
-    font-weight: 400;
-    line-height: var(--text-4xl--line-height);
-    letter-spacing: 0.01em;
-    color: var(--color-primary);
-    margin: 0 0 0.5rem 0;
+  .hero-text h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.8rem, 5.5vw, 5.2rem);
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
     opacity: 0;
-    transform: translateY(12px);
+    transform: translateY(30px);
+    animation: slideUp 1.1s cubic-bezier(0.16, 1, 0.3, 1) 0.8s forwards;
   }
 
-  .hero-tagline {
-    font-family: var(--font-serif);
-    font-size: var(--text-xl);
+  .tagline {
+    font-family: 'Playfair Display', serif;
     font-style: italic;
-    line-height: var(--text-xl--line-height);
-    letter-spacing: 0.02em;
-    color: color-mix(in srgb, var(--color-text) 75%, var(--color-text-muted));
-    margin: 0 0 1.75rem 0;
+    font-size: clamp(1.1rem, 2vw, 1.7rem);
+    margin-top: 0.8rem;
     opacity: 0;
-    transform: translateY(12px);
+    transform: translateY(25px);
+    animation: slideUp 1.1s cubic-bezier(0.16, 1, 0.3, 1) 1.1s forwards;
   }
 
-  .hero-subline {
-    font-family: var(--font-sans);
-    font-size: var(--text-base);
-    line-height: var(--text-base--line-height);
-    color: var(--color-text-muted);
-    max-width: 48ch;
-    margin: 0 0 1.5rem 0;
+  .subline {
+    font-family: system-ui, -apple-system, sans-serif;
+    font-size: clamp(0.85rem, 1.05vw, 1rem);
+    color: #4a4a4a;
+    line-height: 1.65;
+    margin-top: 1.5rem;
+    max-width: 380px;
     opacity: 0;
-    transform: translateY(12px);
+    transform: translateY(20px);
+    animation: slideUp 1.1s cubic-bezier(0.16, 1, 0.3, 1) 1.4s forwards;
   }
 
-  .hero-ctas {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-top: 0;
+  .ctas {
+    margin-top: 2rem;
+    font-family: system-ui, -apple-system, sans-serif;
+    font-size: 0.9rem;
     opacity: 0;
-    transform: translateY(12px);
+    transform: translateY(15px);
+    animation: slideUp 1.1s cubic-bezier(0.16, 1, 0.3, 1) 1.7s forwards;
   }
 
-  .hero-cta {
-    font-family: var(--font-sans);
-    font-size: var(--text-base);
-    letter-spacing: 0.02em;
-    color: var(--color-text-muted);
+  .ctas a {
+    color: #1a1a1a;
     text-decoration: none;
-    transition: color 0.3s var(--ease-subtle);
+    border-bottom: 1px solid #c55a3d;
+    padding-bottom: 2px;
+    transition: color 0.3s, border-color 0.3s;
   }
 
-  .hero-cta:hover {
-    color: var(--color-primary);
-    text-decoration: underline;
-    text-underline-offset: 4px;
-    text-decoration-thickness: 1px;
+  .ctas a:hover {
+    color: #c55a3d;
   }
 
-  .hero-cta:focus-visible {
-    outline: 2px solid var(--color-primary);
+  .ctas a:focus-visible {
+    outline: 2px solid #c55a3d;
     outline-offset: 4px;
     border-radius: 2px;
   }
 
-  .hero-cta-divider {
+  .dot {
     display: inline-block;
-    width: 4px;
-    height: 4px;
-    border-radius: 50%;
-    background-color: var(--color-primary);
-    opacity: 0.4;
-    user-select: none;
-    vertical-align: middle;
+    margin: 0 1rem;
+    color: #c55a3d;
   }
 
-  @media (min-width: 48rem) {
-    .hero-headline {
-      font-size: var(--text-6xl);
-      line-height: var(--text-6xl--line-height);
+  @keyframes slideUp {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-text h1,
+    .tagline,
+    .subline,
+    .ctas {
+      animation: none;
+      opacity: 1;
+      transform: none;
     }
   }
 
   @media (max-width: 47.999rem) {
-    .hero-content {
-      align-items: flex-start;
-      text-align: left;
+    .hero-text {
+      position: relative;
+      top: auto;
+      left: auto;
+      transform: none;
       max-width: 100%;
-    }
-
-    .hero-ctas {
-      flex-direction: column;
-      width: 100%;
-      gap: 0.75rem;
-    }
-
-    .hero-cta {
-      display: block;
-      width: 100%;
-      min-height: 48px;
-      padding: 0.75rem 1.5rem;
-      border: 1px solid color-mix(in srgb, var(--color-text) 15%, transparent);
-      border-radius: 4px;
-      text-align: center;
-      line-height: 1.5;
-      font-size: var(--text-base);
-    }
-
-    .hero-cta:hover {
-      text-decoration: none;
-      border-color: var(--color-primary);
-    }
-
-    .hero-cta-divider {
-      display: none;
+      padding: 0 1.5rem;
     }
   }
 </style>
