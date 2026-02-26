@@ -73,9 +73,13 @@ function isRateLimited(ip: string): boolean {
 
 // ---------- Handler ----------
 
+const ALLOWED_ORIGINS = ['https://subfrac.com', 'https://www.subfrac.com'];
+
 export default async function handler(req: VercelRequest, res: VercelResponse) {
 	// CORS headers
-	res.setHeader('Access-Control-Allow-Origin', '*')
+	const origin = req.headers.origin || '';
+	const allowedOrigin = ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
+	res.setHeader('Access-Control-Allow-Origin', allowedOrigin)
 	res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS')
 	res.setHeader('Access-Control-Allow-Headers', 'Content-Type')
 
