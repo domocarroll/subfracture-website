@@ -15,7 +15,7 @@
 	// Team data from Subfracture intro PDF
 	const team = [
 		{ name: 'Warwick Heathwood', role: 'Strategy Director' },
-		{ name: 'Casey Midgley', role: 'Design Director' },
+		{ name: 'Maddi Kimbe', role: 'Digital Marketing' },
 		{ name: 'Tyronne Curtis', role: 'Innovation Director' },
 		{ name: 'Amanda Archer', role: 'Publicity & Partnerships' }
 	];

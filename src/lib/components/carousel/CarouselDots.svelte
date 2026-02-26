@@ -37,9 +37,9 @@
 
 	.carousel-dot {
 		position: relative;
-		width: 32px;
-		height: 3px;
-		padding: 8px 0;
+		width: 44px;
+		min-height: 44px;
+		padding: 0;
 		background: none;
 		border: none;
 		cursor: pointer;
@@ -56,7 +56,7 @@
 	.dot-fill {
 		display: block;
 		width: 100%;
-		height: 100%;
+		height: 3px;
 		border-radius: 2px;
 		background: var(--color-bone);
 		transition:

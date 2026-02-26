@@ -12,6 +12,7 @@
   let isNavVisible = $state(true);
   let scrollY = $state(0);
   let hasScrolled = $state(false);
+  let hasInitialized = false;
 
   // ScrollTrigger reference for cleanup
   let scrollTriggerInstance: { kill: () => void } | null = null;
@@ -41,9 +42,17 @@
       start: 'top top',
       end: 'bottom bottom',
       onUpdate: (self) => {
+        const currentScroll = window.scrollY || document.documentElement.scrollTop;
+
         // Always show when near top
-        if (window.scrollY < 80) {
+        if (currentScroll < 80) {
           isNavVisible = true;
+          return;
+        }
+
+        // Don't hide until user has actually scrolled meaningfully
+        if (!hasInitialized) {
+          hasInitialized = true;
           return;
         }
 

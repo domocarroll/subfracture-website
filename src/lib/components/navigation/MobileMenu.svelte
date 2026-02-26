@@ -64,11 +64,11 @@
     </div>
 
     <!-- Navigation links -->
-    <div class="flex flex-1 flex-col items-center justify-center gap-8">
-      <NavLink href="#work" onclick={handleLinkClick}>Work</NavLink>
-      <NavLink href="#services" onclick={handleLinkClick}>Services</NavLink>
-      <NavLink href="#about" onclick={handleLinkClick}>About</NavLink>
-      <NavLink href="#contact" onclick={handleLinkClick}>Contact</NavLink>
+    <div class="flex flex-1 flex-col items-center justify-center gap-4">
+      <span class="flex min-h-11 items-center"><NavLink href="#work" onclick={handleLinkClick}>Work</NavLink></span>
+      <span class="flex min-h-11 items-center"><NavLink href="#services" onclick={handleLinkClick}>Services</NavLink></span>
+      <span class="flex min-h-11 items-center"><NavLink href="#about" onclick={handleLinkClick}>About</NavLink></span>
+      <span class="flex min-h-11 items-center"><NavLink href="#contact" onclick={handleLinkClick}>Contact</NavLink></span>
     </div>
   </nav>
 {/if}
