@@ -63,16 +63,39 @@
 	<link rel="icon" href={favicon} />
 </svelte:head>
 
+<!-- Skip to content (a11y) -->
+<a href="#main-content" class="skip-link">Skip to content</a>
+
 <!-- Navigation includes ScrollProgress -->
 <Navigation />
 
-<main class="main-content">
+<main id="main-content" class="main-content">
 	{@render children()}
 </main>
 
 <Footer />
 
 <style>
+	.skip-link {
+		position: fixed;
+		top: -100%;
+		left: 1rem;
+		z-index: 100;
+		padding: 0.75rem 1.5rem;
+		background-color: var(--color-surface);
+		color: var(--color-text);
+		font-family: var(--font-sans);
+		font-size: var(--text-sm);
+		border: 2px solid var(--color-primary);
+		border-radius: 4px;
+		text-decoration: none;
+		transition: top 0.2s ease;
+	}
+
+	.skip-link:focus {
+		top: 1rem;
+	}
+
 	.main-content {
 		/* Account for fixed navigation height */
 		padding-top: 5rem; /* ~80px to match nav height */

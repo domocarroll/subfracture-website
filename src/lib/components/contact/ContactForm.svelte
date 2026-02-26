@@ -110,9 +110,11 @@
 				bind:value={formData.name}
 				autocomplete="name"
 				disabled={submitting}
+				aria-invalid={!!errors.name}
+				aria-describedby={errors.name ? 'name-error' : undefined}
 			/>
 			{#if errors.name}
-				<p class="error">{errors.name}</p>
+				<p class="error" id="name-error" role="alert">{errors.name}</p>
 			{/if}
 		</div>
 
@@ -126,9 +128,11 @@
 				bind:value={formData.email}
 				autocomplete="email"
 				disabled={submitting}
+				aria-invalid={!!errors.email}
+				aria-describedby={errors.email ? 'email-error' : undefined}
 			/>
 			{#if errors.email}
-				<p class="error">{errors.email}</p>
+				<p class="error" id="email-error" role="alert">{errors.email}</p>
 			{/if}
 		</div>
 
@@ -141,9 +145,11 @@
 				bind:value={formData.message}
 				rows="5"
 				disabled={submitting}
+				aria-invalid={!!errors.message}
+				aria-describedby={errors.message ? 'message-error' : undefined}
 			></textarea>
 			{#if errors.message}
-				<p class="error">{errors.message}</p>
+				<p class="error" id="message-error" role="alert">{errors.message}</p>
 			{/if}
 		</div>
 

@@ -11,18 +11,47 @@
 
   let { isOpen, onClose }: Props = $props();
 
+  let menuRef: HTMLElement | undefined = $state(undefined);
+
   // Get transition duration based on reduced motion preference
   function getTransitionDuration(): number {
     if (!browser) return 200;
     return prefersReducedMotion() ? 0 : 200;
   }
 
-  // Handle escape key
+  // Focus trap: keep Tab cycling inside the open menu
   function handleKeydown(event: KeyboardEvent) {
     if (event.key === 'Escape' && isOpen) {
       onClose();
+      return;
+    }
+
+    if (event.key === 'Tab' && isOpen && menuRef) {
+      const focusable = menuRef.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      );
+      if (focusable.length === 0) return;
+
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
     }
   }
+
+  // Auto-focus close button when menu opens
+  $effect(() => {
+    if (isOpen && menuRef) {
+      const closeBtn = menuRef.querySelector<HTMLElement>('button');
+      closeBtn?.focus();
+    }
+  });
 
   // Close menu and call callback
   function handleLinkClick() {
@@ -37,6 +66,7 @@
     id="mobile-menu"
     class="fixed inset-0 z-40 flex flex-col bg-surface md:hidden"
     transition:slide={{ duration: getTransitionDuration(), axis: 'y' }}
+    bind:this={menuRef}
   >
     <!-- Close button -->
     <div class="flex justify-end p-6">

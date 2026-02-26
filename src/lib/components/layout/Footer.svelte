@@ -84,6 +84,12 @@
 		color: var(--color-primary);
 	}
 
+  .footer-wordmark:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 4px;
+    border-radius: 2px;
+  }
+
 	.footer-tagline {
 		font-family: var(--font-serif);
 		font-size: var(--text-sm);
@@ -153,6 +159,12 @@
 	.contact-email:hover {
 		color: var(--color-primary);
 	}
+
+  .contact-email:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 4px;
+    border-radius: 2px;
+  }
 
 	.copyright {
 		font-family: var(--font-sans);

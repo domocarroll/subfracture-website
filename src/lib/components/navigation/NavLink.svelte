@@ -52,4 +52,10 @@
   .nav-link.active {
     color: var(--color-primary);
   }
+
+  .nav-link:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 4px;
+    border-radius: 2px;
+  }
 </style>
