@@ -3,7 +3,7 @@
 	 * ContactForm - 3-field contact form with Zod validation
 	 *
 	 * Fields: name, email, message. Client-side Zod validation,
-	 * then POST to /api/contact (Vercel serverless function).
+	 * then POST to /api/contact (Cloudflare Pages Function).
 	 * Honeypot field catches bots. Loading + error + thank-you states.
 	 * Dark background styling — cream text on near-black.
 	 */

@@ -10,7 +10,7 @@
 - **Build**: Vite 7
 - **Language**: TypeScript
 - **CMS**: Sanity (to be added before deployment)
-- **Deployment**: Vercel
+- **Deployment**: Cloudflare Pages
 
 ## Directory Structure
 ```
@@ -19,7 +19,9 @@
 │   ├── routes/         # SvelteKit pages
 │   ├── lib/            # Shared components & utilities
 │   └── app.css         # Global Tailwind styles
-├── static/             # Static assets
+├── functions/
+│   └── api/            # Cloudflare Pages Functions (contact form)
+├── static/             # Static assets + _headers
 ├── _archive/v1/        # Previous version (reference)
 └── CLAUDE.md           # This file
 ```
