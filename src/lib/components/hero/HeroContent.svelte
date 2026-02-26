@@ -1,116 +1,243 @@
-<div class="hero-text">
-  <h1>Culture<br>Studio</h1>
-  <p class="tagline">For brands that outgrow campaigns</p>
-  <p class="subline">We design brand worlds. Systems that build meaning, momentum, and relevance over time.</p>
-  <div class="ctas">
-    <a href="#contact">Start a conversation</a>
-    <span class="dot" aria-hidden="true">&middot;</span>
-    <a href="#work">See the work</a>
+<script lang="ts">
+  /**
+   * HeroContent — Typographic hero with structural fracture
+   *
+   * "Culture" and "Studio" as two displaced type masses separated by
+   * a hairline rule at the golden ratio. The displacement IS the fracture.
+   * Below: tagline and CTAs as quiet marginalia.
+   *
+   * Entrance: staggered fade-up → rule draws → offset reveals → tagline resolves.
+   * Pure HTML/CSS with optional GSAP entrance. No WebGL, no canvas.
+   */
+
+  import { onMount } from 'svelte';
+  import { browser } from '$app/environment';
+  import { prefersReducedMotion } from '$lib/utils/motion';
+
+  let heroEl: HTMLElement | undefined = $state();
+  let revealed = $state(false);
+
+  onMount(async () => {
+    if (!browser) {
+      revealed = true;
+      return;
+    }
+
+    if (prefersReducedMotion()) {
+      revealed = true;
+      return;
+    }
+
+    const { gsap } = await import('gsap');
+
+    const tl = gsap.timeline({
+      delay: 0.3,
+      defaults: { ease: 'power3.out' }
+    });
+
+    const el = heroEl!;
+
+    // Culture fades up
+    tl.fromTo(
+      el.querySelector('.hero-culture'),
+      { opacity: 0, y: 28 },
+      { opacity: 1, y: 0, duration: 1.0 }
+    );
+
+    // Rule draws across
+    tl.fromTo(
+      el.querySelector('.hero-rule'),
+      { scaleX: 0 },
+      { scaleX: 1, duration: 0.9, ease: 'power2.inOut' },
+      '-=0.4'
+    );
+
+    // Studio fades up at its offset
+    tl.fromTo(
+      el.querySelector('.hero-studio'),
+      { opacity: 0, y: 24 },
+      { opacity: 1, y: 0, duration: 1.0 },
+      '-=0.5'
+    );
+
+    // Tagline and CTAs resolve
+    tl.fromTo(
+      el.querySelector('.hero-meta'),
+      { opacity: 0, y: 16 },
+      { opacity: 1, y: 0, duration: 0.8 },
+      '-=0.3'
+    );
+
+    revealed = true;
+  });
+</script>
+
+<div
+  class="hero-content"
+  class:hero-content--revealed={revealed}
+  bind:this={heroEl}
+>
+  <div class="hero-type">
+    <h1 class="hero-culture">Culture</h1>
+    <div class="hero-rule" aria-hidden="true"></div>
+    <p class="hero-studio">Studio</p>
+  </div>
+
+  <div class="hero-meta">
+    <p class="hero-tagline">For brands that outgrow campaigns</p>
+    <div class="hero-ctas">
+      <a href="#contact" class="hero-cta">Start a conversation</a>
+      <span class="hero-dot" aria-hidden="true"></span>
+      <a href="#work" class="hero-cta">See the work</a>
+    </div>
   </div>
 </div>
 
 <style>
-  .hero-text {
-    position: fixed;
-    top: 50%;
-    left: 3rem;
-    transform: translateY(-50%);
-    z-index: 10;
-    max-width: 42%;
+  .hero-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 100vh;
+    min-height: 100svh;
+    padding: 6rem 2rem 4rem;
+    max-width: var(--content-wide);
+    margin: 0 auto;
   }
 
-  .hero-text h1 {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(2.8rem, 5.5vw, 5.2rem);
-    font-weight: 700;
-    line-height: 1.05;
-    letter-spacing: -0.02em;
-    opacity: 0;
-    transform: translateY(30px);
-    animation: slideUp 1.1s cubic-bezier(0.16, 1, 0.3, 1) 0.8s forwards;
+  /* --- Type masses --- */
+
+  .hero-type {
+    position: relative;
   }
 
-  .tagline {
-    font-family: 'Playfair Display', serif;
+  .hero-culture {
+    font-family: var(--font-serif);
+    font-size: clamp(3.8rem, 10vw, 8.5rem);
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: -0.025em;
+    color: var(--color-text);
+    margin: 0;
+    /* Reduced motion: visible immediately */
+    opacity: 1;
+  }
+
+  .hero-studio {
+    font-family: var(--font-serif);
+    font-size: clamp(3.8rem, 10vw, 8.5rem);
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: -0.025em;
+    color: var(--color-text);
+    margin: 0;
+    /* The structural offset — displaced right */
+    padding-left: clamp(3rem, 12vw, 14rem);
+    opacity: 1;
+  }
+
+  /* --- The fracture line --- */
+
+  .hero-rule {
+    width: 100%;
+    height: 1px;
+    background-color: var(--color-text);
+    margin: clamp(1rem, 2.5vw, 2rem) 0;
+    transform-origin: left center;
+    opacity: 0.15;
+  }
+
+  /* --- Marginalia --- */
+
+  .hero-meta {
+    margin-top: clamp(3rem, 6vw, 5rem);
+    padding-left: clamp(3rem, 12vw, 14rem);
+    opacity: 1;
+  }
+
+  .hero-tagline {
+    font-family: var(--font-serif);
     font-style: italic;
-    font-size: clamp(1.1rem, 2vw, 1.7rem);
-    margin-top: 0.8rem;
-    opacity: 0;
-    transform: translateY(25px);
-    animation: slideUp 1.1s cubic-bezier(0.16, 1, 0.3, 1) 1.1s forwards;
+    font-size: clamp(1rem, 1.8vw, 1.35rem);
+    color: var(--color-text-muted);
+    line-height: 1.5;
+    margin: 0 0 1.5rem;
+    max-width: 28ch;
   }
 
-  .subline {
-    font-family: system-ui, -apple-system, sans-serif;
-    font-size: clamp(0.85rem, 1.05vw, 1rem);
-    color: #4a4a4a;
-    line-height: 1.65;
-    margin-top: 1.5rem;
-    max-width: 380px;
-    opacity: 0;
-    transform: translateY(20px);
-    animation: slideUp 1.1s cubic-bezier(0.16, 1, 0.3, 1) 1.4s forwards;
+  .hero-ctas {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-family: var(--font-sans);
+    font-size: var(--text-sm);
   }
 
-  .ctas {
-    margin-top: 2rem;
-    font-family: system-ui, -apple-system, sans-serif;
-    font-size: 0.9rem;
-    opacity: 0;
-    transform: translateY(15px);
-    animation: slideUp 1.1s cubic-bezier(0.16, 1, 0.3, 1) 1.7s forwards;
-  }
-
-  .ctas a {
-    color: #1a1a1a;
+  .hero-cta {
+    color: var(--color-text);
     text-decoration: none;
-    border-bottom: 1px solid #c55a3d;
+    border-bottom: 1px solid var(--color-primary);
     padding-bottom: 2px;
-    transition: color 0.3s, border-color 0.3s;
+    transition: color 0.3s ease, border-color 0.3s ease;
   }
 
-  .ctas a:hover {
-    color: #c55a3d;
+  .hero-cta:hover {
+    color: var(--color-primary);
   }
 
-  .ctas a:focus-visible {
-    outline: 2px solid #c55a3d;
+  .hero-cta:focus-visible {
+    outline: 2px solid var(--color-primary);
     outline-offset: 4px;
     border-radius: 2px;
   }
 
-  .dot {
-    display: inline-block;
-    margin: 0 1rem;
-    color: #c55a3d;
+  .hero-dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background-color: var(--color-primary);
+    flex-shrink: 0;
   }
 
-  @keyframes slideUp {
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+  /* --- GSAP entrance: hide elements before animation --- */
+
+  .hero-content:not(.hero-content--revealed) .hero-culture,
+  .hero-content:not(.hero-content--revealed) .hero-studio,
+  .hero-content:not(.hero-content--revealed) .hero-meta {
+    opacity: 0;
   }
+
+  .hero-content:not(.hero-content--revealed) .hero-rule {
+    transform: scaleX(0);
+  }
+
+  /* --- Reduced motion: no hidden state --- */
 
   @media (prefers-reduced-motion: reduce) {
-    .hero-text h1,
-    .tagline,
-    .subline,
-    .ctas {
-      animation: none;
+    .hero-content:not(.hero-content--revealed) .hero-culture,
+    .hero-content:not(.hero-content--revealed) .hero-studio,
+    .hero-content:not(.hero-content--revealed) .hero-meta {
       opacity: 1;
-      transform: none;
+    }
+
+    .hero-content:not(.hero-content--revealed) .hero-rule {
+      transform: scaleX(1);
     }
   }
 
+  /* --- Mobile --- */
+
   @media (max-width: 47.999rem) {
-    .hero-text {
-      position: relative;
-      top: auto;
-      left: auto;
-      transform: none;
-      max-width: 100%;
-      padding: 0 1.5rem;
+    .hero-content {
+      padding: 8rem 1.5rem 3rem;
+    }
+
+    .hero-studio {
+      padding-left: clamp(1.5rem, 8vw, 3rem);
+    }
+
+    .hero-meta {
+      padding-left: clamp(1.5rem, 8vw, 3rem);
     }
   }
 </style>

@@ -2,7 +2,7 @@
 	/**
 	 * Services - Pinned scroll-through with animated typography
 	 *
-	 * 500vh scroll spacer with 100vh pinned viewport. Each of 5 service pillars
+	 * 600vh scroll spacer with 100vh pinned viewport. Each of 6 service pillars
 	 * reveals sequentially via a single GSAP master timeline:
 	 * - Ghost watermark number scales in
 	 * - Tagline words thicken (font-weight 400→700) word-by-word
@@ -10,7 +10,7 @@
 	 * - Cross-fade to next pillar (15% overlap)
 	 *
 	 * "What we build" label stays pinned throughout as persistent wayfinding.
-	 * Last pillar (05) holds for extended scroll before natural unpin.
+	 * Last pillar (06) holds for extended scroll before natural unpin.
 	 *
 	 * Reduced motion: static vertical stack with all content visible.
 	 * Section ID: "services" (matches nav link #services)
@@ -26,55 +26,67 @@
 	const services = [
 		{
 			number: '01',
-			tagline: 'The foundation everything else sits on.',
+			tagline: 'Identify problems, test and iterate solutions.',
 			description:
 				'We define what the world stands for, where it competes, and why it matters — so decisions stop fragmenting as pressure increases.',
 			bullets: [
 				'Positioning and value proposition',
 				'Audience and category tension mapping',
-				'Brand architecture (products, sub-brands, offers)',
+				'Brand architecture and systems',
 				'Experience strategy across touchpoints'
 			]
 		},
 		{
 			number: '02',
-			tagline: 'A system you can build momentum on.',
+			tagline: 'Design brand behaviours and foundations.',
 			description:
-				'We create platform ideas that hold together across campaigns, channels, and moments — without resetting every quarter.',
+				'We create identities that scale, adapt, and stay coherent wherever the brand shows up. From voice to visual, every element is designed to hold.',
 			bullets: [
-				'Central creative platform and territories',
-				'Campaign system across channels',
-				'Content pillars and repeatable formats',
-				'Launch narrative and key moments'
+				'Visual identity and art direction',
+				'Tone of voice and verbal identity',
+				'Brand story and naming',
+				'Guidelines and templates'
 			]
 		},
 		{
 			number: '03',
-			tagline: 'Make it unmistakable.',
+			tagline: 'Conceptual ideas developed from insights.',
 			description:
-				'We design identities that scale, adapt, and stay coherent wherever the brand shows up.',
+				'We build platform ideas that hold together across campaigns, channels, and moments — without resetting every quarter.',
 			bullets: [
-				'Naming support and brand story',
-				'Tone of voice and verbal identity',
-				'Visual identity (logo, type, colour, layout, art direction)',
-				'Guidelines and templates for teams and partners'
+				'Creative platform and territories',
+				'Campaign systems across channels',
+				'Content pillars and formats',
+				'Launch narrative and key moments'
 			]
 		},
 		{
 			number: '04',
-			tagline: 'Bring the system to life.',
+			tagline: 'Development and application of creative ideas.',
 			description:
 				'We design and build the things people actually interact with — quickly, carefully, and with intent.',
 			bullets: [
-				'Websites and landing pages (design and build)',
-				'Content production (design, motion, photography direction)',
+				'Websites and digital products',
+				'Content production and photography direction',
 				'Prototyping before major investment',
-				'Software, dev, and immersive builds (where relevant)'
+				'Software and immersive builds'
 			]
 		},
 		{
 			number: '05',
-			tagline: 'Extend reach. Build trust.',
+			tagline: 'Production of assets, content, software, technology.',
+			description:
+				'We produce at the intersection of craft and technology. Materials, objects, experiences — the details that make a brand world tangible.',
+			bullets: [
+				'Asset production at scale',
+				'Motion and video content',
+				'Technology and platform development',
+				'Physical and virtual environments'
+			]
+		},
+		{
+			number: '06',
+			tagline: 'Talent liaison, cultural disruptions or media impact.',
 			description:
 				'We help brands create meaningful moments and collaborations that earn relevance, not just attention.',
 			bullets: [
@@ -107,7 +119,7 @@
 			const pillarEls = pinnedEl!.querySelectorAll('.service-pillar');
 			const totalPillars = pillarEls.length;
 
-			// Master timeline — scrubbed across 500vh
+			// Master timeline — scrubbed across 600vh
 			const tl = gsap.timeline({
 				scrollTrigger: {
 					trigger: outerEl,
@@ -295,9 +307,9 @@
 {/if}
 
 <style>
-	/* Scroll spacer — 500vh for 5 pillars */
+	/* Scroll spacer — 600vh for 6 pillars */
 	.services-outer {
-		height: 500vh;
+		height: 600vh;
 		position: relative;
 		background-color: var(--color-surface-warm);
 	}

@@ -2,8 +2,9 @@
 	/**
 	 * ContactForm - 3-field contact form with Zod validation
 	 *
-	 * Fields: name, email, message. Client-side validation only (no backend yet).
-	 * Thank-you state after successful submission.
+	 * Fields: name, email, message. Client-side Zod validation,
+	 * then POST to /api/contact (Vercel serverless function).
+	 * Honeypot field catches bots. Loading + error + thank-you states.
 	 * Dark background styling — cream text on near-black.
 	 */
 
@@ -19,8 +20,11 @@
 	type FieldErrors = Partial<Record<keyof ContactData, string>>;
 
 	let formData = $state<ContactData>({ name: '', email: '', message: '' });
+	let honeypot = $state('');
 	let errors = $state<FieldErrors>({});
+	let submitting = $state(false);
 	let submitted = $state(false);
+	let serverError = $state('');
 
 	function validate(): boolean {
 		const result = contactSchema.safeParse(formData);
@@ -40,10 +44,38 @@
 		return false;
 	}
 
-	function handleSubmit(e: SubmitEvent) {
+	async function handleSubmit(e: SubmitEvent) {
 		e.preventDefault();
-		if (validate()) {
+		serverError = '';
+
+		if (!validate()) return;
+
+		submitting = true;
+
+		try {
+			const response = await fetch('/api/contact', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({
+					name: formData.name,
+					email: formData.email,
+					message: formData.message,
+					website: honeypot
+				})
+			});
+
+			const data = await response.json();
+
+			if (!response.ok) {
+				serverError = data.error || 'Something went wrong. Please try again.';
+				return;
+			}
+
 			submitted = true;
+		} catch {
+			serverError = 'Network error. Please check your connection and try again.';
+		} finally {
+			submitting = false;
 		}
 	}
 </script>
@@ -55,6 +87,19 @@
 	</div>
 {:else}
 	<form class="form" onsubmit={handleSubmit} novalidate>
+		<!-- Honeypot — hidden from humans, bots fill it in -->
+		<div class="honeypot" aria-hidden="true">
+			<label for="contact-website">Website</label>
+			<input
+				id="contact-website"
+				type="text"
+				name="website"
+				bind:value={honeypot}
+				tabindex="-1"
+				autocomplete="off"
+			/>
+		</div>
+
 		<div class="field">
 			<label for="contact-name" class="label">Name</label>
 			<input
@@ -64,6 +109,7 @@
 				class:input--error={errors.name}
 				bind:value={formData.name}
 				autocomplete="name"
+				disabled={submitting}
 			/>
 			{#if errors.name}
 				<p class="error">{errors.name}</p>
@@ -79,6 +125,7 @@
 				class:input--error={errors.email}
 				bind:value={formData.email}
 				autocomplete="email"
+				disabled={submitting}
 			/>
 			{#if errors.email}
 				<p class="error">{errors.email}</p>
@@ -93,13 +140,24 @@
 				class:input--error={errors.message}
 				bind:value={formData.message}
 				rows="5"
+				disabled={submitting}
 			></textarea>
 			{#if errors.message}
 				<p class="error">{errors.message}</p>
 			{/if}
 		</div>
 
-		<button type="submit" class="submit">Send message</button>
+		{#if serverError}
+			<p class="error server-error">{serverError}</p>
+		{/if}
+
+		<button type="submit" class="submit" disabled={submitting}>
+			{#if submitting}
+				Sending...
+			{:else}
+				Send message
+			{/if}
+		</button>
 	</form>
 {/if}
 
@@ -109,6 +167,17 @@
 		flex-direction: column;
 		gap: 1.5rem;
 		max-width: 32rem;
+	}
+
+	.honeypot {
+		position: absolute;
+		left: -9999px;
+		top: -9999px;
+		opacity: 0;
+		height: 0;
+		width: 0;
+		overflow: hidden;
+		pointer-events: none;
 	}
 
 	.field {
@@ -179,6 +248,19 @@
 	.submit:focus-visible {
 		outline: 2px solid var(--color-primary);
 		outline-offset: 4px;
+	}
+
+	.submit:disabled {
+		opacity: 0.5;
+		cursor: not-allowed;
+	}
+
+	.input:disabled {
+		opacity: 0.5;
+	}
+
+	.server-error {
+		font-size: var(--text-sm);
 	}
 
 	.thank-you {

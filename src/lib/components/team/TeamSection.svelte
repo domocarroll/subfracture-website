@@ -12,12 +12,12 @@
 	import TeamMember from './TeamMember.svelte';
 	import { animate } from '$lib/actions/animate';
 
-	// Placeholder team data — will be replaced by Sanity CMS
+	// Team data from Subfracture intro PDF
 	const team = [
-		{ name: 'Dominic Stevens', role: 'Strategy & Creative Direction' },
-		{ name: 'Mara Chen', role: 'Brand Design Lead' },
-		{ name: 'Luca Moretti', role: 'Culture & Partnerships' },
-		{ name: 'Aisha Patel', role: 'Digital Experience Design' }
+		{ name: 'Warwick Heathwood', role: 'Strategy Director' },
+		{ name: 'Casey Midgley', role: 'Design Director' },
+		{ name: 'Tyronne Curtis', role: 'Innovation Director' },
+		{ name: 'Amanda Archer', role: 'Publicity & Partnerships' }
 	];
 </script>
 

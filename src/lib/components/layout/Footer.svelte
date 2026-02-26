@@ -27,8 +27,8 @@
 				<div class="office">
 					<h3 class="office-heading">Brisbane HQ</h3>
 					<address class="office-address">
-						Level 4, 123 Adelaide Street<br />
-						Brisbane QLD 4000<br />
+						29 Merivale Street<br />
+						South Brisbane QLD 4101<br />
 						Australia
 					</address>
 				</div>
@@ -36,8 +36,8 @@
 				<div class="office">
 					<h3 class="office-heading">Los Angeles</h3>
 					<address class="office-address">
-						1234 Sunset Boulevard<br />
-						Los Angeles, CA 90028<br />
+						520 Broadway Suite 200<br />
+						Santa Monica, CA 90401<br />
 						United States
 					</address>
 				</div>

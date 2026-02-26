@@ -18,43 +18,43 @@
 	import CharacterCascade from '$lib/components/scroll/CharacterCascade.svelte';
 	import Container from '$lib/components/ui/Container.svelte';
 
-	// Placeholder portfolio data — will be replaced by Sanity CMS
+	// Portfolio projects
 	const projects = [
 		{
-			title: 'Vanguard Spirits Co.',
-			outcome: 'Built a brand world that outlasted its launch campaign by 18 months',
-			category: 'Brand Strategy',
-			rotation: 3
-		},
-		{
-			title: 'Meridian Health',
-			outcome: 'Repositioned from clinic chain to trusted health partner',
-			category: 'Identity System',
-			rotation: -4
-		},
-		{
-			title: 'Arcadia Collective',
-			outcome: 'Unified 12 sub-brands under one coherent architecture',
-			category: 'Brand Architecture',
+			title: 'Sprite',
+			outcome: 'Re-ignited Sprite\'s rich history in Hip Hop culture through The Bodega, a New York institution',
+			category: 'Brand Activation',
 			rotation: 2
 		},
 		{
-			title: 'Sunline Festival',
-			outcome: 'Created a cultural moment that earned 2.4M organic impressions',
-			category: 'Cultural Activation',
+			title: 'SAOR Skin',
+			outcome: 'Built a wellness brand system that feels calm without losing presence',
+			category: 'Branding',
 			rotation: -3
 		},
 		{
-			title: 'Waypoint Education',
-			outcome: 'Designed a platform system that scaled from 1 to 8 markets',
-			category: 'Design System',
+			title: 'Nike',
+			outcome: 'Designed the SNKRS Box pop-up — 350 LED screens for the US Olympic Basketball Team',
+			category: 'Activation',
+			rotation: 3
+		},
+		{
+			title: 'Google',
+			outcome: 'Developed the retail narrative for Google\'s holiday pop-up Hardware Stores in Chicago and NYC',
+			category: 'Activation',
+			rotation: -2
+		},
+		{
+			title: 'Ekka',
+			outcome: 'Designed Milo\'s Magic — an AR scavenger hunt that increased foot traffic to less-visited zones',
+			category: 'Campaign',
 			rotation: 4
 		},
 		{
-			title: 'Ember & Stone',
-			outcome: 'Launched from zero to category recognition in 90 days',
-			category: 'Launch Strategy',
-			rotation: -2
+			title: 'Sh!t Happens',
+			outcome: 'Built a brand world from the ground up — honest, accessible, unafraid',
+			category: 'Branding',
+			rotation: -3
 		}
 	];
 </script>
