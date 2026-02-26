@@ -54,7 +54,7 @@
 	.portfolio {
 		background-color: var(--color-text);
 		color: var(--color-surface);
-		padding: clamp(6rem, 8vw, 10rem) 0;
+		padding: clamp(8rem, 10vw, 12rem) 0;
 		position: relative;
 		overflow: hidden;
 		min-height: 100vh;
@@ -67,8 +67,10 @@
 	.portfolio-number {
 		display: block;
 		font-family: var(--font-sans);
-		font-size: var(--text-sm);
+		font-size: var(--text-xs);
+		font-weight: 500;
 		color: var(--color-primary);
+		letter-spacing: 0.05em;
 		margin-bottom: 1rem;
 	}
 

@@ -49,8 +49,10 @@
 	.contact-number {
 		display: block;
 		font-family: var(--font-sans);
-		font-size: var(--text-sm);
+		font-size: var(--text-xs);
+		font-weight: 500;
 		color: var(--color-primary);
+		letter-spacing: 0.05em;
 		margin-bottom: 1rem;
 	}
 
