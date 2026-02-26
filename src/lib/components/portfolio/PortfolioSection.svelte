@@ -18,45 +18,7 @@
 	import CharacterCascade from '$lib/components/scroll/CharacterCascade.svelte';
 	import Container from '$lib/components/ui/Container.svelte';
 
-	// Portfolio projects
-	const projects = [
-		{
-			title: 'Sprite',
-			outcome: 'Re-ignited Sprite\'s rich history in Hip Hop culture through The Bodega, a New York institution',
-			category: 'Brand Activation',
-			rotation: 2
-		},
-		{
-			title: 'SAOR Skin',
-			outcome: 'Built a wellness brand system that feels calm without losing presence',
-			category: 'Branding',
-			rotation: -3
-		},
-		{
-			title: 'Nike',
-			outcome: 'Designed the SNKRS Box pop-up — 350 LED screens for the US Olympic Basketball Team',
-			category: 'Activation',
-			rotation: 3
-		},
-		{
-			title: 'Google',
-			outcome: 'Developed the retail narrative for Google\'s holiday pop-up Hardware Stores in Chicago and NYC',
-			category: 'Activation',
-			rotation: -2
-		},
-		{
-			title: 'Ekka',
-			outcome: 'Designed Milo\'s Magic — an AR scavenger hunt that increased foot traffic to less-visited zones',
-			category: 'Campaign',
-			rotation: 4
-		},
-		{
-			title: 'Sh!t Happens',
-			outcome: 'Built a brand world from the ground up — honest, accessible, unafraid',
-			category: 'Branding',
-			rotation: -3
-		}
-	];
+	import { projects } from '$lib/data/projects';
 </script>
 
 <PortfolioReveal>
@@ -75,12 +37,13 @@
 
 			<div class="portfolio-grid">
 				{#each projects as project}
-					<PortfolioCard
-						title={project.title}
-						outcome={project.outcome}
-						category={project.category}
-						rotation={project.rotation}
-					/>
+				<PortfolioCard
+					title={project.title}
+					outcome={project.outcome}
+					category={project.category}
+					rotation={project.rotation}
+					href="/work/{project.slug}"
+				/>
 				{/each}
 			</div>
 		</Container>
