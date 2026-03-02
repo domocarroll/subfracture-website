@@ -62,7 +62,7 @@
 		font-weight: 400;
 		color: var(--color-surface);
 		line-height: var(--text-3xl--line-height);
-		max-width: 20ch;
+		max-width: 24ch;
 		margin: 0;
 	}
 
