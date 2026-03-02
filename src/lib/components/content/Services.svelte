@@ -223,7 +223,7 @@
 				);
 
 				// --- HOLD --- (reading time)
-				const holdDuration = isLast ? 30 : 10;
+				const holdDuration = isLast ? 18 : 8;
 				tl.to({}, { duration: holdDuration }, `${label}+=28`);
 
 				// --- EXIT --- (skip for last pillar)
@@ -244,7 +244,7 @@
 					);
 
 					// Gap before next pillar
-					tl.to({}, { duration: 4 }, `${exitLabel}+=8`);
+					tl.to({}, { duration: 3 }, `${exitLabel}+=8`);
 				}
 			});
 
@@ -307,9 +307,9 @@
 {/if}
 
 <style>
-	/* Scroll spacer — 600vh for 6 pillars */
+	/* Scroll spacer — 480vh for 6 pillars */
 	.services-outer {
-		height: 600vh;
+		height: 480vh;
 		position: relative;
 		background-color: var(--color-surface-warm);
 	}
