@@ -48,8 +48,11 @@
 
 <style>
 	.closing {
-		padding: clamp(8rem, 10vw, 12rem) 0;
+		padding: clamp(12rem, 15vw, 18rem) 0;
 		background-color: var(--color-surface);
+		min-height: 80vh;
+		display: flex;
+		align-items: center;
 	}
 
 	.closing-content {
