@@ -10,12 +10,13 @@
    * Pure HTML/CSS with optional GSAP entrance. No WebGL, no canvas.
    */
 
-  import { onMount } from 'svelte';
+  import { onMount, onDestroy } from 'svelte';
   import { browser } from '$app/environment';
   import { prefersReducedMotion } from '$lib/utils/motion';
 
   let heroEl: HTMLElement | undefined = $state();
   let revealed = $state(false);
+  let parallaxTriggers: any[] = [];
 
   onMount(async () => {
     if (!browser) {
@@ -69,6 +70,48 @@
     );
 
     revealed = true;
+
+    // Parallax drift — the fracture widens as user scrolls away
+    const { ScrollTrigger } = await import('gsap/ScrollTrigger');
+    gsap.registerPlugin(ScrollTrigger);
+
+    parallaxTriggers.push(
+      gsap.to(el.querySelector('.hero-culture'), {
+        y: -30,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: heroEl,
+          start: 'top top',
+          end: 'bottom top',
+          scrub: 0.8
+        }
+      }).scrollTrigger,
+      gsap.to(el.querySelector('.hero-studio'), {
+        y: -15,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: heroEl,
+          start: 'top top',
+          end: 'bottom top',
+          scrub: 0.8
+        }
+      }).scrollTrigger,
+      gsap.to(el.querySelector('.hero-meta'), {
+        y: -5,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: heroEl,
+          start: 'top top',
+          end: 'bottom top',
+          scrub: 0.8
+        }
+      }).scrollTrigger
+    );
+  });
+
+  onDestroy(() => {
+    parallaxTriggers.forEach(st => st?.kill());
+    parallaxTriggers = [];
   });
 </script>
 
