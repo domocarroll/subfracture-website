@@ -36,7 +36,7 @@
 		class: className = '',
 		start = 'top 85%',
 		end = 'top 25%',
-		scrub = true
+		scrub = 0.5
 	}: Props = $props();
 
 	let containerEl: HTMLElement | undefined = $state();

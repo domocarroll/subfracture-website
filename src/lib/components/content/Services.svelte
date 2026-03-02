@@ -125,7 +125,7 @@
 					trigger: outerEl,
 					start: 'top top',
 					end: 'bottom bottom',
-					scrub: 0.6,
+					scrub: 0.8,
 					pin: pinnedEl,
 					onUpdate: (self) => {
 						// Track active pillar from scroll progress
