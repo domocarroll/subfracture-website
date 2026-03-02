@@ -50,8 +50,9 @@
 			use:animate={{
 				type: 'from',
 				opacity: 0,
-				y: 24,
-				duration: 0.6,
+				y: 20,
+				duration: 0.7,
+				delay: 0.1,
 				ease: 'power3.out',
 				scrollTrigger: { start: 'top 85%' }
 			}}
@@ -64,11 +65,11 @@
 			use:animate={{
 				type: 'from',
 				opacity: 0,
-				y: 24,
+				y: 16,
 				duration: 0.6,
-				delay: 0.15,
+				delay: 0.2,
 				ease: 'power3.out',
-				scrollTrigger: { start: 'top 85%' }
+				scrollTrigger: { start: 'top 80%' }
 			}}
 		>
 			Subfracture is a strategic culture and design studio based in Merivale Studios, South

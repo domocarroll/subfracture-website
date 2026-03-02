@@ -37,11 +37,11 @@
 				<div
 					use:animate={{
 						type: 'fromTo',
-						fromVars: { opacity: 0, y: 30 },
+						fromVars: { opacity: 0, y: 20 },
 						opacity: 1,
 						y: 0,
-						duration: 0.6,
-						delay: i * 0.1,
+						duration: 0.5,
+						delay: i * 0.08,
 						ease: 'power3.out',
 						scrollTrigger: { start: 'top 85%' }
 					}}
