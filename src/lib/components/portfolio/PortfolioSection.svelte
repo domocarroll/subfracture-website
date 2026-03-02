@@ -19,6 +19,7 @@
 	import Container from '$lib/components/ui/Container.svelte';
 
 	import { projects } from '$lib/data/projects';
+	import { animate } from '$lib/actions/animate';
 </script>
 
 <PortfolioReveal>
@@ -36,14 +37,27 @@
 			</div>
 
 			<div class="portfolio-grid">
-				{#each projects as project}
-				<PortfolioCard
-					title={project.title}
-					outcome={project.outcome}
-					category={project.category}
-					rotation={project.rotation}
-					href="/work/{project.slug}"
-				/>
+				{#each projects as project, i}
+					<div
+						use:animate={{
+							type: 'fromTo',
+							fromVars: { opacity: 0, y: 40 },
+							opacity: 1,
+							y: 0,
+							duration: 0.7,
+							delay: i * 0.08,
+							ease: 'power3.out',
+							scrollTrigger: { start: 'top 85%' }
+						}}
+					>
+						<PortfolioCard
+							title={project.title}
+							outcome={project.outcome}
+							category={project.category}
+							rotation={project.rotation}
+							href="/work/{project.slug}"
+						/>
+					</div>
 				{/each}
 			</div>
 		</Container>
