@@ -70,7 +70,7 @@
 		font-size: var(--text-xs);
 		font-weight: 500;
 		color: var(--color-primary);
-		letter-spacing: 0.05em;
+		letter-spacing: var(--letter-spacing-label);
 		margin-bottom: 1rem;
 	}
 

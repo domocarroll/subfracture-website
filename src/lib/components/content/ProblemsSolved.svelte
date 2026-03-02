@@ -123,7 +123,7 @@
 		font-weight: 600;
 		color: var(--color-primary);
 		text-transform: uppercase;
-		letter-spacing: 0.1em;
+		letter-spacing: var(--letter-spacing-label);
 		margin-top: 4rem;
 		margin-bottom: 2rem;
 	}

@@ -339,7 +339,7 @@
 		font-weight: 600;
 		color: var(--color-primary);
 		text-transform: uppercase;
-		letter-spacing: 0.1em;
+		letter-spacing: var(--letter-spacing-label);
 		padding-inline: 1rem;
 		max-width: var(--content-max);
 		margin-inline: auto;
