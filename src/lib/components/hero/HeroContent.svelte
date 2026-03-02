@@ -31,8 +31,8 @@
     const { gsap } = await import('gsap');
 
     const tl = gsap.timeline({
-      delay: 0.3,
-      defaults: { ease: 'power3.out' }
+      delay: 0.5,
+      defaults: { ease: 'expo.out' }
     });
 
     const el = heroEl!;
@@ -41,31 +41,31 @@
     tl.fromTo(
       el.querySelector('.hero-culture'),
       { opacity: 0, y: 28 },
-      { opacity: 1, y: 0, duration: 1.0 }
+      { opacity: 1, y: 0, duration: 1.2 }
     );
 
     // Rule draws across
     tl.fromTo(
       el.querySelector('.hero-rule'),
       { scaleX: 0 },
-      { scaleX: 1, duration: 0.9, ease: 'power2.inOut' },
-      '-=0.4'
+      { scaleX: 1, duration: 1.1, ease: 'power2.inOut' },
+      '-=0.5'
     );
 
     // Studio fades up at its offset
     tl.fromTo(
       el.querySelector('.hero-studio'),
-      { opacity: 0, y: 24 },
-      { opacity: 1, y: 0, duration: 1.0 },
-      '-=0.5'
+      { opacity: 0, y: 20 },
+      { opacity: 1, y: 0, duration: 1.2 },
+      '-=0.6'
     );
 
     // Tagline and CTAs resolve
     tl.fromTo(
       el.querySelector('.hero-meta'),
       { opacity: 0, y: 16 },
-      { opacity: 1, y: 0, duration: 0.8 },
-      '-=0.3'
+      { opacity: 1, y: 0, duration: 1.0 },
+      '-=0.4'
     );
 
     revealed = true;
