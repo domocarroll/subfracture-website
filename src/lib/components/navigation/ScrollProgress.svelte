@@ -41,7 +41,7 @@
 </script>
 
 <div
-  class="fixed left-0 top-0 z-[60] h-px bg-primary opacity-40"
+  class="fixed left-0 top-0 z-[60] h-px bg-text opacity-20"
   style="width: {progress * 100}%"
   role="progressbar"
   aria-valuenow={Math.round(progress * 100)}

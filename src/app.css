@@ -1,12 +1,8 @@
 @import "tailwindcss";
 @import "./lib/styles/tokens.css";
 
-/* Subfracture Website v2 - Global Styles */
-
-/* Base styles — Lenis handles smooth scroll in Phase 8 */
-
 body {
-	font-family: var(--font-serif);
+	font-family: var(--font-sans);
 	font-size: var(--text-base);
 	line-height: var(--text-base--line-height);
 	background-color: var(--color-surface);
@@ -15,13 +11,11 @@ body {
 	-moz-osx-font-smoothing: grayscale;
 }
 
-/* Selection styling */
 ::selection {
-	background-color: var(--color-primary);
-	color: var(--color-surface);
+	background-color: var(--color-yellow);
+	color: var(--color-text);
 }
 
-/* Color chapters — section background contexts */
 .chapter-cream {
 	background-color: var(--color-surface);
 	color: var(--color-text);
@@ -37,16 +31,12 @@ body {
 	color: var(--color-surface);
 }
 
-/* Micro-interactions — CSS only */
-
-/* Focus visible for keyboard navigation */
 :focus-visible {
-	outline: 2px solid var(--color-primary);
+	outline: 2px solid var(--color-text);
 	outline-offset: 4px;
 	border-radius: 2px;
 }
 
-/* Reduce all transitions when motion reduced */
 @media (prefers-reduced-motion: reduce) {
 	*, *::before, *::after {
 		animation-duration: 0.01ms !important;

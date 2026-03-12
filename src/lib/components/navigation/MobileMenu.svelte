@@ -72,7 +72,7 @@
     <div class="flex justify-end p-6">
       <button
         type="button"
-        class="flex h-11 w-11 items-center justify-center text-text hover:text-primary"
+        class="flex h-11 w-11 items-center justify-center text-text hover:text-text-muted"
         onclick={onClose}
         aria-label="Close menu"
       >

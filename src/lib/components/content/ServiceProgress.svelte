@@ -38,7 +38,7 @@
 	.dash {
 		width: 2px;
 		height: 1.25rem;
-		background-color: var(--color-primary);
+		background-color: var(--color-text);
 		opacity: 0.2;
 		border-radius: 1px;
 		transition:

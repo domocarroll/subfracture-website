@@ -19,7 +19,7 @@
 
 <a
   {href}
-  class="nav-link font-sans text-sm uppercase tracking-wide text-text transition-colors duration-200 hover:text-primary"
+  class="nav-link font-sans text-sm uppercase tracking-wide text-text transition-colors duration-200 hover:text-text-muted"
   class:active={isActive}
   aria-current={isActive ? 'page' : undefined}
   onclick={onclick}
@@ -40,7 +40,7 @@
     bottom: 0;
     width: 0;
     height: 1px;
-    background-color: var(--color-primary);
+    background-color: var(--color-text);
     transition: width 200ms ease-out;
   }
 
@@ -50,11 +50,11 @@
   }
 
   .nav-link.active {
-    color: var(--color-primary);
+    color: var(--color-text);
   }
 
   .nav-link:focus-visible {
-    outline: 2px solid var(--color-primary);
+    outline: 2px solid var(--color-text);
     outline-offset: 4px;
     border-radius: 2px;
   }

@@ -48,7 +48,7 @@
 	}
 
 	.carousel-dot:focus-visible {
-		outline: 2px solid var(--color-primary);
+		outline: 2px solid var(--color-text);
 		outline-offset: 4px;
 		border-radius: 2px;
 	}
@@ -65,15 +65,15 @@
 	}
 
 	.carousel-dot.is-active .dot-fill {
-		background: var(--color-primary);
+		background: var(--color-text);
 		transform: scaleX(1.3);
 	}
 
 	.carousel-dot:hover .dot-fill {
-		background: var(--color-primary-dark);
+		background: var(--color-text-muted);
 	}
 
 	.carousel-dot.is-active:hover .dot-fill {
-		background: var(--color-primary);
+		background: var(--color-text);
 	}
 </style>

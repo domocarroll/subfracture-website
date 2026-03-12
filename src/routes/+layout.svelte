@@ -1,10 +1,4 @@
 <script lang="ts">
-	// Self-hosted fonts (no Google Fonts CDN)
-	import '@fontsource-variable/playfair-display';
-	import '@fontsource/source-sans-3/400.css';
-	import '@fontsource/source-sans-3/500.css';
-	import '@fontsource/source-sans-3/600.css';
-
 	import '../app.css';
 	import favicon from '$lib/assets/favicon.svg';
 
@@ -86,7 +80,7 @@
 		color: var(--color-text);
 		font-family: var(--font-sans);
 		font-size: var(--text-sm);
-		border: 2px solid var(--color-primary);
+		border: 2px solid var(--color-text);
 		border-radius: 4px;
 		text-decoration: none;
 		transition: top 0.2s ease;
@@ -97,8 +91,8 @@
 	}
 
 	.main-content {
-		/* Account for fixed navigation height */
-		padding-top: 5rem; /* ~80px to match nav height */
 		min-height: 100vh;
+		position: relative;
+		z-index: 2;
 	}
 </style>

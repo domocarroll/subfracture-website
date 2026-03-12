@@ -39,21 +39,23 @@
 		font-family: var(--font-sans);
 		font-size: var(--text-sm);
 		font-weight: 500;
-		color: var(--color-primary);
+		color: var(--color-text);
 		text-decoration: none;
+		border-bottom: 1px solid var(--color-text);
 		display: inline-flex;
 		align-items: center;
 		gap: 0.5rem;
-		transition: color 0.3s ease;
+		transition: color 0.3s ease, border-color 0.3s ease;
 	}
 
 	.cta:hover,
 	.cta:focus-visible {
-		color: var(--color-primary-dark);
+		color: var(--color-text-muted);
+		border-color: var(--color-text-muted);
 	}
 
 	.cta:focus-visible {
-		outline: 2px solid var(--color-primary);
+		outline: 2px solid var(--color-text);
 		outline-offset: 4px;
 		border-radius: 2px;
 	}
@@ -62,7 +64,7 @@
 		width: 6px;
 		height: 6px;
 		border-radius: 50%;
-		background-color: var(--color-primary);
+		background-color: var(--color-text);
 		flex-shrink: 0;
 		transition: transform 0.3s ease;
 	}

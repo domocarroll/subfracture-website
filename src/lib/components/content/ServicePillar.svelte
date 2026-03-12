@@ -130,7 +130,7 @@
 		font-family: var(--font-sans);
 		font-size: var(--text-xs);
 		font-weight: 500;
-		color: var(--color-primary);
+		color: var(--color-text-muted);
 		letter-spacing: 0.05em;
 		opacity: 0;
 	}
@@ -214,7 +214,7 @@
 		top: 0.55em;
 		width: 6px;
 		height: 1px;
-		background-color: var(--color-primary);
+		background-color: var(--color-text);
 		opacity: 0.6;
 	}
 

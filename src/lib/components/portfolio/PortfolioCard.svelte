@@ -64,7 +64,7 @@
 	}
 
 	.card:focus-visible {
-		outline: 2px solid var(--color-primary);
+		outline: 2px solid var(--color-surface);
 		outline-offset: 8px;
 		border-radius: 4px;
 	}
@@ -79,7 +79,7 @@
 	.card-image-placeholder {
 		width: 100%;
 		height: 100%;
-		background-color: rgba(245, 240, 232, 0.08);
+		background-color: rgba(255, 255, 255, 0.08);
 		display: flex;
 		align-items: flex-end;
 		padding: 1rem;
@@ -90,7 +90,7 @@
 		font-size: var(--text-xs);
 		text-transform: uppercase;
 		letter-spacing: 0.1em;
-		color: rgba(245, 240, 232, 0.4);
+		color: rgba(255, 255, 255, 0.4);
 	}
 
 	.card-title {
@@ -105,7 +105,7 @@
 	.card-outcome {
 		font-family: var(--font-sans);
 		font-size: var(--text-sm);
-		color: rgba(245, 240, 232, 0.6);
+		color: rgba(255, 255, 255, 0.6);
 		line-height: var(--text-base--line-height);
 		margin: 0;
 	}

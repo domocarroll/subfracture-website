@@ -223,28 +223,31 @@
 				);
 
 				// --- HOLD --- (reading time)
-				const holdDuration = isLast ? 18 : 8;
+				const holdDuration = isLast ? 12 : 8;
 				tl.to({}, { duration: holdDuration }, `${label}+=28`);
 
-				// --- EXIT --- (skip for last pillar)
+				// --- EXIT ---
+				const exitLabel = `${label}-exit`;
+				tl.addLabel(exitLabel, `${label}+=38`);
+
+				tl.to(
+					pillarEl,
+					{ opacity: 0, y: -30, duration: 8, ease: 'power2.in' },
+					exitLabel
+				);
+
+				tl.to(
+					ghost,
+					{ opacity: 0, scale: 1.05, duration: 8, ease: 'none' },
+					exitLabel
+				);
+
 				if (!isLast) {
-					const exitLabel = `${label}-exit`;
-					tl.addLabel(exitLabel, `${label}+=38`);
-
-					tl.to(
-						pillarEl,
-						{ opacity: 0, y: -30, duration: 8, ease: 'power2.in' },
-						exitLabel
-					);
-
-					tl.to(
-						ghost,
-						{ opacity: 0, scale: 1.05, duration: 8, ease: 'none' },
-						exitLabel
-					);
-
 					// Gap before next pillar
 					tl.to({}, { duration: 3 }, `${exitLabel}+=8`);
+				} else {
+					// Last pillar: hold blank after fade so unpin is invisible
+					tl.to({}, { duration: 5 }, `${exitLabel}+=8`);
 				}
 			});
 
@@ -337,7 +340,7 @@
 		font-family: var(--font-sans);
 		font-size: var(--text-xs);
 		font-weight: 600;
-		color: var(--color-primary);
+		color: var(--color-text-muted);
 		text-transform: uppercase;
 		letter-spacing: var(--letter-spacing-label);
 		padding-inline: 1rem;

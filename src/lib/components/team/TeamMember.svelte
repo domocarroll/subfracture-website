@@ -11,8 +11,12 @@
 		name: string;
 		/** Role/title */
 		role: string;
-		/** Photo URL (placeholder for now) */
+		/** Photo URL */
 		photo?: string;
+		/** Short bio */
+		bio?: string;
+		/** LinkedIn profile URL */
+		linkedin?: string;
 		/** Additional CSS class */
 		class?: string;
 	}
@@ -21,31 +25,85 @@
 		name,
 		role,
 		photo,
+		bio,
+		linkedin,
 		class: className = ''
 	}: Props = $props();
+
+	let expanded = $state(false);
+
+	function toggleBio() {
+		expanded = !expanded;
+	}
+
+	function handleKeydown(event: KeyboardEvent) {
+		if (event.key === 'Enter' || event.key === ' ') {
+			event.preventDefault();
+			toggleBio();
+		}
+	}
 </script>
 
 <div class="member {className}">
-	<div class="member-photo">
-		{#if photo}
-			<img src={photo} alt={name} loading="lazy" />
-		{:else}
-			<div class="member-photo-placeholder">
-				<span class="member-initial">{name.charAt(0)}</span>
-			</div>
-		{/if}
-	</div>
-	<h3 class="member-name">{name}</h3>
-	<p class="member-role">{role}</p>
+	<button
+		type="button"
+		class="member-card"
+		onclick={toggleBio}
+		onkeydown={handleKeydown}
+		aria-expanded={expanded}
+		aria-label="{name} — {expanded ? 'close' : 'read'} bio"
+	>
+		<div class="member-photo">
+			{#if photo}
+				<img src={photo} alt={name} loading="lazy" />
+			{:else}
+				<div class="member-photo-placeholder">
+					<span class="member-initial">{name.charAt(0)}</span>
+				</div>
+			{/if}
+		</div>
+		<h3 class="member-name">{name}</h3>
+		<p class="member-role">{role}</p>
+	</button>
+
+	{#if expanded && bio}
+		<div class="member-bio">
+			<p class="member-bio-text">{bio}</p>
+			{#if linkedin}
+				<a href={linkedin} target="_blank" rel="noopener" class="member-linkedin">
+					LinkedIn
+				</a>
+			{/if}
+		</div>
+	{/if}
 </div>
 
 <style>
 	.member {
+		/* No outer transition — card button handles hover */
+	}
+
+	.member-card {
+		display: block;
+		width: 100%;
+		background: none;
+		border: none;
+		padding: 0;
+		cursor: pointer;
+		text-align: left;
+		color: inherit;
+		font: inherit;
 		transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 	}
 
-	.member:hover {
+	.member-card:hover {
 		transform: scale(1.03);
+	}
+
+	.member-card:focus-visible {
+		outline: 2px solid var(--color-text);
+		outline-offset: 4px;
+		border-radius: 2px;
 	}
 
 	.member-photo {
@@ -89,16 +147,53 @@
 	.member-role {
 		font-family: var(--font-sans);
 		font-size: var(--text-sm);
-		color: var(--color-primary);
+		color: var(--color-text-muted);
 		margin: 0;
 	}
 
+	/* Bio expansion */
+	.member-bio {
+		margin-top: 1rem;
+		padding-top: 1rem;
+		border-top: 1px solid var(--color-bone);
+	}
+
+	.member-bio-text {
+		font-family: var(--font-sans);
+		font-size: var(--text-sm);
+		color: var(--color-text-muted);
+		line-height: 1.7;
+		margin: 0 0 0.75rem;
+	}
+
+	.member-linkedin {
+		font-family: var(--font-sans);
+		font-size: var(--text-xs);
+		font-weight: 500;
+		text-transform: uppercase;
+		letter-spacing: var(--letter-spacing-label);
+		color: var(--color-text);
+		text-decoration: none;
+		border-bottom: 1px solid currentColor;
+		transition: opacity 0.2s ease;
+	}
+
+	.member-linkedin:hover {
+		opacity: 0.6;
+	}
+
+	.member-linkedin:focus-visible {
+		outline: 2px solid var(--color-text);
+		outline-offset: 4px;
+		border-radius: 2px;
+	}
+
 	@media (prefers-reduced-motion: reduce) {
-		.member {
+		.member-card {
 			transition: none;
 		}
 
-		.member:hover {
+		.member-card:hover {
 			transform: none;
 		}
 	}

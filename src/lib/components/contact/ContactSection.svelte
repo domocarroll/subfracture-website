@@ -51,7 +51,7 @@
 		font-family: var(--font-sans);
 		font-size: var(--text-xs);
 		font-weight: 500;
-		color: var(--color-primary);
+		color: var(--color-text-muted);
 		letter-spacing: var(--letter-spacing-label);
 		margin-bottom: 1rem;
 	}
@@ -73,7 +73,7 @@
 	.contact-intro {
 		font-family: var(--font-sans);
 		font-size: var(--text-base);
-		color: rgba(245, 240, 232, 0.6);
+		color: rgba(255, 255, 255, 0.6);
 		line-height: var(--text-base--line-height);
 		margin: 0 0 3rem;
 	}

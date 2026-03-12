@@ -1,5 +1,7 @@
 <script lang="ts">
 	import Hero from '$lib/components/hero/Hero.svelte';
+	import IntroBlock from '$lib/components/content/IntroBlock.svelte';
+	import ClientsReveal from '$lib/components/hero/ClientsReveal.svelte';
 	import ProblemsSolved from '$lib/components/content/ProblemsSolved.svelte';
 	import Services from '$lib/components/content/Services.svelte';
 	import ClosingStatement from '$lib/components/content/ClosingStatement.svelte';
@@ -47,6 +49,12 @@
 
 <!-- Hero -->
 <Hero />
+
+<!-- Intro Block -->
+<IntroBlock />
+
+<!-- Clients Reveal (lips animation) -->
+<ClientsReveal />
 
 <!-- Problems Solved (About) -->
 <ProblemsSolved />

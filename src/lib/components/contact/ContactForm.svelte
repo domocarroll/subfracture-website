@@ -195,7 +195,7 @@
 	.label {
 		font-family: var(--font-sans);
 		font-size: var(--text-sm);
-		color: rgba(245, 240, 232, 0.6);
+		color: rgba(255, 255, 255, 0.6);
 		text-transform: uppercase;
 		letter-spacing: 0.08em;
 	}
@@ -206,18 +206,18 @@
 		color: var(--color-surface);
 		background-color: transparent;
 		border: none;
-		border-bottom: 1px solid rgba(245, 240, 232, 0.2);
+		border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 		padding: 0.75rem 0;
 		outline: none;
 		transition: border-color 0.3s ease;
 	}
 
 	.input:focus {
-		border-bottom-color: var(--color-primary);
+		border-bottom-color: var(--color-surface);
 	}
 
 	.input--error {
-		border-bottom-color: var(--color-primary);
+		border-bottom-color: #e74c3c;
 	}
 
 	.textarea {
@@ -228,7 +228,7 @@
 	.error {
 		font-family: var(--font-sans);
 		font-size: var(--text-xs);
-		color: var(--color-primary);
+		color: #e74c3c;
 		margin: 0;
 	}
 
@@ -238,7 +238,7 @@
 		font-weight: 500;
 		color: var(--color-surface);
 		background-color: transparent;
-		border: 1px solid rgba(245, 240, 232, 0.3);
+		border: 1px solid rgba(255, 255, 255, 0.3);
 		padding: 1rem 2rem;
 		cursor: pointer;
 		align-self: flex-start;
@@ -247,12 +247,12 @@
 
 	.submit:hover,
 	.submit:focus-visible {
-		border-color: var(--color-primary);
-		color: var(--color-primary);
+		border-color: var(--color-surface);
+		color: var(--color-surface);
 	}
 
 	.submit:focus-visible {
-		outline: 2px solid var(--color-primary);
+		outline: 2px solid var(--color-surface);
 		outline-offset: 4px;
 	}
 
@@ -283,7 +283,7 @@
 	.thank-you-text {
 		font-family: var(--font-sans);
 		font-size: var(--text-base);
-		color: rgba(245, 240, 232, 0.6);
+		color: rgba(255, 255, 255, 0.6);
 		margin: 0;
 	}
 </style>

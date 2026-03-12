@@ -41,7 +41,7 @@
 		font-size: var(--text-xs);
 		font-weight: 600;
 		letter-spacing: 0.08em;
-		color: var(--color-primary);
+		color: var(--color-text-muted);
 	}
 
 	.card-text {

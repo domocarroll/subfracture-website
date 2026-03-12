@@ -47,7 +47,7 @@
 		font-family: var(--font-sans);
 		font-size: var(--text-xs);
 		font-weight: 500;
-		color: var(--color-primary);
+		color: var(--color-text-muted);
 		position: relative;
 		top: -0.2em;
 		letter-spacing: 0.05em;

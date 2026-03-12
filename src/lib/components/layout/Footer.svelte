@@ -1,58 +1,73 @@
 <script lang="ts">
 	/**
-	 * Footer - Site footer with office addresses and contact information
+	 * Footer - Minimal footer matching v1 pattern
 	 *
 	 * Displays:
-	 * - Subfracture wordmark and tagline
-	 * - Brisbane HQ and Los Angeles office addresses
-	 * - Contact email
-	 * - Copyright notice
+	 * - Subfracture wordmark and tagline (top)
+	 * - Bottom bar: tagline left, live city clocks right, copyright
 	 */
+	import { onMount, onDestroy } from 'svelte';
 	import Container from '$lib/components/ui/Container.svelte';
 
 	const currentYear = new Date().getFullYear();
+
+	let brisbaneTime = $state('');
+	let laTime = $state('');
+	let interval: ReturnType<typeof setInterval> | null = null;
+
+	function updateClocks() {
+		const now = new Date();
+		brisbaneTime = now.toLocaleTimeString('en-AU', {
+			timeZone: 'Australia/Brisbane',
+			hour: '2-digit',
+			minute: '2-digit',
+			hour12: false
+		});
+		laTime = now.toLocaleTimeString('en-US', {
+			timeZone: 'America/Los_Angeles',
+			hour: '2-digit',
+			minute: '2-digit',
+			hour12: false
+		});
+	}
+
+	onMount(() => {
+		updateClocks();
+		interval = setInterval(updateClocks, 30000);
+	});
+
+	onDestroy(() => {
+		if (interval) clearInterval(interval);
+	});
 </script>
 
 <footer class="footer">
 	<Container variant="wide">
-		<div class="footer-grid">
-			<!-- Column 1: Brand -->
-			<div class="footer-col">
-				<a href="/" class="footer-wordmark">SUBFRACTURE</a>
-				<p class="footer-tagline">Culture Studio</p>
+		<!-- Top: Brand -->
+		<div class="footer-top">
+			<a href="/" class="footer-wordmark" aria-label="Subfracture — home">
+				<img src="/subfracture.svg" alt="Subfracture" class="footer-wordmark-img" />
+			</a>
+			<p class="footer-tagline">A culture studio. Art and systems, flowing together.</p>
+		</div>
+
+		<!-- Bottom bar -->
+		<div class="footer-bottom">
+			<p class="footer-credo">Built on Intelligence. Powered by Humans.</p>
+
+			<div class="footer-clocks">
+				<span class="clock">
+					<span class="clock-city">BRISBANE</span>
+					<span class="clock-time">{brisbaneTime}</span>
+				</span>
+				<span class="clock-divider" aria-hidden="true"></span>
+				<span class="clock">
+					<span class="clock-city">LOS ANGELES</span>
+					<span class="clock-time">{laTime}</span>
+				</span>
 			</div>
 
-			<!-- Column 2: Offices -->
-			<div class="footer-col footer-col--offices">
-				<div class="office">
-					<h3 class="office-heading">Brisbane HQ</h3>
-					<address class="office-address">
-						29 Merivale Street<br />
-						South Brisbane QLD 4101<br />
-						Australia
-					</address>
-				</div>
-
-				<div class="office">
-					<h3 class="office-heading">Los Angeles</h3>
-					<address class="office-address">
-						520 Broadway Suite 200<br />
-						Santa Monica, CA 90401<br />
-						United States
-					</address>
-				</div>
-			</div>
-
-			<!-- Column 3: Contact -->
-			<div class="footer-col footer-col--contact">
-				<h3 class="contact-heading">Get in touch</h3>
-				<a href="mailto:ohhello@subfrac.com" class="contact-email">
-					ohhello@subfrac.com
-				</a>
-				<p class="copyright">
-					&copy; {currentYear} Subfracture. All rights reserved.
-				</p>
-			</div>
+			<p class="copyright">&copy; {currentYear} <img src="/subfracture.svg" alt="Subfracture" class="copyright-wordmark" /></p>
 		</div>
 	</Container>
 </footer>
@@ -60,152 +75,131 @@
 <style>
 	.footer {
 		background-color: var(--color-text);
-		padding: 4rem 0;
+		padding: 4rem 0 2rem;
+		position: sticky;
+		bottom: 0;
+		z-index: -1;
 	}
 
-	.footer-grid {
-		display: grid;
-		grid-template-columns: 1fr;
-		gap: 3rem;
+	/* Top brand section */
+	.footer-top {
+		padding-bottom: 3rem;
+		border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 	}
 
-	/* Brand column */
 	.footer-wordmark {
-		font-family: var(--font-serif);
-		font-size: var(--text-lg);
-		font-weight: 500;
-		letter-spacing: 0.1em;
-		color: var(--color-surface);
-		text-decoration: none;
 		display: block;
+		text-decoration: none;
 	}
 
-	.footer-wordmark:hover {
-		color: var(--color-primary);
+	.footer-wordmark:hover .footer-wordmark-img {
+		opacity: 0.7;
 	}
 
-  .footer-wordmark:focus-visible {
-    outline: 2px solid var(--color-primary);
-    outline-offset: 4px;
-    border-radius: 2px;
-  }
+	.footer-wordmark:focus-visible {
+		outline: 2px solid var(--color-surface);
+		outline-offset: 4px;
+		border-radius: 2px;
+	}
+
+	.footer-wordmark-img {
+		height: 18px;
+		width: auto;
+		display: block;
+		filter: invert(1);
+		transition: opacity 0.2s ease;
+	}
 
 	.footer-tagline {
-		font-family: var(--font-serif);
-		font-size: var(--text-sm);
+		font-family: var(--font-sans);
+		font-size: 0.9rem;
 		font-style: italic;
-		color: var(--color-text-muted);
+		color: var(--color-surface);
 		margin: 0.5rem 0 0;
-		opacity: 0.8;
+		opacity: 0.45;
 	}
 
-	/* Office addresses */
-	.footer-col--offices {
+	/* Bottom bar */
+	.footer-bottom {
 		display: flex;
-		flex-direction: column;
-		gap: 2rem;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1rem;
+		padding-top: 1.5rem;
 	}
 
-	.office {
+	.footer-credo {
+		font-family: var(--font-sans);
+		font-size: var(--text-xs);
+		color: var(--color-surface);
+		opacity: 0.45;
+		margin: 0;
+		letter-spacing: 0.02em;
+	}
+
+	/* Live clocks */
+	.footer-clocks {
 		display: flex;
-		flex-direction: column;
+		align-items: center;
+		gap: 1.25rem;
+	}
+
+	.clock {
+		display: flex;
+		align-items: baseline;
 		gap: 0.5rem;
 	}
 
-	.office-heading {
+	.clock-city {
 		font-family: var(--font-sans);
-		font-size: var(--text-xs);
-		font-weight: 600;
+		font-size: 0.65rem;
+		font-weight: 500;
+		letter-spacing: 0.12em;
 		text-transform: uppercase;
-		letter-spacing: 0.1em;
-		color: var(--color-primary);
-		margin: 0;
+		color: var(--color-surface);
+		opacity: 0.4;
 	}
 
-	.office-address {
+	.clock-time {
 		font-family: var(--font-sans);
 		font-size: var(--text-sm);
-		font-style: normal;
-		line-height: 1.7;
+		font-variant-numeric: tabular-nums;
 		color: var(--color-surface);
-		opacity: 0.85;
+		opacity: 0.7;
 	}
 
-	/* Contact column */
-	.footer-col--contact {
-		display: flex;
-		flex-direction: column;
-		gap: 0.75rem;
+	.clock-divider {
+		width: 1px;
+		height: 12px;
+		background: rgba(255, 255, 255, 0.15);
 	}
-
-	.contact-heading {
-		font-family: var(--font-sans);
-		font-size: var(--text-xs);
-		font-weight: 600;
-		text-transform: uppercase;
-		letter-spacing: 0.1em;
-		color: var(--color-primary);
-		margin: 0;
-	}
-
-	.contact-email {
-		font-family: var(--font-sans);
-		font-size: var(--text-base);
-		color: var(--color-surface);
-		text-decoration: none;
-		transition: color 200ms ease;
-	}
-
-	.contact-email:hover {
-		color: var(--color-primary);
-	}
-
-  .contact-email:focus-visible {
-    outline: 2px solid var(--color-primary);
-    outline-offset: 4px;
-    border-radius: 2px;
-  }
 
 	.copyright {
 		font-family: var(--font-sans);
 		font-size: var(--text-xs);
 		color: var(--color-surface);
-		opacity: 0.6;
-		margin: 1.5rem 0 0;
+		opacity: 0.3;
+		margin: 0;
+		display: flex;
+		align-items: center;
+		gap: 0.35em;
 	}
 
-	/* Responsive: Two columns on tablet */
-	@media (min-width: 40rem) {
-		.footer {
-			padding: 5rem 0;
-		}
-
-		.footer-grid {
-			grid-template-columns: 1fr 1fr;
-			gap: 3rem;
-		}
-
-		.footer-col--offices {
-			flex-direction: row;
-			gap: 3rem;
-		}
+	.copyright-wordmark {
+		height: 0.7em;
+		width: auto;
+		display: inline-block;
+		filter: invert(1);
+		vertical-align: baseline;
 	}
 
-	/* Responsive: Three columns on desktop */
-	@media (min-width: 64rem) {
-		.footer {
-			padding: 6rem 0;
-		}
-
-		.footer-grid {
-			grid-template-columns: 1.5fr 2fr 1fr;
-			align-items: start;
-		}
-
-		.footer-col--offices {
-			flex-direction: row;
-			gap: 4rem;
-			justify-content: center;
+	/* Mobile: stack vertically */
+	@media (max-width: 40rem) {
+		.footer-bottom {
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 1rem;
 		}
 	}
 </style>

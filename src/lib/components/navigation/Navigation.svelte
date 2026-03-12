@@ -9,7 +9,8 @@
 
   // State
   let isMenuOpen = $state(false);
-  let isNavVisible = $state(true);
+  let isNavVisible = $state(false);
+  let isPastHero = $state(false);
   let scrollY = $state(0);
   let hasScrolled = $state(false);
   let hasInitialized = false;
@@ -36,6 +37,9 @@
 
     const { ScrollTrigger } = await import('gsap/ScrollTrigger');
 
+    const heroEl = document.querySelector('.hero');
+    const heroHeight = heroEl ? heroEl.getBoundingClientRect().height : window.innerHeight * 0.75;
+
     // Create ScrollTrigger for direction detection
     scrollTriggerInstance = ScrollTrigger.create({
       trigger: document.documentElement,
@@ -44,14 +48,19 @@
       onUpdate: (self) => {
         const currentScroll = window.scrollY || document.documentElement.scrollTop;
 
-        // Always show when near top
-        if (currentScroll < 80) {
-          isNavVisible = true;
+        // Stay hidden until past the hero section
+        if (currentScroll < heroHeight) {
+          isPastHero = false;
+          isNavVisible = false;
+          hasInitialized = false;
           return;
         }
 
-        // Don't hide until user has actually scrolled meaningfully
+        isPastHero = true;
+
+        // Don't hide until user has actually scrolled meaningfully past hero
         if (!hasInitialized) {
+          isNavVisible = true;
           hasInitialized = true;
           return;
         }
@@ -95,7 +104,10 @@
 
 <!-- Navigation Header -->
 <header
-  class="fixed left-0 right-0 top-0 z-50 bg-surface transition-[transform,box-shadow]"
+  class="fixed left-0 right-0 top-0 z-50 transition-[transform,box-shadow]"
+  style:background="rgba(255, 255, 255, 0.78)"
+  style:backdrop-filter="blur(6px)"
+  style:-webkit-backdrop-filter="blur(6px)"
   class:shadow-sm={hasScrolled}
   style="transform: {navTransform}; transition-duration: {transitionDuration};"
 >
@@ -103,8 +115,8 @@
   <ScrollProgress />
   <nav class="mx-auto flex max-w-[75rem] items-center justify-between px-6 py-4 lg:px-8">
     <!-- Logo / Wordmark -->
-    <a href="/" class="font-serif text-xl font-medium text-text hover:text-primary">
-      Subfracture
+    <a href="/" class="nav-logo" aria-label="Subfracture — home">
+      <img src="/subfracture.svg" alt="Subfracture" class="nav-logo-img" />
     </a>
 
     <!-- Desktop Navigation -->
@@ -118,7 +130,7 @@
     <!-- Mobile Menu Toggle -->
     <button
       type="button"
-      class="flex min-h-11 min-w-11 items-center justify-center text-text hover:text-primary md:hidden"
+      class="flex min-h-11 min-w-11 items-center justify-center text-text hover:text-text-muted md:hidden"
       onclick={toggleMenu}
       aria-expanded={isMenuOpen}
       aria-controls="mobile-menu"
@@ -153,3 +165,24 @@
 
 <!-- Mobile Menu -->
 <MobileMenu isOpen={isMenuOpen} onClose={closeMenu} />
+
+<style>
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    flex-shrink: 0;
+  }
+
+  .nav-logo:focus-visible {
+    outline: 2px solid var(--color-text);
+    outline-offset: 4px;
+    border-radius: 2px;
+  }
+
+  .nav-logo-img {
+    height: 18px;
+    width: auto;
+    display: block;
+  }
+</style>

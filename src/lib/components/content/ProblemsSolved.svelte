@@ -122,7 +122,7 @@
 		font-family: var(--font-sans);
 		font-size: var(--text-xs);
 		font-weight: 600;
-		color: var(--color-primary);
+		color: var(--color-text-muted);
 		text-transform: uppercase;
 		letter-spacing: var(--letter-spacing-label);
 		margin-top: 4rem;
