@@ -1,10 +1,18 @@
 <script lang="ts">
 	/**
-	 * InlineCTA - Terracotta text link with dot marker
+	 * InlineCTA - "The Invitation"
 	 *
-	 * Distributed after key sections as a gentle invitation.
-	 * Text links only (not buttons), per the plan.
+	 * Terracotta text link with dot marker. Distributed after key sections.
+	 * Entrance: dot springs into existence, text fades up.
+	 * Hover: magnetic pull tracks the cursor's interest.
+	 *
+	 * Reduced motion: visible immediately, no magnetic effect.
 	 */
+
+	import { onMount } from 'svelte';
+	import { browser } from '$app/environment';
+	import { prefersReducedMotion } from '$lib/utils/motion';
+	import { magnetic } from '$lib/actions/magnetic';
 
 	interface Props {
 		/** Link text */
@@ -20,13 +28,82 @@
 		href = '#contact',
 		class: className = ''
 	}: Props = $props();
+
+	let wrapperEl: HTMLElement | undefined = $state();
+	let dotEl: HTMLElement | undefined = $state();
+	let reducedMotion = $state(false);
+
+	onMount(() => {
+		if (!browser) return;
+
+		reducedMotion = prefersReducedMotion();
+		if (reducedMotion || !wrapperEl || !dotEl) return;
+
+		let scrollTriggerInstance: ScrollTrigger | null = null;
+		let tl: gsap.core.Timeline | null = null;
+
+		const init = async () => {
+			const { gsap } = await import('gsap');
+			const { ScrollTrigger } = await import('gsap/ScrollTrigger');
+			gsap.registerPlugin(ScrollTrigger);
+
+			const ctaEl = wrapperEl!.querySelector('.cta');
+			if (!ctaEl || !dotEl) return;
+
+			// Set initial states
+			gsap.set(dotEl, { scale: 0 });
+			gsap.set(ctaEl, { opacity: 0, y: 8 });
+
+			tl = gsap.timeline({ paused: true });
+
+			// Dot springs into existence
+			tl.to(dotEl, {
+				scale: 1,
+				duration: 0.45,
+				ease: 'back.out(1.4)'
+			});
+
+			// Text fades up alongside
+			tl.to(
+				ctaEl,
+				{
+					opacity: 1,
+					y: 0,
+					duration: 0.5,
+					ease: 'power3.out'
+				},
+				0.05
+			);
+
+			scrollTriggerInstance = ScrollTrigger.create({
+				trigger: wrapperEl,
+				start: 'top 88%',
+				onEnter: () => tl!.play(),
+				onLeaveBack: () => tl!.pause(0)
+			});
+		};
+
+		init();
+
+		return () => {
+			if (scrollTriggerInstance) scrollTriggerInstance.kill();
+			if (tl) tl.kill();
+		};
+	});
 </script>
 
-<div class="cta-wrapper {className}">
-	<a {href} class="cta">
-		<span class="cta-dot" aria-hidden="true"></span>
-		{text}
-	</a>
+<div class="cta-wrapper {className}" bind:this={wrapperEl}>
+	{#if reducedMotion}
+		<a {href} class="cta">
+			<span class="cta-dot" aria-hidden="true"></span>
+			{text}
+		</a>
+	{:else}
+		<a {href} class="cta" use:magnetic={{ strength: 5 }}>
+			<span class="cta-dot" aria-hidden="true" bind:this={dotEl}></span>
+			{text}
+		</a>
+	{/if}
 </div>
 
 <style>
@@ -71,5 +148,11 @@
 
 	.cta:hover .cta-dot {
 		transform: scale(1.5);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.cta-dot {
+			transform: none !important;
+		}
 	}
 </style>

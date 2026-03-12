@@ -1,12 +1,21 @@
 <script lang="ts">
 	/**
-	 * Footer - Minimal footer matching v1 pattern
+	 * Footer - "The Coda"
 	 *
-	 * Displays:
-	 * - Subfracture wordmark and tagline (top)
-	 * - Bottom bar: tagline left, live city clocks right, copyright
+	 * Bookends the header: same two-beat tagline treatment, same clock
+	 * scramble. You started with "Built on Intelligence. Powered by Humans."
+	 * and you end with it. The studio is still alive.
+	 *
+	 * Scroll-triggered entrance: tagline words fade up, credo mirrors
+	 * the header's two-beat rhythm, clocks scramble to real time.
+	 *
+	 * Reduced motion: all text visible immediately.
 	 */
+
 	import { onMount, onDestroy } from 'svelte';
+	import { browser } from '$app/environment';
+	import { prefersReducedMotion } from '$lib/utils/motion';
+
 	import Container from '$lib/components/ui/Container.svelte';
 
 	const currentYear = new Date().getFullYear();
@@ -14,6 +23,16 @@
 	let brisbaneTime = $state('');
 	let laTime = $state('');
 	let interval: ReturnType<typeof setInterval> | null = null;
+	let cleanup: (() => void) | null = null;
+
+	// Word splitting for animations
+	const taglineWords = 'A culture studio. Art and systems, flowing together.'.split(/\s+/);
+	const credoWords = 'Built on Intelligence. Powered by Humans.'.split(/\s+/);
+	const credoSentenceBreak = 3;
+
+	let taglineEl: HTMLElement | undefined = $state();
+	let credoEl: HTMLElement | undefined = $state();
+	let clocksEl: HTMLElement | undefined = $state();
 
 	function updateClocks() {
 		const now = new Date();
@@ -31,13 +50,129 @@
 		});
 	}
 
-	onMount(() => {
+	function scrambleClocks() {
+		const chars = '0123456789';
+		let frame = 0;
+		const totalFrames = 12;
+
+		const randomTime = () => {
+			const h =
+				chars[Math.floor(Math.random() * 3)] + chars[Math.floor(Math.random() * 10)];
+			const m =
+				chars[Math.floor(Math.random() * 6)] + chars[Math.floor(Math.random() * 10)];
+			return `${h}:${m}`;
+		};
+
+		const scrambleId = setInterval(() => {
+			brisbaneTime = randomTime();
+			laTime = randomTime();
+			frame++;
+			if (frame >= totalFrames) {
+				clearInterval(scrambleId);
+				updateClocks();
+			}
+		}, 50);
+	}
+
+	onMount(async () => {
+		if (!browser) return;
+
 		updateClocks();
 		interval = setInterval(updateClocks, 30000);
+
+		if (prefersReducedMotion()) return;
+
+		const { gsap } = await import('gsap');
+		const { ScrollTrigger } = await import('gsap/ScrollTrigger');
+		gsap.registerPlugin(ScrollTrigger);
+
+		const taglineWordEls = taglineEl?.querySelectorAll('.footer-tagline-word');
+		const credoWordEls = credoEl?.querySelectorAll('.footer-credo-word');
+
+		if (!taglineWordEls?.length && !credoWordEls?.length) return;
+
+		// Set initial states
+		if (taglineWordEls?.length) {
+			gsap.set(taglineWordEls, { opacity: 0, y: 4 });
+		}
+		if (credoWordEls?.length) {
+			gsap.set(credoWordEls, { opacity: 0, y: 4 });
+		}
+		if (clocksEl) {
+			gsap.set(clocksEl, { opacity: 0 });
+		}
+
+		const tl = gsap.timeline({ paused: true });
+
+		// Tagline words cascade
+		if (taglineWordEls?.length) {
+			tl.to(taglineWordEls, {
+				opacity: 0.5,
+				y: 0,
+				duration: 0.5,
+				ease: 'power3.out',
+				stagger: 0.05
+			});
+		}
+
+		// Credo: two-beat (mirrors header)
+		if (credoWordEls?.length) {
+			const sentence1 = Array.from(credoWordEls).slice(0, credoSentenceBreak);
+			const sentence2 = Array.from(credoWordEls).slice(credoSentenceBreak);
+
+			tl.to(
+				sentence1,
+				{
+					opacity: 0.5,
+					y: 0,
+					duration: 0.5,
+					ease: 'power3.out',
+					stagger: 0.06
+				},
+				'-=0.2'
+			);
+
+			tl.to({}, { duration: 0.35 });
+
+			tl.to(sentence2, {
+				opacity: 0.5,
+				y: 0,
+				duration: 0.5,
+				ease: 'power3.out',
+				stagger: 0.06
+			});
+		}
+
+		// Clocks fade in with scramble
+		if (clocksEl) {
+			tl.to(
+				clocksEl,
+				{
+					opacity: 1,
+					duration: 0.3,
+					ease: 'power2.out',
+					onStart: () => scrambleClocks()
+				},
+				'-=0.3'
+			);
+		}
+
+		const scrollTrigger = ScrollTrigger.create({
+			trigger: taglineEl?.closest('.footer') || taglineEl,
+			start: 'top 90%',
+			onEnter: () => tl.play(),
+			onLeaveBack: () => tl.pause(0)
+		});
+
+		cleanup = () => {
+			tl.kill();
+			scrollTrigger.kill();
+		};
 	});
 
 	onDestroy(() => {
 		if (interval) clearInterval(interval);
+		cleanup?.();
 	});
 </script>
 
@@ -48,14 +183,22 @@
 			<a href="/" class="footer-wordmark" aria-label="Subfracture — home">
 				<img src="/subfracture.svg" alt="Subfracture" class="footer-wordmark-img" />
 			</a>
-			<p class="footer-tagline">A culture studio. Art and systems, flowing together.</p>
+			<p class="footer-tagline" bind:this={taglineEl}>
+				{#each taglineWords as word, i}
+					<span class="footer-tagline-word">{word}</span>{#if i < taglineWords.length - 1}{' '}{/if}
+				{/each}
+			</p>
 		</div>
 
 		<!-- Bottom bar -->
 		<div class="footer-bottom">
-			<p class="footer-credo">Built on Intelligence. Powered by Humans.</p>
+			<p class="footer-credo" bind:this={credoEl}>
+				{#each credoWords as word, i}
+					<span class="footer-credo-word">{word}</span>{#if i < credoWords.length - 1}{' '}{/if}
+				{/each}
+			</p>
 
-			<div class="footer-clocks">
+			<div class="footer-clocks" bind:this={clocksEl}>
 				<span class="clock">
 					<span class="clock-city">BRISBANE</span>
 					<span class="clock-time">{brisbaneTime}</span>
@@ -67,7 +210,14 @@
 				</span>
 			</div>
 
-			<p class="copyright">&copy; {currentYear} <img src="/subfracture.svg" alt="Subfracture" class="copyright-wordmark" /></p>
+			<p class="copyright">
+				&copy; {currentYear}
+				<img
+					src="/subfracture.svg"
+					alt="Subfracture"
+					class="copyright-wordmark"
+				/>
+			</p>
 		</div>
 	</Container>
 </footer>
@@ -119,6 +269,10 @@
 		opacity: 0.45;
 	}
 
+	.footer-tagline-word {
+		display: inline;
+	}
+
 	/* Bottom bar */
 	.footer-bottom {
 		display: flex;
@@ -136,6 +290,10 @@
 		opacity: 0.45;
 		margin: 0;
 		letter-spacing: 0.02em;
+	}
+
+	.footer-credo-word {
+		display: inline;
 	}
 
 	/* Live clocks */
@@ -200,6 +358,14 @@
 			flex-direction: column;
 			align-items: flex-start;
 			gap: 1rem;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.footer-tagline-word,
+		.footer-credo-word {
+			opacity: 1 !important;
+			transform: none !important;
 		}
 	}
 </style>

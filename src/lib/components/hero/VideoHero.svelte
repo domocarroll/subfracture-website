@@ -5,10 +5,14 @@
 
   let sectionEl: HTMLElement | undefined = $state();
   let cursorEl: HTMLElement | undefined = $state();
+  let videoEl: HTMLVideoElement | undefined = $state();
   let cursorVisible = $state(false);
+  let lightboxOpen = $state(false);
   let cleanup: (() => void) | null = null;
   let qtX: ((value: number) => void) | null = null;
   let qtY: ((value: number) => void) | null = null;
+
+  const VIDEO_SRC = 'https://subfrac.com/wp-content/uploads/2026/01/Subfracture_Sizzle_Reel_MASTER_NoTitles_250916_Corrected.mp4';
 
   function handleMouseMove(e: MouseEvent) {
     if (qtX && qtY && cursorEl) {
@@ -18,11 +22,43 @@
   }
 
   function handleMouseEnter() {
-    cursorVisible = true;
+    if (!lightboxOpen) cursorVisible = true;
   }
 
   function handleMouseLeave() {
     cursorVisible = false;
+  }
+
+  let lightboxVisible = $state(false);
+
+  function openLightbox() {
+    lightboxOpen = true;
+    cursorVisible = false;
+    document.body.classList.add('sf-modal-open');
+    try { videoEl?.pause(); } catch (_) {}
+    requestAnimationFrame(() => { lightboxVisible = true; });
+
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        closeLightbox();
+        document.removeEventListener('keydown', handleEsc);
+      }
+    };
+    document.addEventListener('keydown', handleEsc);
+  }
+
+  function closeLightbox() {
+    lightboxVisible = false;
+    document.body.classList.remove('sf-modal-open');
+    try { videoEl?.play(); } catch (_) {}
+    setTimeout(() => { lightboxOpen = false; }, 200);
+  }
+
+  function handleLightboxClick(e: MouseEvent) {
+    const target = e.target as HTMLElement;
+    if (target.classList.contains('sf-lightbox') || target.classList.contains('sf-lightbox__close')) {
+      closeLightbox();
+    }
   }
 
   onMount(async () => {
@@ -76,20 +112,23 @@
       onmousemove={handleMouseMove}
       onmouseenter={handleMouseEnter}
       onmouseleave={handleMouseLeave}
-      role="presentation"
+      onclick={openLightbox}
+      role="button"
+      tabindex="0"
+      aria-label="Play sizzle reel"
+      onkeydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openLightbox(); } }}
     >
+      <!-- svelte-ignore a11y_media_has_caption -->
       <video
         class="hero__video"
+        bind:this={videoEl}
         autoplay
         muted
         playsinline
         loop
         preload="metadata"
       >
-        <source
-          src="https://subfrac.com/wp-content/uploads/2026/01/Subfracture_Sizzle_Reel_MASTER_NoTitles_250916_Corrected.mp4"
-          type="video/mp4"
-        />
+        <source src={VIDEO_SRC} type="video/mp4" />
       </video>
 
       <div class="hero__overlay" aria-hidden="true"></div>
@@ -114,6 +153,26 @@
     ▶ Sizzle Me
   </div>
 </div>
+
+{#if lightboxOpen}
+  <div
+    class="sf-lightbox"
+    class:is-open={lightboxVisible}
+    onclick={handleLightboxClick}
+    onkeydown={(e) => { if (e.key === 'Escape') closeLightbox(); }}
+    role="dialog"
+    tabindex="-1"
+    aria-modal="true"
+    aria-label="Sizzle reel video player"
+  >
+    <div class="sf-lightbox__inner">
+      <button class="sf-lightbox__close" aria-label="Close" onclick={closeLightbox}>&times;</button>
+      <video controls playsinline autoplay>
+        <source src={VIDEO_SRC} type="video/mp4" />
+      </video>
+    </div>
+  </div>
+{/if}
 
 <style>
   .hero-video {
@@ -201,6 +260,64 @@
     width: 100%;
     padding-inline: 1.5vw;
     display: block;
+  }
+
+  /* Lightbox — matches v1 exactly */
+  :global(.sf-modal-open) {
+    overflow: hidden;
+  }
+
+  .sf-lightbox {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.85);
+    display: grid;
+    place-items: center;
+    z-index: 2147483646;
+    opacity: 0;
+    transition: opacity 0.18s ease;
+  }
+
+  .sf-lightbox.is-open {
+    opacity: 1;
+  }
+
+  .sf-lightbox__inner {
+    width: min(90vw, 1200px);
+    aspect-ratio: 16 / 9;
+    background: #000;
+    position: relative;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  }
+
+  .sf-lightbox__inner video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .sf-lightbox__close {
+    position: absolute;
+    top: 10px;
+    right: 14px;
+    background: rgba(255, 255, 255, 0.92);
+    color: #000;
+    border: 0;
+    border-radius: 999px;
+    width: 34px;
+    height: 34px;
+    line-height: 34px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 1.2rem;
+    cursor: pointer;
+    z-index: 1;
+    transition: background 0.15s ease;
+  }
+
+  .sf-lightbox__close:hover {
+    background: #fff;
   }
 
   @media (prefers-reduced-motion: reduce) {

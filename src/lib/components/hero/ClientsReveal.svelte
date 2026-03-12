@@ -78,9 +78,9 @@
   {:else}
     <div class="ticker">
       <div class="ticker-track">
-        {#each { length: 2 } as _, copy}
+        {#each { length: 3 } as _, copy}
           {#each clients as client}
-            <div class="ticker-item" aria-hidden={copy === 1 ? 'true' : undefined}>
+            <div class="ticker-item" aria-hidden={copy > 0 ? 'true' : undefined}>
               <img class="logo-img" src={client.src} alt={client.alt} loading="lazy" />
             </div>
           {/each}
@@ -121,9 +121,9 @@
   .ticker-track {
     display: flex;
     align-items: center;
-    gap: 4rem;
+    gap: clamp(4rem, 8vw, 10rem);
     width: max-content;
-    animation: ticker-scroll 35s linear infinite;
+    animation: ticker-scroll 50s linear infinite;
   }
 
   .logo-strip:hover .ticker-track {
@@ -135,7 +135,7 @@
       transform: translateX(0);
     }
     100% {
-      transform: translateX(-50%);
+      transform: translateX(-33.333%);
     }
   }
 
