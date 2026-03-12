@@ -136,10 +136,10 @@
 
     <div class="hero__watermark" aria-hidden="true">
       <img
-        src="/subfracture.svg"
+        src="/subfracture-bisected.svg"
         alt=""
         width="1699"
-        height="231"
+        height="160"
       />
     </div>
   </div>
@@ -250,7 +250,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    transform: translateY(45%);
+    transform: translateY(30%);
     pointer-events: none;
     will-change: transform, opacity;
     z-index: 2;
