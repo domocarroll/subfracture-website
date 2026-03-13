@@ -19,6 +19,7 @@
 	import ProblemCard from './ProblemCard.svelte';
 	import ScrollCarousel from '$lib/components/carousel/ScrollCarousel.svelte';
 	import CarouselCard from '$lib/components/carousel/CarouselCard.svelte';
+	import BrisbaneMap from '$lib/components/map/BrisbaneMap.svelte';
 	import { animate } from '$lib/actions/animate';
 	import { prefersReducedMotion, onReducedMotionChange } from '$lib/utils/motion';
 
@@ -34,6 +35,7 @@
 	const carouselItems = problems.map((text) => ({ text }));
 
 	let reducedMotion = $state(false);
+	let merivaleHovered = $state(false);
 
 	onMount(() => {
 		reducedMotion = prefersReducedMotion();
@@ -45,6 +47,9 @@
 </script>
 
 <section id="about" class="problems-solved">
+	<!-- Brisbane map — scroll-driven river draw + zoom -->
+	<BrisbaneMap {merivaleHovered} />
+
 	<Container>
 		<div
 			use:animate={{
@@ -72,11 +77,20 @@
 				scrollTrigger: { start: 'top 80%' }
 			}}
 		>
-			Subfracture is a strategic culture and design studio based in Merivale Studios, South
-			Brisbane. We help brands and IP get clear, get chosen, and get remembered — not just
+			Subfracture is a strategic culture and design studio based in <span
+				class="merivale-trigger"
+				role="presentation"
+				onmouseenter={() => (merivaleHovered = true)}
+				onmouseleave={() => (merivaleHovered = false)}
+				>Merivale Studios, South
+				Brisbane</span
+			>. We help brands and IP get clear, get chosen, and get remembered — not just
 			launched.
 		</p>
 
+	</Container>
+
+	<Container>
 		<span class="label">Problems we help solve</span>
 	</Container>
 
@@ -104,8 +118,17 @@
 
 <style>
 	.problems-solved {
-		padding-top: clamp(12rem, 15vw, 18rem);
+		position: relative;
+		padding-top: clamp(20rem, 30vw, 40rem);
+		padding-bottom: clamp(12rem, 15vw, 20rem);
 		background-color: var(--color-surface);
+		overflow: hidden;
+	}
+
+	/* Ensure all content sits above the ambient layers */
+	.problems-solved :global(.container) {
+		position: relative;
+		z-index: 1;
 	}
 
 	.intro {
@@ -125,7 +148,7 @@
 		color: var(--color-text-muted);
 		text-transform: uppercase;
 		letter-spacing: var(--letter-spacing-label);
-		margin-top: 4rem;
+		margin-top: clamp(18rem, 25vw, 35rem);
 		margin-bottom: 2rem;
 	}
 
@@ -140,6 +163,21 @@
 			grid-template-columns: 1fr 1fr;
 			column-gap: 3rem;
 		}
+	}
+
+	.merivale-trigger {
+		cursor: default;
+		position: relative;
+		transition: color 0.3s var(--ease-organic);
+		text-decoration-line: underline;
+		text-decoration-color: transparent;
+		text-underline-offset: 3px;
+		text-decoration-thickness: 1px;
+	}
+
+	.merivale-trigger:hover {
+		color: var(--color-text);
+		text-decoration-color: var(--color-text);
 	}
 
 	.stats-placeholder {
