@@ -240,46 +240,46 @@
 				}
 
 				const rect = scrollSectionEl.getBoundingClientRect();
-				const sectionHeight = scrollSectionEl.offsetHeight;
 				const viewportHeight = window.innerHeight;
-
-				const scrollRange = sectionHeight - viewportHeight;
-				const scrolled = Math.max(0, Math.min(1, -rect.top / scrollRange));
-
 				const inSection = rect.top <= 0 && rect.bottom >= viewportHeight;
 
-				if (inSection && !isDragging) {
-					const rawIndex = scrolled * (TOTAL - 1);
-					const baseIndex = Math.floor(rawIndex);
-					const fraction = rawIndex - baseIndex;
+				if (!inSection || isDragging) {
+					ticking = false;
+					return;
+				}
 
-					scrollVelocity = scrollVelocity * 0.3 + Math.abs(rawIndex - lastRawIndex) * 0.7;
-					lastRawIndex = rawIndex;
+					const scrollRange = scrollSectionEl.offsetHeight - viewportHeight;
+				const scrolled = Math.max(0, Math.min(1, -rect.top / scrollRange));
+				const rawIndex = scrolled * (TOTAL - 1);
+				const baseIndex = Math.floor(rawIndex);
+				const fraction = rawIndex - baseIndex;
 
-					const threshold = scrollVelocity > 0.08 ? SNAP_THRESHOLD_FAST : SNAP_THRESHOLD;
+				scrollVelocity = scrollVelocity * 0.3 + Math.abs(rawIndex - lastRawIndex) * 0.7;
+				lastRawIndex = rawIndex;
 
-					const snappedIndex = fraction >= threshold ? baseIndex + 1 : baseIndex;
+				const threshold = scrollVelocity > 0.08 ? SNAP_THRESHOLD_FAST : SNAP_THRESHOLD;
 
-					if (snappedIndex !== lastScrollCardIndex) {
-						setSpringConfig(SPRING_SNAP);
-						lastScrollCardIndex = snappedIndex;
-						offset.set(-snappedIndex * cardStep);
+				const snappedIndex = fraction >= threshold ? baseIndex + 1 : baseIndex;
+
+				if (snappedIndex !== lastScrollCardIndex) {
+					setSpringConfig(SPRING_SNAP);
+					lastScrollCardIndex = snappedIndex;
+					offset.set(-snappedIndex * cardStep);
+				} else {
+					if (fraction < DEAD_ZONE || fraction > 1 - DEAD_ZONE) {
+						const nearestIndex = Math.round(rawIndex);
+						offset.set(-nearestIndex * cardStep);
+					} else if (fraction < threshold) {
+						setSpringConfig(SPRING_TENSION);
+
+						const activeFraction = (fraction - DEAD_ZONE) / (threshold - DEAD_ZONE);
+						const clamped = Math.max(0, Math.min(1, activeFraction));
+						const eased = rubberBand(clamped) * TENSION_AMOUNT;
+
+						const tensionTarget = -(baseIndex + eased) * cardStep;
+						offset.set(tensionTarget);
 					} else {
-						if (fraction < DEAD_ZONE || fraction > 1 - DEAD_ZONE) {
-							const nearestIndex = Math.round(rawIndex);
-							offset.set(-nearestIndex * cardStep);
-						} else if (fraction < threshold) {
-							setSpringConfig(SPRING_TENSION);
-
-							const activeFraction = (fraction - DEAD_ZONE) / (threshold - DEAD_ZONE);
-							const clamped = Math.max(0, Math.min(1, activeFraction));
-							const eased = rubberBand(clamped) * TENSION_AMOUNT;
-
-							const tensionTarget = -(baseIndex + eased) * cardStep;
-							offset.set(tensionTarget);
-						} else {
-							offset.set(-lastScrollCardIndex * cardStep);
-						}
+						offset.set(-lastScrollCardIndex * cardStep);
 					}
 				}
 
