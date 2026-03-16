@@ -314,6 +314,7 @@
 	.services-outer {
 		height: 480vh;
 		position: relative;
+		z-index: 1;
 		background-color: var(--color-surface-warm);
 	}
 
@@ -325,6 +326,7 @@
 		justify-content: center;
 		overflow: hidden;
 		padding-top: 3rem;
+		background-color: var(--color-surface-warm);
 	}
 
 	/* Pillar viewport — holds all absolute-positioned pillar slides */
