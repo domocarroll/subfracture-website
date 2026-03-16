@@ -46,6 +46,7 @@
 	});
 </script>
 
+<!-- Intro portion — overflow:clip for Brisbane map containment -->
 <section id="about" class="problems-solved">
 	<!-- Brisbane map — scroll-driven river draw + zoom -->
 	<BrisbaneMap {merivaleHovered} />
@@ -88,14 +89,13 @@
 			launched.
 		</p>
 
-	</Container>
-
-	<Container>
 		<span class="label">Problems we help solve</span>
 	</Container>
+</section>
 
-	{#if reducedMotion}
-		<!-- Reduced motion fallback: static grid -->
+<!-- Carousel portion — OUTSIDE overflow:clip so sticky positioning works -->
+{#if reducedMotion}
+	<section class="problems-carousel-fallback">
 		<Container>
 			<div class="problem-grid">
 				{#each problems as text}
@@ -103,26 +103,22 @@
 				{/each}
 			</div>
 		</Container>
-	{:else}
-		<!-- Full motion: scroll-driven 3D carousel -->
-		<ScrollCarousel items={carouselItems}>
-			{#snippet card({ item, index })}
-				<CarouselCard text={item.text} {index} />
-			{/snippet}
-		</ScrollCarousel>
-	{/if}
-
-	<!-- Stats insertion point (CONT-04) -->
-	<div class="stats-placeholder" aria-hidden="true"></div>
-</section>
+	</section>
+{:else}
+	<ScrollCarousel items={carouselItems}>
+		{#snippet card({ item, index })}
+			<CarouselCard text={item.text} {index} />
+		{/snippet}
+	</ScrollCarousel>
+{/if}
 
 <style>
 	.problems-solved {
 		position: relative;
-		padding-top: clamp(20rem, 30vw, 40rem);
-		padding-bottom: clamp(12rem, 15vw, 20rem);
+		padding-top: clamp(10rem, 15vw, 20rem);
+		padding-bottom: clamp(4rem, 6vw, 6rem);
 		background-color: var(--color-surface);
-		overflow: hidden;
+		overflow: clip;
 	}
 
 	/* Ensure all content sits above the ambient layers */
@@ -148,8 +144,13 @@
 		color: var(--color-text-muted);
 		text-transform: uppercase;
 		letter-spacing: var(--letter-spacing-label);
-		margin-top: clamp(18rem, 25vw, 35rem);
-		margin-bottom: 2rem;
+		margin-top: clamp(6rem, 10vw, 12rem);
+		margin-bottom: 0;
+	}
+
+	.problems-carousel-fallback {
+		background-color: var(--color-surface);
+		padding: 2rem 0 clamp(6rem, 8vw, 10rem);
 	}
 
 	.problem-grid {
@@ -178,9 +179,5 @@
 	.merivale-trigger:hover {
 		color: var(--color-text);
 		text-decoration-color: var(--color-text);
-	}
-
-	.stats-placeholder {
-		display: none;
 	}
 </style>
