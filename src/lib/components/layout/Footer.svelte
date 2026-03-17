@@ -15,6 +15,7 @@
 	import { onMount, onDestroy } from 'svelte';
 	import { browser } from '$app/environment';
 	import { prefersReducedMotion } from '$lib/utils/motion';
+	import { siteContent } from '$lib/data/content';
 
 	import Container from '$lib/components/ui/Container.svelte';
 
@@ -26,9 +27,9 @@
 	let cleanup: (() => void) | null = null;
 
 	// Word splitting for animations
-	const taglineWords = 'A culture studio. Art and systems, flowing together.'.split(/\s+/);
-	const credoWords = 'Built on Intelligence. Powered by Humans.'.split(/\s+/);
-	const credoSentenceBreak = 3;
+	const taglineWords = siteContent.footer.tagline.split(/\s+/);
+	const credoWords = siteContent.footer.credo.split(/\s+/);
+	const credoSentenceBreak = siteContent.footer.credoSentenceBreak;
 
 	let taglineEl: HTMLElement | undefined = $state();
 	let credoEl: HTMLElement | undefined = $state();

@@ -10,14 +10,15 @@
 	import Container from '$lib/components/ui/Container.svelte';
 	import ScrubTextReveal from '$lib/components/scroll/ScrubTextReveal.svelte';
 	import ContactForm from './ContactForm.svelte';
+	import { siteContent } from '$lib/data/content';
 </script>
 
 <section id="contact" class="contact">
 	<Container>
 		<div class="contact-header">
-			<span class="contact-number">04</span>
+			<span class="contact-number">{siteContent.contact.number}</span>
 			<ScrubTextReveal
-				text="Ready when you are. Let's build something that lasts."
+				text={siteContent.contact.heading}
 				tag="h2"
 				class="contact-heading"
 				start="top 80%"
@@ -27,8 +28,7 @@
 
 		<div class="contact-body">
 			<p class="contact-intro">
-				Whether you're starting from scratch or evolving what exists,
-				we'd love to hear what you're working on.
+				{siteContent.contact.intro}
 			</p>
 			<ContactForm />
 		</div>

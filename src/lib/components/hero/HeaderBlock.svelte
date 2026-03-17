@@ -13,14 +13,15 @@
 	import { onMount, onDestroy } from 'svelte';
 	import { browser } from '$app/environment';
 	import { prefersReducedMotion } from '$lib/utils/motion';
+	import { siteContent } from '$lib/data/content';
 
 	let bneTime = $state('--:--');
 	let laTime = $state('--:--');
 	let interval: ReturnType<typeof setInterval> | null = null;
 	let cleanup: (() => void) | null = null;
 
-	const taglineWords = 'Built on Intelligence. Powered by Humans.'.split(/\s+/);
-	const sentenceBreak = 3; // "Built on Intelligence." is words 0-2
+	const taglineWords = siteContent.hero.tagline.split(/\s+/);
+	const sentenceBreak = siteContent.hero.sentenceBreak;
 
 	let taglineEl: HTMLElement | undefined = $state();
 	let clocksEl: HTMLElement | undefined = $state();

@@ -2,6 +2,7 @@
   import { onMount, onDestroy } from 'svelte';
   import { browser } from '$app/environment';
   import { prefersReducedMotion } from '$lib/utils/motion';
+  import { siteContent } from '$lib/data/content';
 
   let sectionEl: HTMLElement | undefined = $state();
   let reducedMotion = $state(false);
@@ -51,16 +52,7 @@
     }
   });
 
-  const clients = [
-    { name: 'Nike', alt: 'Nike logo', src: '/images/clients/nike.png' },
-    { name: 'Sprite', alt: 'Sprite logo', src: '/images/clients/sprite.svg' },
-    { name: 'BMW', alt: 'BMW logo', src: '/images/clients/bmw.svg' },
-    { name: 'Sennheiser', alt: 'Sennheiser logo', src: '/images/clients/sennheiser.svg' },
-    { name: 'Jimmy Choo', alt: 'Jimmy Choo logo', src: '/images/clients/jimmy-choo.svg' },
-    { name: 'QLD Government', alt: 'Queensland Government logo', src: '/images/clients/qld-government.svg' },
-    { name: 'Sennheiser', alt: 'Sennheiser logo', src: '/images/clients/senn-2.svg' },
-    { name: 'Verizon', alt: 'Verizon logo', src: '/images/clients/verizon.svg' }
-  ];
+  const clients = siteContent.clients;
 </script>
 
 <section

@@ -1,0 +1,158 @@
+version: 1
+project: subfracture-website
+description: Embedded agentic infrastructure for the Subfracture culture studio website
+
+default_dirs:
+  skills: .claude/skills/
+  agents: .claude/agents/
+  commands: .claude/commands/
+  cookbooks: .claude/cookbooks/
+
+library:
+  skills:
+    - name: content-editor
+      description: Data schemas, Svelte 5 patterns, safe editing rules for site content
+      path: .claude/skills/content-editor/SKILL.md
+
+    - name: site-builder
+      description: Build pipeline, dev server, screenshots, deployment workflow
+      path: .claude/skills/site-builder/SKILL.md
+
+    - name: visual-qa
+      description: Screenshot capture, comparison, accessibility scoring
+      path: .claude/skills/visual-qa/SKILL.md
+
+    - name: portfolio-mgr
+      description: Project lifecycle, slug rules, image requirements
+      path: .claude/skills/portfolio-mgr/SKILL.md
+
+    - name: agent-browser
+      description: Browser automation CLI for screenshots and interaction
+      path: .claude/skills/agent-browser/SKILL.md
+
+    - name: ux-audit
+      description: 9-point quality scoring rubric (100 points)
+      path: .claude/skills/ux-audit.md
+
+    - name: library
+      description: This catalog — index of all agentic infrastructure
+      path: .claude/skills/library/SKILL.md
+
+  agents:
+    - name: content-agent
+      description: Builder agent for data file and content changes
+      path: .claude/agents/content-agent.md
+      requires: [skill:content-editor, skill:portfolio-mgr]
+
+    - name: design-agent
+      description: Builder agent for visual and CSS changes
+      path: .claude/agents/design-agent.md
+      requires: [skill:content-editor, skill:visual-qa]
+
+    - name: qa-agent
+      description: Read-only validator for screenshots and quality reports
+      path: .claude/agents/qa-agent.md
+      requires: [skill:visual-qa, skill:site-builder, skill:ux-audit]
+
+    - name: deploy-agent
+      description: Build and deploy to Cloudflare Pages
+      path: .claude/agents/deploy-agent.md
+      requires: [skill:site-builder]
+
+  commands:
+    - name: add-project
+      description: Add a new portfolio case study
+      path: .claude/commands/add-project.md
+      cookbook: .claude/cookbooks/add-project.md
+      agents: [content-agent, qa-agent]
+
+    - name: update-team
+      description: Add, edit, or remove team members
+      path: .claude/commands/update-team.md
+      cookbook: .claude/cookbooks/update-team.md
+      agents: [content-agent, qa-agent]
+
+    - name: update-content
+      description: Edit any site copy — hero, services, about, contact, footer, SEO
+      path: .claude/commands/update-content.md
+      cookbook: .claude/cookbooks/update-content.md
+      agents: [content-agent, qa-agent]
+
+    - name: review-site
+      description: Full visual QA with screenshots and scoring
+      path: .claude/commands/review-site.md
+      cookbook: .claude/cookbooks/review-site.md
+      agents: [qa-agent]
+
+    - name: deploy
+      description: Build, validate, and deploy to production
+      path: .claude/commands/deploy.md
+      cookbook: .claude/cookbooks/deploy.md
+      agents: [deploy-agent, qa-agent]
+
+    - name: design-tweak
+      description: Visual or design changes — spacing, colors, typography
+      path: .claude/commands/design-tweak.md
+      cookbook: .claude/cookbooks/design-tweak.md
+      agents: [design-agent, qa-agent]
+
+    - name: site-status
+      description: Quick health check — build, content stats, recent changes
+      path: .claude/commands/site-status.md
+      agents: []
+
+    - name: prime
+      description: Load full context for a new session
+      path: .claude/commands/prime.md
+      agents: []
+
+    - name: feedback
+      description: Gather website feedback through conversational discovery
+      path: .claude/commands/feedback.md
+      agents: []
+
+    - name: whats-needed
+      description: Scan for missing assets, keys, and human decisions
+      path: .claude/commands/whats-needed.md
+      agents: []
+
+  cookbooks:
+    - name: add-project
+      description: Step-by-step recipe for adding a portfolio case study
+      path: .claude/cookbooks/add-project.md
+
+    - name: update-team
+      description: Recipe for adding, editing, removing team members
+      path: .claude/cookbooks/update-team.md
+
+    - name: update-content
+      description: Recipe for editing any site content area
+      path: .claude/cookbooks/update-content.md
+
+    - name: review-site
+      description: Recipe for full visual QA review
+      path: .claude/cookbooks/review-site.md
+
+    - name: deploy
+      description: Recipe for build, validate, deploy workflow
+      path: .claude/cookbooks/deploy.md
+
+    - name: design-tweak
+      description: Recipe for visual and design changes
+      path: .claude/cookbooks/design-tweak.md
+
+data_files:
+  - path: src/lib/data/projects.ts
+    description: Portfolio projects (Project interface)
+    count: 6
+
+  - path: src/lib/data/team.ts
+    description: Team members (TeamMember interface)
+    count: 3
+
+  - path: src/lib/data/services.ts
+    description: Service pillars (ServicePillar interface)
+    count: 6
+
+  - path: src/lib/data/content.ts
+    description: All site copy, meta, clients (SiteContent interface)

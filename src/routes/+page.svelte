@@ -10,26 +10,27 @@
 	import TeamSection from '$lib/components/team/TeamSection.svelte';
 	import ContactSection from '$lib/components/contact/ContactSection.svelte';
 	import InlineCTA from '$lib/components/ui/InlineCTA.svelte';
+	import { siteContent } from '$lib/data/content';
 </script>
 
 <svelte:head>
-	<title>Subfracture | Culture Studio</title>
-	<meta name="description" content="Subfracture is a strategic culture and design studio. We help brands get clear, get chosen, and get remembered. Brisbane HQ, Los Angeles." />
-	<link rel="canonical" href="https://subfrac.com" />
+	<title>{siteContent.meta.title}</title>
+	<meta name="description" content={siteContent.meta.description} />
+	<link rel="canonical" href={siteContent.meta.canonical} />
 
 	<!-- Open Graph -->
 	<meta property="og:type" content="website" />
-	<meta property="og:url" content="https://subfrac.com" />
-	<meta property="og:title" content="Subfracture | Culture Studio" />
-	<meta property="og:description" content="Strategic culture and design studio. For brands that outgrow campaigns." />
-	<meta property="og:image" content="https://subfrac.com/og-image.png" />
-	<meta property="og:locale" content="en_AU" />
+	<meta property="og:url" content={siteContent.meta.canonical} />
+	<meta property="og:title" content={siteContent.meta.title} />
+	<meta property="og:description" content={siteContent.meta.ogDescription} />
+	<meta property="og:image" content={siteContent.meta.ogImage} />
+	<meta property="og:locale" content={siteContent.meta.locale} />
 
 	<!-- Twitter -->
 	<meta name="twitter:card" content="summary_large_image" />
-	<meta name="twitter:title" content="Subfracture | Culture Studio" />
-	<meta name="twitter:description" content="Strategic culture and design studio. For brands that outgrow campaigns." />
-	<meta name="twitter:image" content="https://subfrac.com/og-image.png" />
+	<meta name="twitter:title" content={siteContent.meta.title} />
+	<meta name="twitter:description" content={siteContent.meta.ogDescription} />
+	<meta name="twitter:image" content={siteContent.meta.ogImage} />
 
 	<!-- JSON-LD Structured Data -->
 	{@html `<script type="application/ld+json">${JSON.stringify({

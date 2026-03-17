@@ -13,13 +13,14 @@
 	import Container from '$lib/components/ui/Container.svelte';
 	import ScrubTextReveal from '$lib/components/scroll/ScrubTextReveal.svelte';
 	import { animate } from '$lib/actions/animate';
+	import { siteContent } from '$lib/data/content';
 </script>
 
 <section class="closing">
 	<Container>
 		<div class="closing-content">
 			<ScrubTextReveal
-				text="Entry points are flexible. Outputs are deliberate."
+				text={siteContent.closing.statement}
 				tag="p"
 				class="closing-statement"
 				start="top 85%"
@@ -38,9 +39,7 @@
 					scrollTrigger: { start: 'top 75%' }
 				}}
 			>
-				We work alongside founders and brand teams to set direction, design systems, and bring
-				ideas to life — because strong brands aren't just seen, they're understood, trusted, and
-				chosen.
+				{siteContent.closing.paragraph}
 			</p>
 		</div>
 	</Container>

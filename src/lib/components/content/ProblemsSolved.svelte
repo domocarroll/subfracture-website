@@ -22,15 +22,9 @@
 	import BrisbaneMap from '$lib/components/map/BrisbaneMap.svelte';
 	import { animate } from '$lib/actions/animate';
 	import { prefersReducedMotion, onReducedMotionChange } from '$lib/utils/motion';
+	import { siteContent } from '$lib/data/content';
 
-	const problems = [
-		'Campaign-led thinking with no long-term platform',
-		'Inconsistent brand and IP expression at scale',
-		'Low trust or weak cultural relevance',
-		'Launches that need real momentum, not noise',
-		'Brand systems that extend beyond start and end dates',
-		'Unclear positioning \u2014 people don\u2019t get it'
-	];
+	const problems = siteContent.about.problems;
 
 	const carouselItems = problems.map((text) => ({ text }));
 
