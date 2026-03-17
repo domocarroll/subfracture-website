@@ -39,32 +39,32 @@ interface ChatMessage {
 	content: string;
 }
 
+interface OpenAIResponse {
+	choices?: Array<{
+		message?: { content?: string };
+	}>;
+	error?: { message?: string };
+}
+
+const PROXY_URL = () => env.PROXY_URL || 'http://localhost:8317';
+const PROXY_KEY = () => env.PROXY_KEY || 'sk-subfrac-local';
+
 export const POST: RequestHandler = async ({ request }) => {
 	const { messages } = (await request.json()) as { messages: ChatMessage[] };
 
-	const apiKey = env.ANTHROPIC_API_KEY;
-	if (!apiKey) {
-		return new Response(JSON.stringify({ error: 'API key not configured' }), {
-			status: 500,
-			headers: { 'Content-Type': 'application/json' }
-		});
-	}
-
-	const response = await fetch('https://api.anthropic.com/v1/messages', {
+	const response = await fetch(`${PROXY_URL()}/v1/chat/completions`, {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json',
-			'x-api-key': apiKey,
-			'anthropic-version': '2023-06-01'
+			Authorization: `Bearer ${PROXY_KEY()}`
 		},
 		body: JSON.stringify({
 			model: 'claude-haiku-4-5-20251001',
 			max_tokens: 1024,
-			system: SYSTEM_PROMPT,
-			messages: messages.map((m) => ({
-				role: m.role,
-				content: m.content
-			}))
+			messages: [
+				{ role: 'system', content: SYSTEM_PROMPT },
+				...messages.map((m) => ({ role: m.role, content: m.content }))
+			]
 		})
 	});
 
@@ -76,10 +76,8 @@ export const POST: RequestHandler = async ({ request }) => {
 		});
 	}
 
-	const data = (await response.json()) as {
-		content?: Array<{ text?: string }>;
-	};
-	const content = data.content?.[0]?.text || '';
+	const data = (await response.json()) as OpenAIResponse;
+	const content = data.choices?.[0]?.message?.content || '';
 
 	// Extract design brief if present
 	const briefMatch = content.match(/```design-brief\n([\s\S]*?)\n```/);
@@ -101,8 +99,6 @@ export const POST: RequestHandler = async ({ request }) => {
 			brief,
 			role: 'assistant'
 		}),
-		{
-			headers: { 'Content-Type': 'application/json' }
-		}
+		{ headers: { 'Content-Type': 'application/json' } }
 	);
 };

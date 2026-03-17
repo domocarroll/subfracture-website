@@ -65,24 +65,17 @@ The document MUST include:
 
 DESIGN DIRECTION: Be BOLD. Commit to an aesthetic. Every output should feel like it came from an opinionated design studio, not a template generator.`;
 
-interface GeminiResponse {
-	candidates?: Array<{
-		content?: {
-			parts?: Array<{ text?: string }>;
-		};
+interface OpenAIResponse {
+	choices?: Array<{
+		message?: { content?: string };
 	}>;
 }
 
+const PROXY_URL = () => env.PROXY_URL || 'http://localhost:8317';
+const PROXY_KEY = () => env.PROXY_KEY || 'sk-subfrac-local';
+
 export const POST: RequestHandler = async ({ request }) => {
 	const { brief } = (await request.json()) as { brief: DesignBrief };
-
-	const apiKey = env.GEMINI_API_KEY;
-	if (!apiKey) {
-		return new Response(JSON.stringify({ error: 'Gemini API key not configured' }), {
-			status: 500,
-			headers: { 'Content-Type': 'application/json' }
-		});
-	}
 
 	const userPrompt = [
 		`Generate a ${brief.type} design.`,
@@ -95,21 +88,22 @@ export const POST: RequestHandler = async ({ request }) => {
 		.filter(Boolean)
 		.join('\n');
 
-	const response = await fetch(
-		`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
-		{
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({
-				system_instruction: { parts: [{ text: GENERATION_PROMPT }] },
-				contents: [{ parts: [{ text: userPrompt }] }],
-				generationConfig: {
-					maxOutputTokens: 8192,
-					temperature: 0.8
-				}
-			})
-		}
-	);
+	const response = await fetch(`${PROXY_URL()}/v1/chat/completions`, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${PROXY_KEY()}`
+		},
+		body: JSON.stringify({
+			model: 'gemini-2.5-flash',
+			max_tokens: 8192,
+			temperature: 0.8,
+			messages: [
+				{ role: 'system', content: GENERATION_PROMPT },
+				{ role: 'user', content: userPrompt }
+			]
+		})
+	});
 
 	if (!response.ok) {
 		const error = await response.text();
@@ -119,10 +113,10 @@ export const POST: RequestHandler = async ({ request }) => {
 		});
 	}
 
-	const data = (await response.json()) as GeminiResponse;
-	let html = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+	const data = (await response.json()) as OpenAIResponse;
+	let html = data.choices?.[0]?.message?.content || '';
 
-	// Strip markdown fences if Gemini wraps them
+	// Strip markdown fences if model wraps them
 	html = html.replace(/^```html?\n?/i, '').replace(/\n?```$/i, '').trim();
 
 	return new Response(JSON.stringify({ html }), {

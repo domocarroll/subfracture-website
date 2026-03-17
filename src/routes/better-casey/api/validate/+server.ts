@@ -48,58 +48,44 @@ interface ValidationResult {
 	suggestion?: string;
 }
 
-interface GeminiResponse {
-	candidates?: Array<{
-		content?: {
-			parts?: Array<{ text?: string }>;
-		};
+interface OpenAIResponse {
+	choices?: Array<{
+		message?: { content?: string };
 	}>;
 }
+
+const PROXY_URL = () => env.PROXY_URL || 'http://localhost:8317';
+const PROXY_KEY = () => env.PROXY_KEY || 'sk-subfrac-local';
 
 export const POST: RequestHandler = async ({ request }) => {
 	const { screenshot } = (await request.json()) as { screenshot: string };
 
-	const apiKey = env.GEMINI_API_KEY;
-	if (!apiKey) {
-		return new Response(
-			JSON.stringify({
-				pass: true,
-				score: 70,
-				issues: [],
-				strengths: ['Validation skipped — no API key']
-			} satisfies ValidationResult),
-			{
-				headers: { 'Content-Type': 'application/json' }
-			}
-		);
-	}
+	const imageData = screenshot.replace(/^data:image\/\w+;base64,/, '');
 
-	const response = await fetch(
-		`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
-		{
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({
-				contents: [
-					{
-						parts: [
-							{ text: VISION_PROMPT },
-							{
-								inline_data: {
-									mime_type: 'image/png',
-									data: screenshot.replace(/^data:image\/\w+;base64,/, '')
-								}
-							}
-						]
-					}
-				],
-				generationConfig: {
-					maxOutputTokens: 1024,
-					temperature: 0.2
+	const response = await fetch(`${PROXY_URL()}/v1/chat/completions`, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+			Authorization: `Bearer ${PROXY_KEY()}`
+		},
+		body: JSON.stringify({
+			model: 'gemini-2.5-flash',
+			max_tokens: 1024,
+			temperature: 0.2,
+			messages: [
+				{
+					role: 'user',
+					content: [
+						{ type: 'text', text: VISION_PROMPT },
+						{
+							type: 'image_url',
+							image_url: { url: `data:image/png;base64,${imageData}` }
+						}
+					]
 				}
-			})
-		}
-	);
+			]
+		})
+	});
 
 	if (!response.ok) {
 		// Fail open — don't block the user if vision fails
@@ -110,14 +96,12 @@ export const POST: RequestHandler = async ({ request }) => {
 				issues: ['Vision validation unavailable'],
 				strengths: []
 			} satisfies ValidationResult),
-			{
-				headers: { 'Content-Type': 'application/json' }
-			}
+			{ headers: { 'Content-Type': 'application/json' } }
 		);
 	}
 
-	const data = (await response.json()) as GeminiResponse;
-	let text = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+	const data = (await response.json()) as OpenAIResponse;
+	let text = data.choices?.[0]?.message?.content || '';
 
 	// Strip markdown fences if present
 	text = text.replace(/^```json?\n?/i, '').replace(/\n?```$/i, '').trim();
@@ -135,9 +119,7 @@ export const POST: RequestHandler = async ({ request }) => {
 				issues: ['Could not parse validation'],
 				strengths: []
 			} satisfies ValidationResult),
-			{
-				headers: { 'Content-Type': 'application/json' }
-			}
+			{ headers: { 'Content-Type': 'application/json' } }
 		);
 	}
 };
