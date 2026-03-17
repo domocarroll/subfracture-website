@@ -153,7 +153,7 @@
 
 	<!-- The Pitch -->
 	<section class="pitch">
-		<h2 class="pitch-heading">Casey left. We codified his taste.</h2>
+		<h2 class="pitch-heading">He left. We built something better.</h2>
 		<p class="pitch-sub">Describe any UI and watch our AI design director build it live. No signup. No cost. Impeccable output guaranteed.</p>
 	</section>
 
