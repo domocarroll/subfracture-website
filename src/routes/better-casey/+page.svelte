@@ -11,6 +11,43 @@
 
 	import { onMount } from 'svelte';
 	import { browser } from '$app/environment';
+	import DesignChat from '$lib/components/better-casey/DesignChat.svelte';
+	import DesignPreview from '$lib/components/better-casey/DesignPreview.svelte';
+	import CodeOutput from '$lib/components/better-casey/CodeOutput.svelte';
+
+	interface DesignBrief {
+		type: string;
+		description: string;
+		industry: string;
+		mood: string;
+		colors: string | null;
+		constraints: string[];
+	}
+
+	let generatedHtml = $state('');
+	let generating = $state(false);
+
+	async function handleGenerate(brief: DesignBrief) {
+		generating = true;
+		generatedHtml = '';
+
+		try {
+			const res = await fetch('/better-casey/api/generate', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ brief })
+			});
+
+			const data = await res.json();
+			if (data.html) {
+				generatedHtml = data.html;
+			}
+		} catch {
+			// Generation failed silently — chat will show error
+		} finally {
+			generating = false;
+		}
+	}
 
 	let phase = $state<'portrait' | 'zooming' | 'toddler' | 'binky'>('portrait');
 	let frameEl: HTMLElement | undefined = $state();
@@ -113,27 +150,43 @@
 			{/if}
 		</p>
 	</div>
+
+	<!-- The Pitch -->
+	<section class="pitch">
+		<h2 class="pitch-heading">Casey left. We codified his taste.</h2>
+		<p class="pitch-sub">Describe any UI and watch our AI design director build it live. No signup. No cost. Impeccable output guaranteed.</p>
+	</section>
+
+	<!-- Design Tool -->
+	<section class="design-tool">
+		<div class="tool-chat">
+			<DesignChat {generating} ongenerate={handleGenerate} />
+		</div>
+		<div class="tool-preview">
+			<DesignPreview html={generatedHtml} />
+		</div>
+	</section>
+
+	<!-- Code Output -->
+	<CodeOutput html={generatedHtml} />
+
+	<!-- CTA -->
+	<section class="cta">
+		<p class="cta-text">Want this for your brand?</p>
+		<a href="/#contact" class="cta-link">Let's talk →</a>
+	</section>
 </div>
 
 <style>
 	.page {
-		min-height: 100dvh;
 		background: #1a1815;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		padding: 2rem;
-		/* Dark gallery wall with subtle texture */
-		background-image:
-			radial-gradient(ellipse at 30% 20%, rgba(120, 80, 40, 0.08) 0%, transparent 50%),
-			radial-gradient(ellipse at 70% 80%, rgba(80, 60, 30, 0.06) 0%, transparent 50%);
-	}
-
-	.gallery-wall {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		gap: 1.5rem;
+		padding: 0 2rem;
+		background-image:
+			radial-gradient(ellipse at 30% 20%, rgba(120, 80, 40, 0.08) 0%, transparent 50%),
+			radial-gradient(ellipse at 70% 80%, rgba(80, 60, 30, 0.06) 0%, transparent 50%);
 	}
 
 	/* Portrait frame — gold ornate style */
@@ -290,6 +343,106 @@
 
 	.back-link:hover {
 		color: rgba(255, 255, 255, 0.8);
+	}
+
+	/* Gallery wall — centered first screen */
+	.gallery-wall {
+		min-height: 100dvh;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		gap: 1.5rem;
+	}
+
+	/* The Pitch */
+	.pitch {
+		text-align: center;
+		padding: clamp(4rem, 8vw, 8rem) 2rem;
+		max-width: 40rem;
+	}
+
+	.pitch-heading {
+		font-family: var(--font-serif, Georgia, serif);
+		font-size: clamp(1.5rem, 4vw, 2.5rem);
+		font-weight: 400;
+		color: rgba(255, 255, 255, 0.85);
+		line-height: 1.2;
+		margin: 0 0 1rem;
+	}
+
+	.pitch-sub {
+		font-family: var(--font-sans, system-ui, sans-serif);
+		font-size: 0.95rem;
+		color: rgba(255, 255, 255, 0.4);
+		line-height: 1.6;
+		margin: 0;
+	}
+
+	/* Design Tool */
+	.design-tool {
+		display: grid;
+		grid-template-columns: 2fr 3fr;
+		gap: 1px;
+		width: 100%;
+		max-width: 1200px;
+		min-height: 600px;
+		background: rgba(255, 255, 255, 0.04);
+		border: 1px solid rgba(255, 255, 255, 0.06);
+		border-radius: 12px;
+		overflow: hidden;
+	}
+
+	.tool-chat {
+		border-right: 1px solid rgba(255, 255, 255, 0.06);
+	}
+
+	.tool-preview {
+		min-height: 500px;
+	}
+
+	@media (max-width: 48rem) {
+		.design-tool {
+			grid-template-columns: 1fr;
+		}
+
+		.tool-chat {
+			border-right: none;
+			border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+			min-height: 350px;
+		}
+	}
+
+	/* CTA */
+	.cta {
+		text-align: center;
+		padding: clamp(4rem, 8vw, 8rem) 2rem;
+	}
+
+	.cta-text {
+		font-family: var(--font-serif, Georgia, serif);
+		font-size: 1.3rem;
+		color: rgba(255, 255, 255, 0.5);
+		margin: 0 0 1rem;
+	}
+
+	.cta-link {
+		font-family: var(--font-sans, system-ui, sans-serif);
+		font-size: 0.8rem;
+		font-weight: 500;
+		text-transform: uppercase;
+		letter-spacing: 0.08em;
+		color: #c9a84c;
+		text-decoration: none;
+		padding: 0.6rem 1.5rem;
+		border: 1px solid rgba(201, 168, 76, 0.3);
+		border-radius: 4px;
+		transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+	}
+
+	.cta-link:hover {
+		background: rgba(201, 168, 76, 0.1);
+		border-color: rgba(201, 168, 76, 0.5);
 	}
 
 	@media (prefers-reduced-motion: reduce) {
