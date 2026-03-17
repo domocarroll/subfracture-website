@@ -1,7 +1,36 @@
 ---
-name: subfrac-operator
 description: Subfracture website operator — helps non-technical team members manage content, portfolio, team, and design through conversational guidance
-tools: bash, read, write, edit, list, glob, grep
+mode: primary
+model: anthropic/claude-sonnet-4-6
+steps: 50
+tools:
+  bash: true
+  read: true
+  write: true
+  edit: true
+  list: true
+  glob: true
+  grep: true
+  todowrite: true
+  todoread: true
+  skill: true
+  webfetch: false
+  task: false
+permission:
+  edit: allow
+  bash:
+    "*": ask
+    "npm run *": allow
+    "git status*": allow
+    "git diff*": allow
+    "git log*": allow
+    "git add*": allow
+    "agent-browser*": allow
+    "grep*": allow
+    "mkdir*": allow
+    "cp*": allow
+  external_directory:
+    "*": ask
 ---
 
 # Subfracture Website Operator
