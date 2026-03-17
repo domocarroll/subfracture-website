@@ -20,379 +20,380 @@ It's an easter egg. It's a product demo. It's a loss-leader. It's an F-you to Ca
 7. Scroll past the portrait
 8. See: "Casey left. We codified his taste. Try it."
 9. Text input: "Design me a hero section for a coffee brand"
-10. Watch better-casey generate HTML/CSS live in a preview panel
-11. Output: production-ready, Impeccable-certified, anti-slop code
-12. Download button → get the code
-13. Optional: "Want this for your brand? Let's talk." → CTA to /contact
+10. Haiku responds as Danni: "A surf brand hero... I'm seeing tinted sand tones, bold serif, full-bleed imagery. Give me a moment."
+11. Gemini generates HTML/CSS live → preview materializes in iframe
+12. Gemini Vision screenshots the output, runs AI Slop Test
+13. If pass → show to user with Haiku commentary
+14. If fail → Gemini regenerates silently, user never sees the bad version
+15. Download button → get production-ready code
+16. "Want this for your brand? Let's talk." → CTA to /contact
 ```
 
 ---
 
-## Architecture
+## Architecture: Three-Model Stack
 
 ```
-/better-casey (SvelteKit page on subfrac.com)
-├── Portrait Section (existing — Harry Potter tantrum)
-├── Design Tool Section (NEW)
-│   ├── Chat Panel (left)
-│   │   └── Anthropic SDK → Claude with better-casey system prompt
-│   ├── Preview Panel (right)
-│   │   └── iframe → E2B sandbox serving generated HTML
-│   └── Code Panel (bottom, togglable)
-│       └── Syntax-highlighted output (HTML/CSS/Svelte)
-└── CTA Section
-    └── "Want this for your brand? Let's talk." → /contact
+User prompt
+    ↓
+┌─────────────────────────────────────────────┐
+│  HAIKU 4.5 — Conversation Layer             │
+│  • Danni/better-casey persona               │
+│  • Parse intent, extract design brief       │
+│  • Respond warmly, explain choices           │
+│  • Cost: ~$0.0002/turn                      │
+│  Output: { brief, mood, type, constraints } │
+└──────────────────┬──────────────────────────┘
+                   ↓
+┌─────────────────────────────────────────────┐
+│  GEMINI 3 FLASH/PRO — Generation Layer      │
+│  • Receive structured design brief          │
+│  • Apply Impeccable anti-patterns           │
+│  • Generate self-contained HTML/CSS         │
+│  • Include Tailwind CDN + Google Fonts      │
+│  • Cost: Dom's existing token pool          │
+│  Output: complete HTML document string      │
+└──────────────────┬──────────────────────────┘
+                   ↓
+┌─────────────────────────────────────────────┐
+│  GEMINI 3 PRO VISION — Quality Gate         │
+│  • Screenshot the srcdoc iframe             │
+│  • Run AI Slop Test against Impeccable rules│
+│  • Check: banned fonts? purple gradients?   │
+│    card nesting? gray-on-color?             │
+│  • Pass → deliver to user                   │
+│  • Fail → regenerate with feedback          │
+│  Output: { pass: boolean, issues: string[] }│
+└──────────────────┬──────────────────────────┘
+                   ↓
+┌─────────────────────────────────────────────┐
+│  SRCDOC IFRAME — Preview Layer              │
+│  • Renders HTML directly in sandboxed frame │
+│  • Zero infrastructure, instant, free       │
+│  • Tailwind via CDN script tag              │
+│  • Google Fonts via @import                 │
+│  • Viewport toggle: desktop/tablet/mobile   │
+└─────────────────────────────────────────────┘
 ```
 
-### Stack
+### Why This Stack
 
-| Layer | Technology | Purpose |
-|-------|-----------|---------|
-| Page | SvelteKit (this website) | Hosts the tool at /better-casey |
-| AI | Anthropic API (server-side) | Claude with better-casey prompt |
-| Sandbox | E2B Code Interpreter | Runs generated code, serves preview |
-| Preview | iframe pointing to E2B sandbox URL | Live rendered output |
-| Design Intelligence | Impeccable anti-patterns + Subfracture doctrine | Ensures output quality |
-
-### Why E2B (not client-side rendering)
-
-- **Security**: User-provided prompts generate code. Running it in a sandbox prevents XSS.
-- **Full stack**: Can run Tailwind builds, import Google Fonts, use npm packages.
-- **Isolation**: Each session gets its own sandbox. No cross-contamination.
-- **URL-accessible**: E2B sandboxes expose ports via public URLs for iframe embedding.
+| Concern | Solution |
+|---------|----------|
+| **Cost** | Haiku is fractions of a cent. Gemini runs on Dom's existing pool. |
+| **Speed** | Haiku responds instantly. Gemini Flash generates in 2-4s. |
+| **Quality** | Vision gate catches slop before user sees it. |
+| **Personality** | Haiku handles all user-facing conversation (Danni persona). |
+| **Scalability** | Public endpoint stays cheap even at volume. |
 
 ---
 
-## Phase 1: Server-Side API Route
+## Phase 1: API Routes (Server-Side)
 
-Create a SvelteKit server endpoint that proxies to Anthropic API with the better-casey system prompt.
+Three endpoints, all server-side (keys never exposed to client).
 
-### Files
+### 1a. Conversation endpoint (Haiku)
+
+**`src/routes/better-casey/api/chat/+server.ts`**
+
+```typescript
+// POST { messages: Message[], prompt: string }
+// Returns: streaming Haiku response (Danni persona)
+// When Haiku decides to generate, returns { action: 'generate', brief: {...} }
+
+import Anthropic from '@anthropic-ai/sdk';
+
+const SYSTEM_PROMPT = `You are better-casey — Subfracture's AI design director...
+[Danni persona + brief extraction instructions]
+When you have enough info to design, respond with a JSON block:
+\`\`\`json
+{ "action": "generate", "brief": { "type": "hero", "industry": "...", "mood": "...", "constraints": [...] } }
+\`\`\`
+Otherwise, ask clarifying questions conversationally.`;
+```
+
+### 1b. Generation endpoint (Gemini)
 
 **`src/routes/better-casey/api/generate/+server.ts`**
 
 ```typescript
-// POST { prompt: string, sessionId?: string }
-// Returns: { html: string, css: string, explanation: string, sandboxUrl?: string }
+// POST { brief: DesignBrief }
+// Returns: streaming HTML document
 
-import { ANTHROPIC_API_KEY } from '$env/static/private';
-import Anthropic from '@anthropic-ai/sdk';
+import { GoogleGenAI } from '@google/genai';
 
-// System prompt loaded from better-casey skill
-// + Impeccable anti-patterns
-// + Output format instructions (return HTML + CSS)
+const GENERATION_PROMPT = `You are a world-class frontend designer.
+[Impeccable anti-patterns — full list]
+[Output format: single self-contained HTML with Tailwind CDN + Google Fonts @import]
+[Subfracture creative doctrine]
+
+Generate a {brief.type} for a {brief.industry} brand.
+Mood: {brief.mood}
+Constraints: {brief.constraints}
+
+Return ONLY the HTML. No markdown fences. No explanation.`;
 ```
 
-**Design decisions:**
-- Server-side only (API key stays on server)
-- Streaming response for live generation feel
-- Session support for iterative refinement ("make it more spacious")
-- Rate limiting (public endpoint — protect against abuse)
+### 1c. Quality gate endpoint (Gemini Vision)
 
-### Dependencies to Add
+**`src/routes/better-casey/api/validate/+server.ts`**
+
+```typescript
+// POST { screenshot: base64 }
+// Returns: { pass: boolean, issues: string[], suggestions: string[] }
+
+import { GoogleGenAI } from '@google/genai';
+
+const VISION_PROMPT = `You are an expert design critic applying the Impeccable anti-pattern test.
+Look at this screenshot and check for:
+- Overused fonts (Inter, Arial, Roboto)
+- Purple/blue gradients
+- Gray text on colored backgrounds
+- Card nesting
+- Pure black or pure gray
+- Bounce/elastic easing indicators
+- Generic AI aesthetic ("would someone say 'AI made this' immediately?")
+
+Return JSON: { "pass": boolean, "issues": ["..."], "suggestions": ["..."] }`;
+```
+
+### Dependencies
 
 ```bash
-npm install @anthropic-ai/sdk
+npm install @anthropic-ai/sdk @google/genai
+```
+
+### Environment Variables
+
+```
+ANTHROPIC_API_KEY=sk-ant-...     # For Haiku conversation
+GEMINI_API_KEY=...               # For generation + vision
 ```
 
 ---
 
-## Phase 2: E2B Sandbox Preview
+## Phase 2: Preview Component (srcdoc iframe)
 
-Create an E2B sandbox that serves generated HTML as a live preview.
+**`src/lib/components/better-casey/DesignPreview.svelte`**
 
-### Files
+```svelte
+<script lang="ts">
+  interface Props {
+    html: string;
+    viewport: 'desktop' | 'tablet' | 'mobile';
+  }
+  let { html, viewport = 'desktop' }: Props = $props();
 
-**`src/routes/better-casey/api/preview/+server.ts`**
+  const viewportWidths = { desktop: '100%', tablet: '768px', mobile: '375px' };
+</script>
 
-```typescript
-// POST { html: string, css: string }
-// Returns: { previewUrl: string, sandboxId: string }
-
-import { Sandbox } from '@e2b/code-interpreter';
-
-// 1. Create sandbox
-// 2. Write HTML + CSS to sandbox filesystem
-// 3. Start a simple HTTP server (python -m http.server or serve)
-// 4. Return the public URL
+<div class="preview-container">
+  <div class="viewport-bar">
+    <button onclick={() => viewport = 'desktop'}>Desktop</button>
+    <button onclick={() => viewport = 'tablet'}>Tablet</button>
+    <button onclick={() => viewport = 'mobile'}>Mobile</button>
+  </div>
+  <div class="preview-frame" style:width={viewportWidths[viewport]}>
+    <iframe
+      srcdoc={html}
+      sandbox="allow-scripts allow-same-origin"
+      title="Design preview"
+    />
+  </div>
+</div>
 ```
 
-**Alternative (simpler, no E2B):**
-Use `srcdoc` on an iframe — render generated HTML directly in a sandboxed iframe.
-
-```html
-<iframe
-  srcdoc={generatedHtml}
-  sandbox="allow-scripts allow-same-origin"
-  style="width: 100%; height: 600px; border: none;"
-/>
-```
-
-This is simpler, cheaper (no E2B API calls), and works for pure HTML/CSS output.
-E2B only needed if we want npm/Tailwind build support.
-
-**Recommendation**: Start with `srcdoc` iframe (Phase 2a), add E2B later if needed (Phase 2b).
+Key decisions:
+- `sandbox="allow-scripts allow-same-origin"` — allows Tailwind CDN and Google Fonts
+- Viewport toggle resizes the frame container, not the iframe itself
+- Streams: update `html` binding as Gemini streams → iframe re-renders progressively
 
 ---
 
 ## Phase 3: Chat Interface Component
 
-Build the conversational design interface on the /better-casey page.
-
-### Files
-
 **`src/lib/components/better-casey/DesignChat.svelte`**
 
-```
-- Message list (scrollable)
-- Input field with submit button
-- Streaming response display
-- "Generating..." state with typing indicator
-```
+Core behaviors:
+- Message list with auto-scroll
+- Input field with Enter-to-submit
+- Streaming Haiku responses
+- When Haiku returns `{ action: 'generate' }`, automatically triggers generation
+- Shows "Designing..." state with progress indicator during Gemini generation
+- After generation, Haiku comments on the result ("Here's what I built and why...")
 
-**`src/lib/components/better-casey/DesignPreview.svelte`**
-
-```
-- iframe with srcdoc (generated HTML)
-- Viewport size toggle (desktop/tablet/mobile)
-- Refresh button
-- "View Code" toggle
-```
-
-**`src/lib/components/better-casey/CodeOutput.svelte`**
-
-```
-- Syntax-highlighted HTML/CSS
-- Copy button
-- Download button (generates .html file)
-- Framework toggle: HTML / Svelte / React (stretch goal)
-```
-
-### Layout
-
-```
-┌─────────────────────────────────────────────┐
-│  Portrait Section (existing)                │
-├─────────────────────────────────────────────┤
-│  "Casey left. We codified his taste."       │
-├──────────────────┬──────────────────────────┤
-│  Chat Panel      │  Preview Panel           │
-│                  │                           │
-│  [messages]      │  ┌─────────────────────┐ │
-│                  │  │  generated design    │ │
-│                  │  │  (live iframe)       │ │
-│                  │  │                      │ │
-│  [input____]     │  └─────────────────────┘ │
-│  [Generate]      │  [Desktop] [Mobile]      │
-├──────────────────┴──────────────────────────┤
-│  Code Panel (togglable)                     │
-│  [Copy] [Download]                          │
-├─────────────────────────────────────────────┤
-│  CTA: "Want this for your brand?"           │
-└─────────────────────────────────────────────┘
+Message types:
+```typescript
+type Message = {
+  role: 'user' | 'assistant' | 'system';
+  content: string;
+  type?: 'text' | 'generating' | 'preview' | 'error';
+};
 ```
 
 ---
 
-## Phase 4: The System Prompt (better-casey for generation)
+## Phase 4: Code Output Component
 
-The existing better-casey skill is for critique/polish. For generation, we need a variant that outputs code.
+**`src/lib/components/better-casey/CodeOutput.svelte`**
 
-### Key Requirements
+- Toggle panel (collapsed by default, "View Code" button)
+- Syntax highlighting (use Shiki or Prism — or just `<pre><code>` with CSS)
+- Copy to clipboard button
+- Download as `.html` file button
+- Line numbers
 
-1. **Output format**: Return a single self-contained HTML file with inline CSS and optional inline JS
-2. **Quality gate**: Apply ALL Impeccable anti-patterns before output
-3. **Self-contained**: Must render correctly in an iframe with no external dependencies (inline Google Fonts via @import)
-4. **Dark horse quality**: Output should be genuinely impressive — portfolio-grade
-5. **Personality**: Snarky about Casey. Professional about design.
-
-### System Prompt Structure
-
-```
-You are better-casey — Subfracture's AI design director.
-You replaced a human designer. You're better. It's in the name.
-
-DESIGN RULES:
-[Impeccable anti-patterns]
-[Subfracture doctrine]
-
-OUTPUT FORMAT:
-Return a single HTML file with:
-- Inline <style> block (no external CSS)
-- Google Fonts via @import in <style>
-- Responsive (mobile-first)
-- Dark mode support via prefers-color-scheme
-- Semantic HTML
-- WCAG AA contrast
-
-PERSONALITY:
-- Explain your design choices
-- Reference which anti-patterns you avoided
-- Be confident but not arrogant
-- Occasional dry humor about replacing Casey
-```
+Keep it simple. No framework toggle in v1 — just raw HTML output.
 
 ---
 
 ## Phase 5: Page Integration
 
-Update `/better-casey` page to include the design tool below the portrait.
+Update `/better-casey/+page.svelte` to compose all sections:
 
-### Modified Page Structure
-
-```svelte
-<!-- Section 1: Portrait (existing) -->
-<PortraitSection />
-
-<!-- Section 2: The Pitch -->
-<section class="pitch">
-  <h2>Casey left. We codified his taste.</h2>
-  <p>Describe any UI and watch our AI design director build it live.
-     No signup. No cost. Impeccable output guaranteed.</p>
-</section>
-
-<!-- Section 3: Design Tool -->
-<section class="design-tool">
-  <DesignChat on:generate={handleGenerate} />
-  <DesignPreview html={generatedHtml} />
-  <CodeOutput html={generatedHtml} css={generatedCss} />
-</section>
-
-<!-- Section 4: CTA -->
-<section class="cta">
-  <p>Want this for your brand?</p>
-  <a href="/contact">Let's talk.</a>
-</section>
 ```
+┌─────────────────────────────────────────────┐
+│  Portrait Section (existing)                │
+│  Gold frame, Harry Potter tantrum           │
+├─────────────────────────────────────────────┤
+│  The Pitch                                  │
+│  "Casey left. We codified his taste."       │
+│  "Describe any UI. Watch it materialize."   │
+├──────────────────┬──────────────────────────┤
+│  Chat Panel      │  Preview Panel           │
+│  (left, 40%)     │  (right, 60%)            │
+│                  │                           │
+│  [Danni msgs]    │  ┌─────────────────────┐ │
+│                  │  │  srcdoc iframe       │ │
+│                  │  │  (live preview)      │ │
+│                  │  │                      │ │
+│  [input____]     │  └─────────────────────┘ │
+│                  │  [Desktop][Tablet][Mobile]│
+├──────────────────┴──────────────────────────┤
+│  Code Panel (togglable)                     │
+│  [View Code ▼] [Copy] [Download]            │
+├─────────────────────────────────────────────┤
+│  CTA                                        │
+│  "Want this for your brand? Let's talk."    │
+│  [Contact us →]                             │
+└─────────────────────────────────────────────┘
+```
+
+On mobile: stack vertically (chat above, preview below).
 
 ---
 
 ## Phase 6: Rate Limiting & Protection
 
-Public endpoint = abuse risk.
-
 ### Approach
 
-1. **IP-based rate limit**: 10 generations per hour per IP
-2. **Cloudflare Turnstile**: Invisible captcha before first generation
-3. **Token budget**: Cap each generation at 4096 output tokens
-4. **Content filter**: Reject prompts that aren't design-related
-5. **Cost tracking**: Log usage to understand burn rate
+1. **Cloudflare rate limiting** (deploy target is CF Pages):
+   - 10 generations per hour per IP
+   - Use `cf.request` headers for IP identification
+2. **Token budget**: Cap Gemini output at 8192 tokens per generation
+3. **Haiku guard**: Haiku validates the prompt is design-related before triggering generation
+   - "Write me an essay" → Haiku: "I only do design. Try me with something visual."
+4. **No auth required** — frictionless is the point
 
 ### Implementation
 
-```typescript
-// src/routes/better-casey/api/generate/+server.ts
-// Use Cloudflare KV for rate limiting (we deploy to CF Pages)
-```
+Rate limit via Cloudflare Workers KV or simple in-memory map (acceptable for CF Pages functions).
 
 ---
 
 ## Phase 7: Analytics & Lead Capture
 
-### Soft lead capture
+### Soft capture (after 3 generations)
 
-After 3 generations, show a subtle prompt:
-> "Enjoying better-casey? Leave your email and we'll send you the Subfracture design system."
+Subtle inline prompt:
+> "You've generated 3 designs. Subfracture builds brand worlds like this for a living. [Leave your email] and we'll send you our design system."
 
-Not required. Not blocking. Just a gentle ask.
+### Analytics (Plausible)
 
-### Analytics
+- `/better-casey` page views
+- Generation events (custom event)
+- Download clicks (custom event)
+- CTA clicks (custom event)
 
-Track via Plausible (privacy-respecting):
-- Page views on /better-casey
-- Generation count
-- Prompt categories (hero, card, form, etc.)
-- Download clicks
+---
+
+## File Manifest
+
+```
+NEW FILES:
+src/routes/better-casey/api/chat/+server.ts          # Haiku conversation
+src/routes/better-casey/api/generate/+server.ts       # Gemini generation
+src/routes/better-casey/api/validate/+server.ts       # Gemini Vision quality gate
+src/lib/components/better-casey/DesignChat.svelte     # Chat interface
+src/lib/components/better-casey/DesignPreview.svelte  # srcdoc iframe preview
+src/lib/components/better-casey/CodeOutput.svelte     # Code display + download
+src/lib/components/better-casey/PortraitSection.svelte # Extracted from +page.svelte
+
+MODIFIED FILES:
+src/routes/better-casey/+page.svelte                  # Compose all sections
+package.json                                          # Add @anthropic-ai/sdk, @google/genai
+.env.example                                          # Add ANTHROPIC_API_KEY, GEMINI_API_KEY
+```
 
 ---
 
 ## Dependency Map
 
 ```
-Phase 1 (API route)
-  ↓
-Phase 2 (Preview iframe)
-  ↓
-Phase 3 (Chat + Preview components)
-  ↓
-Phase 4 (System prompt) — can be done in parallel with 1-3
-  ↓
-Phase 5 (Page integration) — depends on 1-4
-  ↓
-Phase 6 (Rate limiting) — can be done in parallel
-  ↓
-Phase 7 (Analytics) — last, after everything works
+Phase 1a (Haiku chat API) ─────┐
+Phase 1b (Gemini gen API) ─────┤── Can build in parallel
+Phase 1c (Vision gate API) ────┘
+           ↓
+Phase 2 (Preview component) ───┐
+Phase 3 (Chat component) ──────┤── Can build in parallel
+Phase 4 (Code output) ─────────┘
+           ↓
+Phase 5 (Page integration) ──── Depends on 1-4
+           ↓
+Phase 6 (Rate limiting) ─────── Can build in parallel with 5
+           ↓
+Phase 7 (Analytics) ──────────── Last
 ```
 
-### Parallelizable
-
-- Phase 1 + Phase 4 (API route + system prompt — independent)
-- Phase 2 + Phase 3 (Preview + Chat components — independent)
-- Phase 6 at any point after Phase 1
+**Estimated build: 3 waves of parallel work.**
 
 ---
 
-## New Files (estimated)
+## Deployment Note: adapter-static Limitation
 
-```
-src/routes/better-casey/
-├── +page.svelte                    # UPDATE (add design tool sections)
-├── api/
-│   └── generate/
-│       └── +server.ts              # NEW — Anthropic API proxy
-src/lib/components/better-casey/
-├── DesignChat.svelte               # NEW — chat interface
-├── DesignPreview.svelte            # NEW — iframe preview
-├── CodeOutput.svelte               # NEW — syntax-highlighted code
-└── PortraitSection.svelte          # EXTRACT from current +page.svelte
-```
+The current site uses `adapter-static` (Cloudflare Pages static). The API routes (`+server.ts`) require a **server adapter** — either:
 
-### Dependencies to Add
+1. **`adapter-cloudflare`** — swap out adapter-static for Cloudflare Pages Functions (recommended, minimal change)
+2. **`adapter-vercel`** — if deploying to Vercel instead
+3. **Separate API** — deploy the AI endpoints as a standalone Cloudflare Worker, keep the site static
 
-```bash
-npm install @anthropic-ai/sdk    # Anthropic API
-```
-
-Optional later:
-```bash
-npm install @e2b/code-interpreter  # If we add E2B sandbox support
-```
-
----
-
-## Open Questions for Dom
-
-1. **Anthropic API key**: Do you have one for server-side use on subfrac.com? Or use Claude OAuth?
-2. **E2B vs srcdoc**: Start simple (iframe srcdoc) or go full sandbox from day one?
-3. **Cost budget**: Each generation is ~2K input + 4K output tokens. At 100 users/day × 3 generations = 1.8M tokens/day. Acceptable?
-4. **Scope of output**: Just HTML/CSS? Or also Svelte components? React?
-5. **The Casey joke level**: Subtle (current portrait) or overt ("Casey couldn't do this" in the output)?
+**Recommendation**: Switch to `adapter-cloudflare`. It supports both static pages AND server endpoints. Minimal migration — just change the adapter in `svelte.config.js`.
 
 ---
 
 ## Success Criteria
 
-- [ ] Visitor can generate a UI design from natural language in under 10 seconds
-- [ ] Output passes the AI Slop Test (doesn't look AI-generated)
-- [ ] Preview renders correctly in iframe across Chrome/Safari/Firefox
+- [ ] Visitor generates a UI design from natural language in under 8 seconds
+- [ ] Haiku conversation feels warm, sharp, and distinctly Danni
+- [ ] Gemini output passes the AI Slop Test (Vision gate catches failures)
+- [ ] Preview renders correctly in srcdoc iframe (Chrome/Safari/Firefox)
 - [ ] Code is downloadable as a self-contained HTML file
-- [ ] Rate limiting prevents abuse
+- [ ] Rate limiting prevents abuse (10/hour/IP)
 - [ ] Page loads fast (design tool lazy-loaded below fold)
 - [ ] CTA converts curiosity into contact form submissions
-- [ ] Casey sees it and has feelings about it
+- [ ] The whole thing works with no signup, no login, no friction
+- [ ] Casey sees it and has complicated feelings about it
 
 ---
 
 ## Meta-Patterns from Embedded Agentics
 
-Applying the same patterns from the agentic infrastructure build:
-
 | Pattern | Application |
 |---------|------------|
-| **Cookbook** | The system prompt IS the cookbook — step-by-step design process |
-| **Validation gates** | AI Slop Test applied before output |
+| **Cookbook** | The generation prompt IS the cookbook — structured design process |
+| **Validation gates** | Vision gate = the AI Slop Test before user sees output |
 | **Preview before commit** | Live iframe preview before download |
-| **Danni persona** | better-casey IS a Danni fragment |
-| **Typed data** | Generated output is structured { html, css, explanation } |
-| **Skill reference** | Generation prompt loads better-casey skill rules |
+| **Danni persona** | Haiku IS Danni, better-casey IS the fragment |
+| **Builder + Validator** | Gemini = Builder (generates), Vision = Validator (read-only critique) |
+| **Typed data** | Structured brief { type, mood, industry, constraints } |
+| **Two-phase execution** | Haiku routes → Gemini executes (like SKILL.md → cookbook) |
