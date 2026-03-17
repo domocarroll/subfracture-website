@@ -53,17 +53,54 @@ Restraint = authority.
 - Padding inconsistency between sections
 
 **Motion:**
-- Bounce/elastic easing on UI elements (tacky)
-- Animation duration > 600ms for UI transitions
-- Missing `prefers-reduced-motion` fallbacks
-- Animating layout properties (top, left, width, height) — use transform/opacity
+- Bounce/elastic easing on UI elements (tacky) — use exponential curves instead
+- `ease` keyword — use `ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1)` or `ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1)`
+- Duration rules: 100ms (micro), 300ms (standard), 500ms (large). Exit = 75% of enter.
+- Animating layout properties (top, left, width, height) — ONLY `transform` and `opacity`
+- Missing `prefers-reduced-motion` fallbacks (~35% of adults over 40 are affected)
 - Auto-playing video without user consent
+- Stagger sequences > 1s total (cap total time, not per-item delay)
 
 **Interaction:**
-- Touch targets below 44px
-- Missing focus-visible styles
+- Touch targets below 44px (use pseudo-element expansion if needed)
+- Missing focus-visible styles (`:focus-visible` for keyboard-only rings)
 - Hover-only interactions (no keyboard equivalent)
-- Form fields without visible labels
+- Form fields without visible labels (placeholders are NOT labels)
+- Modals unless truly necessary — use native `<dialog>` with `inert`
+- Every button styled as primary — hierarchy matters
+- Spinners for loading — use skeleton screens instead
+
+**The AI Slop Test:**
+> "If you showed this interface to someone and said 'AI made this,' would they believe you immediately? If yes, that's the problem."
+
+## Reference: Typography
+
+- 5 sizes cover most needs: caption, secondary, body, subheading, heading
+- Use `clamp()` for fluid sizing: `clamp(1rem, 0.5rem + 1.5vw, 1.25rem)`
+- `max-width: 65ch` for body text measure (55ch for this project)
+- Body text minimum 16px. Use `rem` not `px`.
+- `tabular-nums` for data tables. Load only weights you use.
+- Never pair fonts that are similar-but-not-identical
+- Better alternatives to banned fonts: Instrument Sans, Plus Jakarta Sans, Outfit, Onest, Figtree, Fraunces
+
+## Reference: Color (OKLCH)
+
+- Use OKLCH not HSL — perceptually uniform
+- Tinted neutrals: `oklch(97% 0.01 60)` instead of pure gray
+- 60-30-10 visual weight rule for color distribution
+- 2-4 colors max beyond neutrals
+- Alpha transparency is a design smell — use explicit colors
+- Dark mode is NOT inverted light mode: lighter surfaces for depth, desaturate accents, reduce font weight
+
+## Reference: Spatial Design
+
+- 4pt base grid (not 8pt — more flexible)
+- Semantic token names for spacing (`--space-section`, `--space-element`, `--space-text`)
+- `auto-fit` + `minmax()` for self-adjusting grids
+- The Squint Test: blur your eyes — does the hierarchy still read?
+- Cards are NOT required. Never nest cards.
+- Container queries for components: `@container (min-width: 400px)`
+- Optical adjustments: negative margin for text alignment, play icon shift right
 
 ## Design Tokens (This Project)
 
