@@ -64,18 +64,17 @@ The document MUST include:
 7. Smooth, purposeful micro-interactions via CSS transitions
 
 IMAGES:
-For ALL images, use Unsplash Source URLs. These are real, high-quality photos that load instantly:
-- Hero/banner: https://images.unsplash.com/photo-{id}?w=1600&h=900&fit=crop&q=80
-- Portrait: https://images.unsplash.com/photo-{id}?w=800&h=1000&fit=crop&q=80
-- Square: https://images.unsplash.com/photo-{id}?w=800&h=800&fit=crop&q=80
-- Background: https://images.unsplash.com/photo-{id}?w=1920&h=1080&fit=crop&q=80
+For ALL images, use placeholder markers that will be replaced with real Unsplash photos:
+- Use this exact format: src="__UNSPLASH:keyword1,keyword2:WIDTHxHEIGHT__"
+- Example: src="__UNSPLASH:coffee,minimal:1600x900__"
+- Example: src="__UNSPLASH:portrait,business:800x1000__"
+- Example: src="__UNSPLASH:ocean,aerial:1920x1080__"
 
-Use the Unsplash search URL format for keyword-based images:
-- https://source.unsplash.com/1600x900/?{keyword},{keyword2}
-Example: https://source.unsplash.com/1600x900/?coffee,minimal for a coffee brand hero.
+Choose 1-3 relevant keywords that describe the image you need.
+Available sizes: 1600x900 (hero), 1200x800 (feature), 800x800 (square), 800x1000 (portrait), 1920x1080 (background).
 
 NEVER use placeholder.com, placehold.co, via.placeholder.com, or picsum.photos.
-NEVER use broken/made-up image URLs.
+NEVER use made-up image URLs or fake unsplash photo IDs.
 ALWAYS include descriptive alt text on every image.
 For decorative backgrounds, prefer CSS gradients over images when possible.
 
@@ -135,24 +134,53 @@ export const POST: RequestHandler = async ({ request }) => {
 	// Strip markdown fences if model wraps them
 	html = html.replace(/^```html?\n?/i, '').replace(/\n?```$/i, '').trim();
 
-	// Fallback: replace any broken placeholder URLs with Unsplash
-	html = html.replace(
-		/https?:\/\/(placeholder\.com|placehold\.co|via\.placeholder\.com|placekitten\.com|picsum\.photos)[^\s"')]+/gi,
-		(_match) => {
-			const keywords = brief.industry || brief.description || 'design';
-			const clean = keywords.replace(/[^a-zA-Z0-9 ]/g, '').split(' ').slice(0, 2).join(',');
-			return `https://source.unsplash.com/1200x800/?${encodeURIComponent(clean)}`;
-		}
-	);
+	// Replace __UNSPLASH:keywords:WxH__ markers with real Unsplash photos
+	const unsplashKey = env.UNSPLASH_ACCESS_KEY;
+	if (unsplashKey) {
+		const markers = [...html.matchAll(/__UNSPLASH:([^:]+):(\d+x\d+)__/g)];
+		const seen = new Map<string, string>();
 
-	// Also catch made-up unsplash photo IDs that 404 — swap to keyword search
-	html = html.replace(
-		/https:\/\/images\.unsplash\.com\/photo-[a-zA-Z0-9-]+\?/g,
-		() => {
-			const keywords = brief.industry || brief.description || 'minimal';
-			const clean = keywords.replace(/[^a-zA-Z0-9 ]/g, '').split(' ').slice(0, 2).join(',');
-			return `https://source.unsplash.com/1200x800/?${encodeURIComponent(clean)}?`;
+		for (const match of markers) {
+			const [fullMatch, keywords, size] = match;
+			const cacheKey = `${keywords}:${size}`;
+
+			if (!seen.has(cacheKey)) {
+				const [w, h] = size.split('x');
+				const query = keywords.replace(/,/g, ' ');
+
+				try {
+					const res = await fetch(
+						`https://api.unsplash.com/photos/random?query=${encodeURIComponent(query)}&orientation=${
+							parseInt(w) > parseInt(h) ? 'landscape' : 'portrait'
+						}&count=1`,
+						{ headers: { Authorization: `Client-ID ${unsplashKey}` } }
+					);
+
+					if (res.ok) {
+						const photos = (await res.json()) as Array<{ urls: { raw: string } }>;
+						if (photos[0]?.urls?.raw) {
+							seen.set(cacheKey, `${photos[0].urls.raw}&w=${w}&h=${h}&fit=crop&q=80`);
+						}
+					}
+				} catch {
+					// Unsplash failed — fall through to picsum fallback
+				}
+			}
+
+			const url = seen.get(cacheKey) || `https://picsum.photos/${size.replace('x', '/')}`;
+			html = html.replace(fullMatch, url);
 		}
+	} else {
+		// No Unsplash key — use picsum as fallback
+		html = html.replace(/__UNSPLASH:[^:]+:(\d+)x(\d+)__/g, (_m, w, h) => {
+			return `https://picsum.photos/${w}/${h}`;
+		});
+	}
+
+	// Catch any remaining placeholder URLs from the model ignoring instructions
+	html = html.replace(
+		/https?:\/\/(placeholder\.com|placehold\.co|via\.placeholder\.com|placekitten\.com)[^\s"')]+/gi,
+		() => 'https://picsum.photos/1200/800'
 	);
 
 	return new Response(JSON.stringify({ html }), {
