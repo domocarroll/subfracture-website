@@ -63,6 +63,22 @@ The document MUST include:
 6. WCAG AA contrast on all text
 7. Smooth, purposeful micro-interactions via CSS transitions
 
+IMAGES:
+For ALL images, use Unsplash Source URLs. These are real, high-quality photos that load instantly:
+- Hero/banner: https://images.unsplash.com/photo-{id}?w=1600&h=900&fit=crop&q=80
+- Portrait: https://images.unsplash.com/photo-{id}?w=800&h=1000&fit=crop&q=80
+- Square: https://images.unsplash.com/photo-{id}?w=800&h=800&fit=crop&q=80
+- Background: https://images.unsplash.com/photo-{id}?w=1920&h=1080&fit=crop&q=80
+
+Use the Unsplash search URL format for keyword-based images:
+- https://source.unsplash.com/1600x900/?{keyword},{keyword2}
+Example: https://source.unsplash.com/1600x900/?coffee,minimal for a coffee brand hero.
+
+NEVER use placeholder.com, placehold.co, via.placeholder.com, or picsum.photos.
+NEVER use broken/made-up image URLs.
+ALWAYS include descriptive alt text on every image.
+For decorative backgrounds, prefer CSS gradients over images when possible.
+
 DESIGN DIRECTION: Be BOLD. Commit to an aesthetic. Every output should feel like it came from an opinionated design studio, not a template generator.`;
 
 interface OpenAIResponse {
@@ -118,6 +134,26 @@ export const POST: RequestHandler = async ({ request }) => {
 
 	// Strip markdown fences if model wraps them
 	html = html.replace(/^```html?\n?/i, '').replace(/\n?```$/i, '').trim();
+
+	// Fallback: replace any broken placeholder URLs with Unsplash
+	html = html.replace(
+		/https?:\/\/(placeholder\.com|placehold\.co|via\.placeholder\.com|placekitten\.com|picsum\.photos)[^\s"')]+/gi,
+		(_match) => {
+			const keywords = brief.industry || brief.description || 'design';
+			const clean = keywords.replace(/[^a-zA-Z0-9 ]/g, '').split(' ').slice(0, 2).join(',');
+			return `https://source.unsplash.com/1200x800/?${encodeURIComponent(clean)}`;
+		}
+	);
+
+	// Also catch made-up unsplash photo IDs that 404 — swap to keyword search
+	html = html.replace(
+		/https:\/\/images\.unsplash\.com\/photo-[a-zA-Z0-9-]+\?/g,
+		() => {
+			const keywords = brief.industry || brief.description || 'minimal';
+			const clean = keywords.replace(/[^a-zA-Z0-9 ]/g, '').split(' ').slice(0, 2).join(',');
+			return `https://source.unsplash.com/1200x800/?${encodeURIComponent(clean)}?`;
+		}
+	);
 
 	return new Response(JSON.stringify({ html }), {
 		headers: { 'Content-Type': 'application/json' }
