@@ -74,3 +74,45 @@ content-stats:
 
 # Full health check
 health: check build content-stats
+
+# ─── OpenCode (Team Interface) ───
+
+# Start OpenCode TUI with operator agent
+oc:
+    opencode --agent subfrac-operator
+
+# Run a single command via OpenCode (non-interactive)
+oc-run args="":
+    opencode run --agent subfrac-operator "{{args}}"
+
+# Start OpenCode web interface (browser-based — most accessible)
+oc-web:
+    opencode web --agent subfrac-operator
+
+# ─── Team Sessions (tmux) ───
+
+# Spawn a team member's OpenCode session
+spawn name:
+    @tmux kill-session -t subfrac-{{name}} 2>/dev/null || true
+    tmux new-session -d -s subfrac-{{name}} -c $(pwd)
+    tmux send-keys -t subfrac-{{name}} "opencode --agent subfrac-operator" Enter
+    @echo "Session 'subfrac-{{name}}' is live. Attach with: tmux attach -t subfrac-{{name}}"
+
+# Spawn all team sessions
+spawn-all: (spawn "warwick") (spawn "tyronne") (spawn "amanda")
+
+# List active team sessions
+sessions:
+    @tmux list-sessions 2>/dev/null | grep "subfrac-" || echo "No active team sessions"
+
+# Attach to a team session
+attach name:
+    tmux attach -t subfrac-{{name}}
+
+# Kill a team session
+kill name:
+    tmux kill-session -t subfrac-{{name}}
+
+# Kill all team sessions
+kill-all:
+    @tmux list-sessions 2>/dev/null | grep "subfrac-" | cut -d: -f1 | xargs -I{} tmux kill-session -t {} 2>/dev/null || echo "No sessions to kill"
