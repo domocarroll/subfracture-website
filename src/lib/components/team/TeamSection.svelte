@@ -11,7 +11,7 @@
 	import CharacterCascade from '$lib/components/scroll/CharacterCascade.svelte';
 	import TeamMember from './TeamMember.svelte';
 	import { animate } from '$lib/actions/animate';
-	import { team } from '$lib/data/team';
+	import { team, alumni } from '$lib/data/team';
 </script>
 
 <section class="team">
@@ -49,6 +49,31 @@
 				</div>
 			{/each}
 		</div>
+
+		<!-- Alumni ghost — easter egg -->
+		{#each alumni as ghost, i}
+			<a
+				href={ghost.easterEgg || '#'}
+				class="alumni-ghost"
+				use:animate={{
+					type: 'fromTo',
+					fromVars: { opacity: 0 },
+					opacity: 1,
+					duration: 0.8,
+					delay: (team.length + i) * 0.08 + 0.5,
+					ease: 'power3.out',
+					scrollTrigger: { start: 'top 70%' }
+				}}
+			>
+				<div class="alumni-photo">
+					<img src={ghost.photo} alt={ghost.name} loading="lazy" />
+				</div>
+				<span class="alumni-label">
+					{ghost.name}
+					<span class="alumni-role">{ghost.role}</span>
+				</span>
+			</a>
+		{/each}
 	</Container>
 </section>
 
@@ -98,5 +123,54 @@
 			grid-template-columns: 1fr;
 			max-width: 20rem;
 		}
+	}
+
+	/* Alumni ghost — faded, small, bottom-right */
+	.alumni-ghost {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		margin-top: clamp(3rem, 5vw, 5rem);
+		text-decoration: none;
+		opacity: 0.25;
+		transition: opacity 0.4s ease;
+	}
+
+	.alumni-ghost:hover {
+		opacity: 0.6;
+	}
+
+	.alumni-photo {
+		width: 2.5rem;
+		height: 2.5rem;
+		border-radius: 50%;
+		overflow: hidden;
+		filter: grayscale(1);
+		transition: filter 0.4s ease;
+	}
+
+	.alumni-ghost:hover .alumni-photo {
+		filter: grayscale(0);
+	}
+
+	.alumni-photo img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	.alumni-label {
+		font-family: var(--font-sans);
+		font-size: var(--text-xs);
+		color: var(--color-text-muted);
+		display: flex;
+		flex-direction: column;
+		gap: 0.1rem;
+	}
+
+	.alumni-role {
+		font-size: 0.65rem;
+		opacity: 0.6;
+		font-style: italic;
 	}
 </style>

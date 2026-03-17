@@ -4,6 +4,10 @@ export interface TeamMember {
 	photo: string;
 	bio: string;
 	linkedin: string;
+	/** Easter egg — hidden member, revealed on interaction */
+	alumni?: boolean;
+	/** Easter egg URL — clicking the photo goes here instead of expanding bio */
+	easterEgg?: string;
 }
 
 export const team: readonly TeamMember[] = [
@@ -27,6 +31,19 @@ export const team: readonly TeamMember[] = [
 		photo: '/images/team/amanda.png',
 		bio: 'Amanda is a global publicity strategist and founder of First-Class Access Worldwide Collection. Her impressive career spans work with icons including Madonna, Serena Williams, the Hilton sisters, and the Irwin family. A speaker at SXSW and mentee of Randi Zuckerberg, Amanda sits at the intersection of luxury, technology, and culture.',
 		linkedin: 'https://www.linkedin.com/in/amanda-archer-6319ba169'
+	}
+];
+
+/** Casey "better-casey" Midgley — alumni, easter egg */
+export const alumni: readonly TeamMember[] = [
+	{
+		name: 'Casey Midgley',
+		role: 'Former Design Director',
+		photo: '/images/team/casey.png',
+		bio: 'Casey shaped the studio\'s creative vision for 14 years before moving on to new adventures. His design instinct lives on — codified into an AI that never misses a deadline.',
+		linkedin: 'https://www.linkedin.com/in/caseymidgley/',
+		alumni: true,
+		easterEgg: '/better-casey'
 	}
 ];
 
