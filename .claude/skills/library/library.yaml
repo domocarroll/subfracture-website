@@ -38,6 +38,112 @@ library:
       description: This catalog — index of all agentic infrastructure
       path: .claude/skills/library/SKILL.md
 
+    # Impeccable design system (pbakaus/impeccable)
+    - name: frontend-design
+      description: Core Impeccable skill — anti-pattern detection, design context, AI slop prevention
+      path: .claude/skills/frontend-design/SKILL.md
+      source: pbakaus/impeccable
+
+    - name: adapt
+      description: Responsive adaptation across screens, devices, and contexts
+      path: .claude/skills/adapt/SKILL.md
+      source: pbakaus/impeccable
+
+    - name: animate
+      description: Purposeful motion, micro-interactions, and animation
+      path: .claude/skills/animate/SKILL.md
+      source: pbakaus/impeccable
+
+    - name: arrange
+      description: Layout, spacing, visual rhythm, and hierarchy
+      path: .claude/skills/arrange/SKILL.md
+      source: pbakaus/impeccable
+
+    - name: audit
+      description: Comprehensive interface quality audit (accessibility, performance, theming)
+      path: .claude/skills/audit/SKILL.md
+      source: pbakaus/impeccable
+
+    - name: bolder
+      description: Amplify safe designs to be more visually interesting
+      path: .claude/skills/bolder/SKILL.md
+      source: pbakaus/impeccable
+
+    - name: clarify
+      description: Improve UX copy, error messages, and microcopy
+      path: .claude/skills/clarify/SKILL.md
+      source: pbakaus/impeccable
+
+    - name: colorize
+      description: Add strategic color to monochromatic interfaces
+      path: .claude/skills/colorize/SKILL.md
+      source: pbakaus/impeccable
+
+    - name: critique
+      description: Evaluate design effectiveness with actionable feedback
+      path: .claude/skills/critique/SKILL.md
+      source: pbakaus/impeccable
+
+    - name: delight
+      description: Add personality and unexpected touches that spark joy
+      path: .claude/skills/delight/SKILL.md
+      source: pbakaus/impeccable
+
+    - name: distill
+      description: Strip designs to their essence — remove unnecessary complexity
+      path: .claude/skills/distill/SKILL.md
+      source: pbakaus/impeccable
+
+    - name: extract
+      description: Extract reusable components and design tokens
+      path: .claude/skills/extract/SKILL.md
+      source: pbakaus/impeccable
+
+    - name: harden
+      description: Improve interface resilience — error handling, i18n, edge cases
+      path: .claude/skills/harden/SKILL.md
+      source: pbakaus/impeccable
+
+    - name: normalize
+      description: Normalize design to match your design system
+      path: .claude/skills/normalize/SKILL.md
+      source: pbakaus/impeccable
+
+    - name: impeccable-onboard
+      description: Design onboarding flows, empty states, first-time UX
+      path: .claude/skills/onboard/SKILL.md
+      source: pbakaus/impeccable
+
+    - name: optimize
+      description: Improve performance — loading, rendering, animations, bundle size
+      path: .claude/skills/optimize/SKILL.md
+      source: pbakaus/impeccable
+
+    - name: overdrive
+      description: Push interfaces past conventional limits — shaders, physics, scroll effects
+      path: .claude/skills/overdrive/SKILL.md
+      source: pbakaus/impeccable
+
+    - name: polish
+      description: Final quality pass — alignment, spacing, consistency, detail
+      path: .claude/skills/polish/SKILL.md
+      source: pbakaus/impeccable
+
+    - name: quieter
+      description: Tone down overly bold or aggressive designs
+      path: .claude/skills/quieter/SKILL.md
+      source: pbakaus/impeccable
+
+    - name: teach-impeccable
+      description: One-time setup — gathers design context, saves to .impeccable.md
+      path: .claude/skills/teach-impeccable/SKILL.md
+      source: pbakaus/impeccable
+
+    - name: typeset
+      description: Improve typography — font choices, hierarchy, sizing, readability
+      path: .claude/skills/typeset/SKILL.md
+      source: pbakaus/impeccable
+
   agents:
     - name: content-agent
       description: Builder agent for data file and content changes
