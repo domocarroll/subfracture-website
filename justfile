@@ -56,6 +56,12 @@ design-tweak args="":
 deploy:
     claude -p "/deploy"
 
+# ─── Onboarding ───
+
+# Set up a new team member's machine (interactive)
+onboard name="":
+    claude "/onboard {{name}}"
+
 # ─── Utilities ───
 
 # Load full context for a new session
